@@ -1,0 +1,13 @@
+OPERATORS 
+
+MATH OPERATORS 
+
++ , -, * , /
+
+ASSIGNMENT OPERATORS 
+
++= , -+ , *= , ++ , --
+
+COMPARISION OPERATORS 
+
+< , > , <= , >= , ==
