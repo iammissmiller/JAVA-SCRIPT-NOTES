@@ -1,0 +1,12 @@
+What is DOM and DOM Manipulation?
+
+The DOM, or Document Object Model, is a structured representation of HTML documents. It allows JavaScript to access, modify, and manipulate HTML elements, attributes, and styles dynamically. Using the DOM, developers can update a webpage's content, structure, and style without needing to reload the page.
+
+The DOM acts as a connection point between HTML and JavaScript code. When an HTML page is loaded in a browser, the browser automatically creates the DOM as a tree structure where each HTML element becomes a node in the tree. This makes it easy for JavaScript to interact with specific parts of the page.
+
+For example, with DOM manipulation, we can change the text inside an element, update attributes like src or href, or even modify CSS styles such as colors and fonts on the fly. This powerful capability allows for responsive and interactive web pages.
+
+A key object in DOM manipulation is the document object, which is a special JavaScript object representing the entire HTML document. It provides access to elements using methods like document.querySelector() or getElementById(). This object acts as the entry point into the DOM.
+
+It's important to understand that while JavaScript uses the DOM, the DOM itself is not a part of JavaScript. Instead, it is a Web API (Application Programming Interface) provided by the browser. The DOM is a programming interface for web documents, enabling scripts to dynamically access and update content, structure, and style.
+
