@@ -1,0 +1,38 @@
+// 1. Variables (to store data)
+let name = "Praptee";
+const age = 21;
+
+// 2. Functions (to do tasks)
+function greet(userName) {
+  console.log("Hello, " + userName + "!");
+}
+
+// 3. Function Call (to run it)
+greet(name);
+
+// 4. Conditional Statements (decision making)
+if (age >= 18) {
+  console.log("You're an adult.");
+} else {
+  console.log("You're a minor.");
+}
+
+// 5. Loops (to repeat things)
+for (let i = 1; i <= 5; i++) {
+  console.log("Counting: " + i);
+}
+
+// 6. Objects (to group related data)
+const person = {
+  firstName: "Praptee",
+  lastName: "Miller",
+  fullName: function () {
+    return this.firstName + " " + this.lastName;
+  },
+};
+
+console.log(person.fullName());
+
+// 7. Arrays (to store multiple items)
+let colors = ["red", "green", "blue"];
+console.log(colors[0]); // prints "red"
