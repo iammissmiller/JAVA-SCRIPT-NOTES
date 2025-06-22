@@ -1,0 +1,52 @@
+JavaScript Engine and Runtime
+
+JavaScript is a high-level, interpreted programming language, but in modern environments, it runs through powerful JavaScript engines and runtimes.
+
+JavaScript Engine
+
+A JavaScript engine is a program that executes JavaScript code. It takes the code, compiles it to machine code (not interprets line-by-line like older engines), and runs it efficiently. The most popular engines include:
+
+V8 (used in Chrome and Node.js)
+
+SpiderMonkey (used in Firefox)
+
+JavaScriptCore (used in Safari)
+
+
+How it works:
+
+1. Parsing: The engine reads JavaScript code and parses it into an Abstract Syntax Tree (AST).
+
+
+2. Compilation: The AST is compiled into machine code by the Just-In-Time (JIT) compiler.
+
+
+3. Execution: The machine code is executed directly by the CPU.
+
+
+
+This process helps JavaScript run faster, especially in browsers.
+
+JavaScript Runtime
+
+While the engine executes the code, the runtime environment provides the tools and APIs to interact with the outside world (e.g., browser or server). A runtime includes:
+
+JavaScript Engine (like V8)
+
+Web APIs (like setTimeout, fetch, DOM APIs in browsers)
+
+Callback queue
+
+Event loop
+
+
+The event loop is a crucial part. It manages asynchronous operations by picking tasks from the callback queue and pushing them to the call stack when it’s empty.
+
+Browser vs Node.js Runtime
+
+Browser Runtime includes DOM APIs, fetch, alert, etc.
+
+Node.js Runtime includes file system access, HTTP module, etc.
+
+
+The JavaScript engine alone can’t handle asynchronous tasks or interact with files/network. The runtime bridges this gap.
