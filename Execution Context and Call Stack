@@ -1,0 +1,89 @@
+Execution Context and Call Stack
+
+Execution Context
+
+In JavaScript, execution context refers to the environment in which code is evaluated and executed.
+
+There are three main types:
+
+1. Global Execution Context (GEC) – created when a script first runs.
+
+
+2. Function Execution Context (FEC) – created every time a function is called.
+
+
+3. Eval Execution Context – created inside eval() (rarely used).
+
+
+
+Each execution context goes through two phases:
+
+1. Creation Phase:
+
+The scope chain is created.
+
+Variables and functions are hoisted (set to undefined or memory space reserved).
+
+The this keyword is set.
+
+
+
+2. Execution Phase:
+
+The code is actually executed.
+
+Variables are assigned values.
+
+Functions are invoked.
+
+
+
+
+Each context has:
+
+Variable Environment (local variables, function arguments)
+
+Lexical Environment (scope)
+
+This Binding
+
+
+Call Stack
+
+The call stack is a data structure that keeps track of which execution context is currently running.
+
+How it works:
+
+When the JavaScript engine starts, the Global Execution Context is pushed onto the call stack.
+
+Each time a function is called, a new Function Execution Context is created and pushed on top of the stack.
+
+When a function finishes, its context is popped off the stack, and control goes back to the previous one.
+
+
+Example:
+
+function greet() {
+  sayHi();
+}
+function sayHi() {
+  console.log("Hello!");
+}
+greet();
+
+Call stack flow:
+
+1. Global context
+
+
+2. greet() context
+
+
+3. sayHi() context
+
+
+4. console.log() runs
+
+
+5. Stack pops back down
+
