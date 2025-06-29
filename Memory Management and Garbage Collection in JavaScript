@@ -1,0 +1,62 @@
+Memory Management and Garbage Collection in JavaScript
+
+JavaScript automatically handles memory allocation and deallocation through a process known as Garbage Collection (GC). However, understanding how it works helps prevent memory leaks and improve performance.
+
+
+---
+
+1. Memory Allocation
+
+When variables, objects, or functions are created, the JavaScript engine allocates memory:
+
+Primitives (like numbers, strings) are stored on the stack.
+
+Objects and functions are stored in the heap, which is larger and more flexible.
+
+
+let num = 10; // allocated in stack
+let user = { name: "Praptee" }; // object allocated in heap
+
+
+---
+
+2. Memory Usage
+
+Memory is used as long as a value is reachable — meaning it can be accessed by code through references.
+
+let obj = { name: "Alice" }; // reachable
+obj = null; // now unreachable — ready for garbage collection
+
+
+---
+
+3. Garbage Collection
+
+Garbage Collection automatically frees memory used by unreachable values. The most commonly used method is:
+
+🔹 Mark-and-Sweep Algorithm
+
+1. The engine starts from "roots" (global scope, active function variables).
+
+
+2. It marks all reachable values.
+
+
+3. Values not marked (unreachable) are swept or removed from memory.
+
+
+
+This process runs in the background and helps prevent memory overflow.
+
+
+---
+
+4. Common Causes of Memory Leaks
+
+Unused global variables
+
+Forgotten timers or event listeners (setInterval, addEventListener)
+
+Closures holding large data references
+
+
