@@ -1,0 +1,67 @@
+Array Destructuring in JavaScript
+
+Destructuring is a feature introduced in ES6 that allows you to unpack values from arrays (or properties from objects) into separate variables in a clean, concise way.
+
+
+---
+
+1. Basic Syntax
+
+const fruits = ["apple", "banana", "mango"];
+const [a, b, c] = fruits;
+
+console.log(a); // "apple"
+console.log(b); // "banana"
+console.log(c); // "mango"
+
+You assign variables based on the order of elements in the array.
+
+
+---
+
+2. Skipping Elements
+
+You can skip elements by leaving a blank space:
+
+const numbers = [1, 2, 3, 4];
+const [first, , third] = numbers;
+
+console.log(first); // 1
+console.log(third); // 3
+
+
+---
+
+3. Default Values
+
+You can assign default values to avoid undefined if an element is missing:
+
+const colors = ["red"];
+const [primary, secondary = "blue"] = colors;
+
+console.log(primary);   // "red"
+console.log(secondary); // "blue"
+
+
+---
+
+4. Swapping Variables
+
+Array destructuring makes it easy to swap variables:
+
+let a = 1, b = 2;
+[a, b] = [b, a];
+console.log(a, b); // 2 1
+
+
+---
+
+5. Using with Functions
+
+Destructure return values directly:
+
+function getCoordinates() {
+  return [10, 20];
+}
+const [x, y] = getCoordinates();
+
