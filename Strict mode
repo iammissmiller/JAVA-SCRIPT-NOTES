@@ -1,7 +1,0 @@
-#Activating strict mode
-
-use strict';
-
-use it at the beginning of your script
-
-- To write more secure codes.
