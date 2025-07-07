@@ -1,0 +1,33 @@
+The rest pattern and rest parameters in JavaScript allow you to collect multiple elements into a single array-like variable. Introduced in ES6, they are useful for handling an unknown number of arguments or extracting remaining properties from objects or arrays.
+
+Rest Parameters (Functions)
+Used in function definitions to represent an indefinite number of arguments as an array:
+
+js
+Copy
+Edit
+function sum(...numbers) {
+  return numbers.reduce((a, b) => a + b, 0);
+}
+Here, ...numbers gathers all extra arguments into an array.
+
+Rest Pattern (Destructuring)
+Used in array or object destructuring to collect the "rest" of the elements/properties.
+
+Array example:
+
+js
+Copy
+Edit
+const [a, b, ...rest] = [1, 2, 3, 4, 5]; 
+// a = 1, b = 2, rest = [3, 4, 5]
+Object example:
+
+js
+Copy
+Edit
+const { x, ...others } = { x: 1, y: 2, z: 3 };
+// x = 1, others = { y: 2, z: 3 }
+Note: Rest syntax (...) must be the last element in the parameter or destructuring pattern.
+
+Rest is different from spread syntax, though both use .... Spread expands items; rest gathers them.
