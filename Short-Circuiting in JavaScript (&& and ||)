@@ -1,0 +1,39 @@
+Short-circuiting is a behavior in JavaScript where logical expressions are evaluated from left to right and stop as soon as the outcome is determined. This happens with the logical OR (||) and AND (&&) operators.
+
+|| (Logical OR)
+The OR (||) operator returns the first truthy value it encounters. If all values are falsy, it returns the last one.
+
+Example:
+
+js
+Copy
+Edit
+console.log(0 || 'Hello');       // Output: 'Hello'
+console.log('' || null || 'JS'); // Output: 'JS'
+In the first case, 0 is falsy, so it moves to 'Hello', which is truthy, and stops. This is useful for setting default values:
+
+js
+Copy
+Edit
+const username = input || 'Guest';
+If input is falsy (like undefined, null, 0, or ''), 'Guest' is assigned.
+
+&& (Logical AND)
+The AND (&&) operator returns the first falsy value. If all values are truthy, it returns the last one.
+
+Example:
+
+js
+Copy
+Edit
+console.log('User' && 0);     // Output: 0
+console.log(1 && 'Welcome');  // Output: 'Welcome'
+In the first case, 'User' is truthy, but 0 is falsy, so it returns 0.
+
+This is often used for conditional execution:
+
+js
+Copy
+Edit
+isLoggedIn && showDashboard();
+Here, showDashboard() runs only if isLoggedIn is truthy.
