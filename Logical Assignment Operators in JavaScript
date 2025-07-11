@@ -1,0 +1,76 @@
+Logical Assignment Operators in JavaScript
+
+Logical assignment operators are shorthand operators that combine logical operations (||, &&, and ??) with assignment (=). Introduced in ES2021, they simplify common patterns in conditional assignments.
+
+
+---
+
+1. OR Assignment (||=)
+
+This operator assigns a value to a variable only if the variable is falsy (like false, 0, '', null, undefined, or NaN).
+
+let name = "";
+name ||= "Guest";
+console.log(name); // "Guest"
+
+It is equivalent to:
+
+if (!name) {
+  name = "Guest";
+}
+
+
+---
+
+2. AND Assignment (&&=)
+
+This operator assigns a value only if the variable is truthy.
+
+let isLoggedIn = true;
+isLoggedIn &&= "User";
+console.log(isLoggedIn); // "User"
+
+Equivalent to:
+
+if (isLoggedIn) {
+  isLoggedIn = "User";
+}
+
+
+---
+
+3. Nullish Coalescing Assignment (??=)
+
+This operator assigns a value only if the variable is null or undefined.
+
+let title;
+title ??= "Untitled";
+console.log(title); // "Untitled"
+
+Equivalent to:
+
+if (title === null || title === undefined) {
+  title = "Untitled";
+}
+
+
+---
+
+Use Cases
+
+Setting default values
+
+Conditional state updates
+
+Avoiding verbose if conditions
+
+
+
+---
+
+Difference Between ||= and ??=
+
+||= triggers on falsy values (false, 0, "", etc.)
+
+??= triggers only on null or undefined
+
