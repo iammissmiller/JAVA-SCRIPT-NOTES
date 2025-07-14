@@ -1,0 +1,12 @@
+# Ways to declare variables in java script 
+
+  - let 
+  - const 
+  - var
+
+
+  # let : let keyword is to declare variable that we can change late 
+
+  # const : It is to declare a variable that we cant change . it is always initialized . 
+
+  # var : It should be completly avoided . It is an old version 

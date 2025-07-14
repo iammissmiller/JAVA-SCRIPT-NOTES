@@ -1,0 +1,43 @@
+#Overview of Javascript
+
+Java script is a high level programming language 
+
+Interpreted or just in time compiled
+
+Its Multi Paradigm
+
+Paradigms : An approach and mindset of Structuring code, which will direct your coding style and technique.
+
+Three types of Paradigm.
+
+Procedural Programming
+
+Object oriented programming (OOP)
+
+Functional programming (FP)
+
+JS does all of it.
+
+Prototype - based object Oriented.
+
+First-clans Functions 
+
+In a language with first-class functions, function are simply treated as variable. we can pass them into other functions, and return them from function.
+
+Dynamically-typed language
+
+JS is a dynamic languge.
+
+#Concurrency model : how the Java Script engine handles multiple tasks happening at the same time
+
+why do we need that
+
+# Java Script runs in one single thread so it can only do one thing at a time.
+
+So what about a long running task ?
+
+sounds life it would block the single theread, However, we want non blocking behaviour!
+
+How to we achieve that ?
+
+By using an event loop: takes Long running tasks, enccuses them on the background and puts then back in the main thread once they are finished 

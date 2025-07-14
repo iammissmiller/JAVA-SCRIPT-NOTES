@@ -1,0 +1,12 @@
+# Syntax for declaring a variable 
+
+
+let var_name = "Value" ;
+
+
+
+
+# Syntax for output of variable 
+
+
+console.log(var_name);

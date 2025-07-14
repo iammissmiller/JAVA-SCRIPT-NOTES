@@ -1,0 +1,30 @@
+Stings and template literals 
+
+
+( `  ` ) = Backticks {very useful}  
+
+These are used for template literals .
+
+It can also be used for normal strings in place of single or double quote.
+
+
+
+ex : 
+
+
+
+const firstname = 'Praptee';
+
+const job = 'Programmer' ;
+
+const birthyear = 2006;
+
+const year = 2025;
+
+
+
+
+
+const pptnew = `I'm ${firstname} , a ${year - birthyear} year old ${job} ! `
+
+console.log(pptnew);

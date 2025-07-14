@@ -1,0 +1,58 @@
+Spread Operator in JavaScript (...)
+
+The spread operator (...) allows an iterable (like an array or string) or object properties to be expanded into individual elements or key-value pairs. It was introduced in ES6.
+
+
+---
+
+1. Using with Arrays
+
+🔹 Expanding Arrays
+
+const nums = [1, 2, 3];
+const newNums = [...nums, 4, 5];
+console.log(newNums); // [1, 2, 3, 4, 5]
+
+🔹 Combining Arrays
+
+const arr1 = [1, 2];
+const arr2 = [3, 4];
+const combined = [...arr1, ...arr2];
+console.log(combined); // [1, 2, 3, 4]
+
+🔹 Copying Arrays
+
+const original = [10, 20];
+const copy = [...original];
+console.log(copy); // [10, 20]
+
+
+---
+
+2. Using with Objects
+
+🔹 Copying Objects
+
+const user = { name: "Praptee", age: 20 };
+const userCopy = { ...user };
+
+🔹 Merging Objects
+
+const location = { city: "Mumbai" };
+const fullProfile = { ...user, ...location };
+
+If both objects have the same property, the last one overrides:
+
+const obj1 = { name: "A" };
+const obj2 = { name: "B" };
+const merged = { ...obj1, ...obj2 }; // name: "B"
+
+
+---
+
+3. With Strings
+
+const str = "JS";
+const letters = [...str];
+console.log(letters); // ["J", "S"]
+

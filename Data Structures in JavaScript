@@ -1,0 +1,77 @@
+Data Structures in JavaScript
+
+JavaScript provides built-in data structures to organize and manage data efficiently. These are divided into two categories:
+
+
+---
+
+1. Primitive Data Structures
+
+These hold a single value and are immutable.
+
+Number – for numeric values
+
+String – sequence of characters
+
+Boolean – true or false
+
+Null – intentional absence of value
+
+Undefined – variable declared but not assigned
+
+Symbol – unique, immutable identifier (ES6)
+
+BigInt – for large integers beyond Number limits
+
+
+
+---
+
+2. Non-Primitive (Complex) Data Structures
+
+These can store collections of values and are mutable.
+
+🔹 Object
+
+Key-value pairs
+
+Can hold any data type including functions
+
+
+const user = { name: "Praptee", age: 20 };
+
+🔹 Array
+
+Ordered list of values (index-based)
+
+Can hold mixed types
+
+
+const fruits = ["apple", "banana", "mango"];
+
+🔹 Set
+
+Collection of unique values
+
+No duplicates allowed
+
+
+const ids = new Set([1, 2, 3, 3]); // Set(3) {1, 2, 3}
+
+🔹 Map
+
+Stores key-value pairs (keys can be of any type)
+
+Maintains insertion order
+
+
+const map = new Map();
+map.set("name", "Praptee");
+
+
+---
+
+3. Typed Arrays
+
+Used for handling binary data efficiently (used in advanced scenarios like WebGL, buffers, etc.)
+

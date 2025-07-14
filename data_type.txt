@@ -1,0 +1,22 @@
+Primitive data types 
+
+  1. Numbers : Floating numbers for decimals and integers.
+
+  2. Ste=ring : Sequence of characters in single or double quotes .
+
+  3. Boolean : Logical type - true or false.
+
+  4. Undefined : A Variable not yet defined .
+
+  5. Null : Empty value .
+
+  6. Symbol : (ES2015) Value that is unique and cannot be changed.
+
+  7. BigInt : (ES2020) Very large integer .
+
+
+
+
+Java script have dynamic tping : we do not need to define manually the data type of the value stored in the variable . Instead , data types are determined automatically .
+
+  

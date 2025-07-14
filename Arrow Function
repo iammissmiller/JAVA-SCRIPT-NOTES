@@ -1,0 +1,29 @@
+Arrow Function
+
+This was added in JS in ES6
+
+An arroe function is simply a special form of function expression that is shorter and therefore faster to writer.
+
+Syntax
+
+// arrow function 
+
+birthyear => 2037 - birthyear ;
+
+EXAMPLE :
+
+const calcage3 = birthyear => 2037 - birthyear ;
+
+const age3 = calcage3(2006);
+
+console.log(age3);
+
+
+
+
+
+
+
+
+
+
