@@ -1,0 +1,53 @@
+Hoisting in JavaScript
+
+Definition:
+Hoisting is JavaScript's default behavior of moving declarations to the top of the current scope (function or global) during the compile phase.
+
+But remember:
+
+> Only declarations are hoisted, not initializations.
+
+
+
+
+---
+
+Examples:
+
+console.log(a); // undefined
+var a = 5;
+
+Behind the scenes:
+
+var a;
+console.log(a); // undefined
+a = 5;
+
+With let and const:
+
+console.log(b); // ReferenceError
+let b = 10;
+
+Because of TDZ, which we’ll discuss below.
+
+
+---
+
+Function Hoisting:
+
+greet(); // works
+function greet() {
+  console.log("Hello!");
+}
+
+Function declarations are fully hoisted with their definitions.
+
+But function expressions are not:
+
+sayHi(); // TypeError: sayHi is not a function
+var sayHi = function () {
+  console.log("Hi!");
+};
+
+
+---
