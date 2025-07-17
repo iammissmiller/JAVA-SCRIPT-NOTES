@@ -1,0 +1,96 @@
+JavaScript for-of Loop – Notes
+
+Introduction
+The for-of loop was introduced in ES6.
+
+It provides a simpler way to iterate over arrays than the traditional for loop.
+
+It removes the need to manually manage:
+
+A counter (i)
+
+A condition (i < array.length)
+
+An increment step (i++)
+
+Setting Up the Array
+js
+Copy
+Edit
+const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
+Combines starterMenu and mainMenu arrays using the spread operator.
+
+Basic Syntax of for-of
+js
+Copy
+Edit
+for (const item of menu) {
+  console.log(item);
+}
+item is the variable representing the current element in each iteration.
+
+menu is the array being looped over.
+
+Logs each element one by one.
+
+If only one statement is inside the loop, curly braces {} are optional.
+
+Why Use for-of
+Cleaner and more readable syntax.
+
+Avoids manual setup of counters and conditions.
+
+Supports break and continue.
+
+Getting Both Index and Element
+Problem
+The for-of loop only provides the element by default.
+
+Solution: Use .entries()
+js
+Copy
+Edit
+for (const item of menu.entries()) {
+  console.log(item);
+}
+menu.entries() returns an iterator with pairs like [0, "Pizza"], [1, "Burger"].
+
+Converting to an Array for Inspection
+js
+Copy
+Edit
+console.log([...menu.entries()]);
+The spread operator converts the iterator to a full array.
+
+Formatting Output (Old Way)
+js
+Copy
+Edit
+for (const item of menu.entries()) {
+  console.log(`${item[0] + 1}: ${item[1]}`);
+}
+item[0] is the index.
+
+item[1] is the element.
+
+Adds 1 to index to start counting from 1.
+
+Improved Version Using Destructuring
+js
+Copy
+Edit
+for (const [i, el] of menu.entries()) {
+  console.log(`${i + 1}: ${el}`);
+}
+Destructures each [index, element] pair directly.
+
+Cleaner and more modern than accessing item[0] and item[1].
+
+Summary
+for-of is easier and cleaner than a traditional for loop.
+
+Ideal for simple array iterations.
+
+Can still use break and continue.
+
+Use .entries() with destructuring when both index and value are needed.
