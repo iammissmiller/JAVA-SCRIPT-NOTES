@@ -1,0 +1,88 @@
+JavaScript – Rest Patterns & Parameters
+
+1. Syntax Similarity with Spread
+
+Both rest and spread use the ... syntax.
+
+They do opposite things:
+
+Spread: Unpacks elements (expands arrays/objects).
+
+Rest: Packs elements (collects remaining items into arrays/objects).
+
+2. Use Cases of Rest Pattern
+
+A. In Array Destructuring
+
+Spread Example (on right side of =):
+
+const arr = [1, 2, ...[3, 4]];
+
+Rest Pattern Example (on left side of =):
+
+const [a, b, ...others] = [2, 3, 4, 5];
+console.log(a);       // 2
+console.log(b);       // 3
+console.log(others);  // [4, 5]
+Rest collects remaining items after the last variable.
+
+Rest must always be the last element.
+
+Only one rest element is allowed in destructuring.
+
+B. In Object Destructuring
+
+const { sat, ...weekdays } = restaurant.openingHours;
+console.log(weekdays);
+
+// Output: { thu: {...}, fri: {...} }
+Remaining properties are collected into a new object.
+
+3. Rest Parameters in Functions
+
+Used to handle a variable number of arguments.
+
+Example:
+
+const add = function(...numbers) {
+  let sum = 0;
+  for (let i = 0; i < numbers.length; i++) {
+    sum += numbers[i];
+  }
+  console.log(sum);
+};
+
+add(2, 3);           // 5
+add(5, 3, 7, 2);     // 17
+numbers becomes an array of all arguments passed.
+
+4. Rest + Spread Combined Example
+
+const x = [23, 5, 7];
+add(...x); // Uses spread to pass elements into a rest parameter
+Spread unpacks array into individual arguments.
+
+Rest packs them back into an array in the function.
+
+5. Real-World Example: orderPizza Function
+
+restaurant.orderPizza = function(mainIngredient, ...otherIngredients) {
+  console.log(mainIngredient);
+  console.log(otherIngredients);
+};
+
+restaurant.orderPizza('mushrooms', 'onion', 'olives', 'spinach');
+// Output:
+// mushrooms
+// ['onion', 'olives', 'spinach']
+
+restaurant.orderPizza('mushrooms');
+// Output:
+// mushrooms
+// []
+
+
+mainIngredient: first argument.
+
+...otherIngredients: collects the rest into an array.
+
