@@ -1,0 +1,98 @@
+Enhanced Object Literals in ES6
+
+ES6 introduced several improvements to how object literals can be written in JavaScript, making them more concise and powerful. Below are the three main enhancements:
+
+
+1. Property Shorthand (Object Property Value Shorthand)
+
+Before ES6:
+
+When adding a variable as a property to an object, the property name and the variable name had to be written explicitly:
+
+const openingHours = { ... };
+
+const restaurant = {
+  name: 'Food Place',
+  openingHours: openingHours,
+};
+
+
+After ES6:
+
+If the property name is the same as the variable name, you can write it just once:
+
+const restaurant = {
+  name: 'Food Place',
+  openingHours,
+};
+
+
+Benefit:
+Cleaner and less repetitive code when variable names match property names.
+
+
+2. Method Definition Shorthand
+
+Before ES6:
+
+Object methods had to be written using the `function` keyword:
+
+const restaurant = {
+  order: function (starter, main) {
+    return `Starter: ${starter}, Main: ${main}`;
+  }
+};
+
+After ES6:
+
+The function keyword can be omitted for a more concise syntax:
+
+const restaurant = {
+  order(starter, main) {
+    return `Starter: ${starter}, Main: ${main}`;
+  }
+};
+
+Benefit:
+Simplifies object method declarations, improves readability.
+
+
+3. Computed Property Names
+
+Before ES6:
+
+Property names in object literals had to be written explicitly (as string literals or identifiers).
+
+After ES6:
+
+You can now use expressions inside square brackets to compute property names dynamically:
+
+const weekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+const openingHours = {
+  [weekdays[3]]: {
+    open: 12,
+    close: 22
+  },
+  [weekdays[4]]: {
+    open: 11,
+    close: 23
+  },
+  [`day-${2 + 2}`]: {
+    open: 0,
+    close: 24
+  }
+};
+
+Benefit:
+Allows dynamically generated keys, useful in scenarios like mapping values from arrays or conditionally setting object properties.
+
+
+Recap of Benefits
+
+* Less redundancy and boilerplate.
+* Cleaner, more modern syntax.
+* Flexibility with dynamic property names.
+* Improved readability and maintainability of code.
+
+
