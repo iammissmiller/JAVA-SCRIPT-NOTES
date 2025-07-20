@@ -1,0 +1,73 @@
+Looping Over Objects in JavaScript
+
+Objects are not iterable like arrays, but we can still loop over them indirectly by using helper methods to convert them into arrays.
+
+There are three main use cases depending on what you want to loop over:
+
+* Property names (keys)
+* Property values
+* Both keys and values (entries)
+
+1. Looping Over Property Names (Keys)
+
+To loop over keys (property names) of an object:
+
+const properties = Object.keys(openingHours);
+
+for (const day of properties) {
+  console.log(day);
+}
+
+* `Object.keys(obj)` returns an array of keys.
+* You can use `.length` on this array to count how many keys the object has:
+
+console.log(`We are open on ${properties.length} days.`);
+
+
+* You can also build a string using these keys:
+
+let openStr = `We are open on ${properties.length} days: `;
+for (const day of properties) {
+  openStr += `${day}, `;
+}
+
+
+2. Looping Over Property Values
+
+To access the values of the object:
+
+const values = Object.values(openingHours);
+console.log(values);
+
+
+* `Object.values(obj)` returns an **array of values**.
+* You can loop over this array the same way as above.
+
+3. Looping Over Entries (Keys + Values)
+
+To get both the keys and the corresponding values:
+
+const entries = Object.entries(openingHours);
+
+for (const [day, { open, close }] of entries) {
+  console.log(`On ${day}, we open at ${open} and close at ${close}`);
+}
+
+* `Object.entries(obj)` returns an array of key-value pairs.
+* Each value can be **further destructured** if it's an object itself.
+* In the example, the `value` was another object with `open` and `close` properties.
+
+Summary
+
+| Purpose           | Method                | Returns                      |
+| ----------------- | --------------------- | ---------------------------- |
+| Loop over keys    | `Object.keys(obj)`    | Array of keys                |
+| Loop over values  | `Object.values(obj)`  | Array of values              |
+| Loop over entries | `Object.entries(obj)` | Array of \[key, value] pairs 
+
+# Note on Syntax Differences
+
+* With **arrays**, `.entries()` is called on the array itself.
+* With **objects**, use `Object.entries(obj)` instead.
+
+
