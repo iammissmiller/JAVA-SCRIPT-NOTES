@@ -1,0 +1,140 @@
+JavaScript Sets (ES6)
+
+What is a Set?
+
+A Set is a collection of unique values.
+
+Introduced in ES6, along with Maps.
+
+Common in other languages, now natively supported in JS.
+
+Creating a Set
+
+const ordersSet = new Set([
+  'Pasta',
+  'Pizza',
+  'Pizza',
+  'Risotto',
+  'Pasta',
+  'Pizza'
+]);
+
+Result:
+
+Set(3) { 'Pasta', 'Pizza', 'Risotto' }
+
+
+Duplicates are automatically removed.
+
+
+Sets can store any data type.
+
+You can also create sets from strings or empty sets:
+
+
+new Set('hello'); // Set(4) { 'h', 'e', 'l', 'o' }
+new Set();        // Empty set
+
+
+
+
+Set Properties & Methods
+
+
+.size
+
+Returns the number of unique elements.
+
+
+ordersSet.size; // 3
+
+
+.has(value)
+
+Checks if a value is in the set.
+
+
+ordersSet.has('Pizza');  // true
+ordersSet.has('Bread');  // false
+
+
+
+.add(value)
+
+Adds a new value to the set.
+
+ordersSet.add('Garlic Bread');
+ordersSet.add('Garlic Bread'); // Only added once
+
+
+
+.delete(value)
+
+Deletes a value from the set.
+
+ordersSet.delete('Risotto');
+
+
+
+.clear()
+
+Removes all elements from the set.
+
+ordersSet.clear();
+
+
+
+Set Characteristics
+
+No duplicates allowed
+
+No indexes — values cannot be accessed by position.
+
+Unordered — order is not guaranteed or meaningful.
+
+Iterables — can be looped over using for...of.
+
+Looping Through a Set
+
+for (const order of ordersSet) {
+  console.log(order);
+}
+
+
+Practical Use Case: Removing Duplicates
+
+Example: Unique Staff Roles
+
+const staff = ['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter'];
+
+const staffUnique = [...new Set(staff)];
+console.log(staffUnique); // [ 'Waiter', 'Chef', 'Manager' ]
+
+
+Count Unique Items
+
+console.log(new Set(staff).size); // 3
+
+
+Count Unique Letters in a String
+
+console.log(new Set('praptee').size); // 6
+
+
+
+When to Use Sets
+
+Use a Set when:
+
+You need to store unique values only.
+
+You want to quickly check for existence of a value using .has().
+
+Don’t use a Set when:
+
+You need ordered data.
+
+You need to manipulate or access elements by index (use arrays instead).
+
+You require advanced array methods like map, filter, etc.
+
