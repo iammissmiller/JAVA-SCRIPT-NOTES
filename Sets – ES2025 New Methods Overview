@@ -1,0 +1,106 @@
+JavaScript Sets – ES2025 New Methods Overview
+
+Prior to ES2025
+
+Sets had only four methods:
+
+has()
+
+add()
+
+delete()
+
+clear()
+
+Due to limited functionality, sets were rarely used in real-world applications.
+
+ES2025 Update: 7 New Set Methods
+
+Makes Sets more useful and powerful, especially when used with arrays.
+
+Aligns JavaScript Sets more closely with sets in other programming languages.
+
+Demo Data Used
+
+Two sets representing food ingredients:
+
+const italianFoods = new Set(['pasta', 'gnocchi', 'tomatoes', 'olive oil', 'garlic', 'basil']);
+const mexicanFoods = new Set(['tortilla', 'queso', 'tomatoes', 'beans', 'garlic', 'avocado']);
+
+New Set Methods
+
+1. intersection(set)
+
+Returns a new Set containing elements present in both sets.
+
+const commonFoods = italianFoods.intersection(mexicanFoods);
+Result: Set { 'tomatoes', 'garlic' }
+
+Convert to array if needed:
+
+const commonArray = [...commonFoods];
+
+2. union(set)
+
+Returns a new Set with all unique elements from both sets.
+
+const fusion = italianFoods.union(mexicanFoods);
+Alternate way using arrays:
+
+const fusionArray = [...new Set([...italianFoods, ...mexicanFoods])];
+
+3. difference(set)
+
+Returns a Set of elements in the first set but not in the second.
+
+Order matters.
+
+Italian-specific ingredients:
+
+const uniqueItalianFoods = italianFoods.difference(mexicanFoods);
+Mexican-specific ingredients:
+
+const uniqueMexicanFoods = mexicanFoods.difference(italianFoods);
+
+4. symmetricDifference(set)
+
+Returns elements in either set but not in both.
+
+Excludes common elements.
+
+const uniqueItalianAndMexicanFoods = italianFoods.symmetricDifference(mexicanFoods);
+
+5. isDisjointFrom(set)
+
+Returns true if the two sets share no elements; otherwise, false.
+
+console.log(italianFoods.isDisjointFrom(mexicanFoods)); // false
+
+6. isSubsetOf(set)
+
+Returns true if all elements of the current set are in the other set.
+
+7. isSupersetOf(set)
+
+Returns true if the current set contains all elements of the other set.
+
+Set Theory Reference
+
+These methods are equivalent to standard set operations in mathematics:
+
+Intersection
+
+Union
+
+Difference
+
+Symmetric Difference
+
+Disjoint Sets
+
+Browser Compatibility
+
+These methods are new in ES2025.
+
+Supported only in the latest versions of modern browsers.
+
