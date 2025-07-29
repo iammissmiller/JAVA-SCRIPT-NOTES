@@ -1,0 +1,101 @@
+JavaScript Maps – Introduction and Usage
+
+What is a Map?
+
+A Map is a new data structure in JavaScript that stores data in key-value pairs.
+
+Similar to objects, but with major differences:
+
+In objects, keys are always strings (or symbols).
+
+In maps, keys can be any data type: strings, numbers, booleans, objects, arrays, etc.
+
+Creating a Map
+
+const rest = new Map();
+This creates an empty map.
+
+Adding Entries
+
+rest.set('name', 'Classico Italiano');
+rest.set(1, 'Firenze, Italy');
+rest.set(2, 'Lisbon, Portugal');
+The .set() method adds a key-value pair to the map.
+
+It returns the updated map, allowing method chaining:
+
+rest
+  .set('categories', ['Italian', 'Vegetarian'])
+  .set('open', 11)
+  .set('close', 23)
+  .set(true, 'We are open')
+  .set(false, 'We are closed');
+
+
+Reading Data from a Map
+
+Use .get(key) to retrieve values:
+
+console.log(rest.get('name'));   // 'Classico Italiano'
+console.log(rest.get(1));        // 'Firenze, Italy'
+console.log(rest.get(true));     // 'We are open'
+
+
+Key type must match exactly:
+
+rest.get('1'); // undefined, because key was number 1
+
+
+Example: Time-Based Message Using Booleans
+
+const time = 21; // 9 PM
+const isOpen = time > rest.get('open') && time < rest.get('close');
+console.log(rest.get(isOpen)); // 'We are open'
+
+true or false is used to access the correct message.
+
+
+
+Map Methods Summary
+
+.has(key)
+Checks if a key exists:
+
+rest.has('categories'); // true
+
+
+.delete(key)
+Deletes an entry by key:
+
+rest.delete(2); // Removes 'Lisbon, Portugal'
+
+
+.size
+Returns number of entries:
+
+console.log(rest.size); // 7 (after deletions/insertions)
+
+
+.clear()
+Removes all entries from the map:
+
+rest.clear();
+
+Using Arrays or Objects as Map Keys
+
+Important: Object references matter
+
+const arr = [1, 2];
+rest.set(arr, 'Test');
+console.log(rest.get(arr)); // 'Test'
+
+console.log(rest.get([1, 2])); // undefined (different object in memory)
+
+
+DOM elements as keys
+
+rest.set(document.querySelector('h1'), 'Heading');
+
+Keys can be DOM nodes or any object.
+
+Useful for associating metadata or events with specific elements.
