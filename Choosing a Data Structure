@@ -1,0 +1,95 @@
+Sources of Data
+
+Within source code
+Example: status messages displayed on a webpage.
+
+From the user interface (UI/DOM)
+Example: tasks in a todo app, expenses in a budget app.
+
+From external sources (Web APIs)
+
+API = Application Programming Interface.
+
+Provides external data (e.g., weather, movies, currency rates).
+
+Data usually comes in JSON format (JavaScript Object Notation).
+
+
+
+Choosing a Data Structure
+
+Simple list of values → Use Array or Set.
+
+Key-value pairs → Use Object or Map.
+
+Key-value pairs describe values with keys, while lists only hold values.
+
+
+
+Arrays vs Sets
+
+Arrays
+
+Store values in order.
+
+Allow duplicates.
+
+Best when you need to manipulate data.
+
+Large set of built-in methods for transformations.
+
+
+Sets
+
+Store only unique values.
+
+Do not allow duplicates.
+
+Faster for searching and deleting items (can be up to 10x faster than arrays).
+
+Great for removing duplicates from arrays.
+
+Complement arrays; not a replacement.
+
+
+
+
+Objects vs Maps
+
+Objects
+
+Traditional key-value data structure (before ES6).
+
+Keys must be strings (or symbols).
+
+Very easy to write and access (dot or bracket notation).
+
+Ideal when using methods (functions as values), because this can be used.
+
+Common when working with JSON.
+
+
+Maps
+
+Better performance than objects as key-value stores.
+
+Keys can be any data type (string, number, boolean, object, array, DOM element).
+
+Easier to iterate over.
+
+Easy to compute size with .size.
+
+Recommended when you need non-string keys or a pure key-value store.
+
+
+
+Summary Guidelines
+
+Use arrays when you need ordered collections, duplicates, or array methods.
+
+Use sets when you need unique values or high-performance lookups.
+
+Use objects when you need functions (methods) as values or when working with JSON.
+
+Use maps for flexible key types, better performance, and easier iteration.
+
