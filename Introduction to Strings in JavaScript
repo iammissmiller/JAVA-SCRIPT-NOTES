@@ -1,0 +1,87 @@
+Introduction to Strings in JavaScript
+
+Strings are primitives, but JavaScript allows us to use methods on them due to a behind-the-scenes process called boxing.
+
+Boxing: JavaScript temporarily wraps a string primitive in a String object, allowing access to methods, then converts it back to a primitive.
+
+Basic String Operations
+
+Creating Strings
+
+const airline = 'TAP Air Portugal';
+const plane = 'A320';
+
+
+Accessing Characters
+
+plane[0]; // 'A'
+plane[1]; // '3'
+
+
+String Length
+
+airline.length; // 16
+'B727'.length;  // 4
+
+
+String Methods
+
+indexOf() and lastIndexOf()
+indexOf() → Finds first occurrence index.
+
+lastIndexOf() → Finds last occurrence index.
+
+Searches are case-sensitive.
+
+airline.indexOf('r');        // 6
+airline.lastIndexOf('r');    // 10
+airline.indexOf('Portugal'); // 8
+airline.indexOf('portugal'); // -1
+
+
+slice(beginIndex, endIndex)
+
+Extracts part of a string into a new string (substring).
+
+Does not modify the original string.
+
+End index is not included.
+
+Supports negative indexes (counting from end).
+
+
+airline.slice(4);      // 'Air Portugal'
+airline.slice(4, 7);   // 'Air'
+airline.slice(0, airline.indexOf(' '));           // First word
+airline.slice(airline.lastIndexOf(' ') + 1);      // Last word
+airline.slice(-2);     // Last 2 characters
+airline.slice(1, -1);  // Removes first and last character
+
+Example: Middle Seat Check
+
+Airplanes have rows with seats labeled A-F; B and E are middle seats.
+
+function checkMiddleSeat(seat) {
+  const s = seat.slice(-1);
+  if (s === 'B' || s === 'E') {
+    console.log('You got the middle seat');
+  } else {
+    console.log('You got lucky');
+  }
+}
+
+checkMiddleSeat('11B'); // Middle seat
+checkMiddleSeat('23C'); // Lucky
+checkMiddleSeat('3E');  // Middle seat
+
+
+Key Points
+
+Strings are immutable: methods return new strings.
+
+Many array-like methods also exist for strings, but strings are not arrays.
+
+Index positions are zero-based.
+
+Using indexOf()/lastIndexOf() is useful for finding dynamic positions before slicing.
+
