@@ -1,0 +1,78 @@
+JavaScript String Methods – Practical Usage
+
+1. Changing Case
+
+str.toLowerCase() → Converts string to all lowercase.
+
+str.toUpperCase() → Converts string to all uppercase.
+
+Example: Fix capitalization
+
+const passenger = 'jOnAs';
+const passengerLower = passenger.toLowerCase();
+const passengerCorrect = passengerLower[0].toUpperCase() + passengerLower.slice(1);
+console.log(passengerCorrect); // Jonas
+
+2. Trimming Whitespace
+
+str.trim() → Removes whitespace from both ends.
+
+str.trimStart() → Removes from start.
+
+str.trimEnd() → Removes from end.
+
+Example: Normalize email input
+
+const loginEmail = '  Hello@Jonas.io \n';
+const normalizedEmail = loginEmail.toLowerCase().trim();
+console.log(normalizedEmail); // hello@jonas.io
+
+3. Replacing Text
+
+str.replace('old', 'new') → Replaces first occurrence.
+
+str.replaceAll('old', 'new') → Replaces all occurrences (ES2021+).
+
+str.replace(/old/g, 'new') → Regex alternative to replace all.
+
+Example: Convert price and announcement
+
+const priceGB = '288,97£';
+const priceUS = priceGB.replace('£', '$').replace(',', '.');
+console.log(priceUS); // 288.97$
+
+const announcement = 'All passengers come to boarding door 23. Boarding door 23.';
+console.log(announcement.replaceAll('door', 'gate'));
+// All passengers come to boarding gate 23. Boarding gate 23.
+
+4. Checking Substrings
+
+str.includes('x') → Returns true if substring exists.
+
+str.startsWith('x') → Checks if string starts with substring.
+
+str.endsWith('x') → Checks if string ends with substring.
+
+Example: Identify aircraft model
+
+const plane = 'Airbus A320neo';
+
+console.log(plane.includes('A320'));     // true
+console.log(plane.startsWith('Airbus')); // true
+console.log(plane.endsWith('neo'));      // true
+
+5. Real-life Use Case: Security Check for Baggage
+
+Check if baggage contains banned items (case-insensitive):
+
+function checkBaggage(items) {
+  const baggage = items.toLowerCase();
+  if (baggage.includes('knife') || baggage.includes('gun')) {
+    console.log('You are not allowed on board');
+  } else {
+    console.log('Welcome aboard');
+  }
+}
+
+checkBaggage('I have a laptop, some Food and a pocket Knife'); 
+// You are not allowed on board
