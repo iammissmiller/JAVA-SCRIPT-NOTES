@@ -1,0 +1,67 @@
+JavaScript String Methods – Summary Notes
+
+1. Changing Case
+
+toLowerCase() – Converts string to lowercase.
+
+toUpperCase() – Converts string to uppercase.
+
+Use for input standardization.
+
+Example:
+
+const name = 'jOnAs';
+const properName = name[0].toUpperCase() + name.slice(1).toLowerCase();
+
+2. Trimming Whitespace
+
+trim() – Removes whitespace from both ends.
+
+trimStart(), trimEnd() – Remove only from start/end.
+
+Example:
+
+const email = '  Hello@Example.com  ';
+const cleaned = email.trim().toLowerCase();
+
+3. Replacing Text
+
+replace(old, new) – Replaces first match.
+
+replaceAll(old, new) – Replaces all matches.
+
+Regex with /g can replace globally.
+
+Example:
+
+const price = '288,97£';
+const usPrice = price.replace('£', '$').replace(',', '.');
+
+4. Checking Substrings
+
+includes(sub) – True if substring found.
+
+startsWith(sub) – True if starts with substring.
+
+endsWith(sub) – True if ends with substring.
+
+Example:
+
+const plane = 'Airbus A320neo';
+plane.includes('A320');     // true
+plane.startsWith('Airbus'); // true
+
+5. Real-life Example: Security Check
+
+Convert text to lowercase before checking.
+
+Example:
+
+function checkBaggage(items) {
+  const baggage = items.toLowerCase();
+  if (baggage.includes('knife') || baggage.includes('gun')) {
+    console.log('Not allowed');
+  } else {
+    console.log('Allowed');
+  }
+}
