@@ -1,0 +1,96 @@
+# JavaScript Functions: Default Parameters
+
+### 1. What are Default Parameters?
+
+* Allow function parameters to have default values.
+* If no argument or `undefined` is passed, the default is used.
+* Makes functions easier to call without specifying every argument.
+
+---
+
+### 2. Example Setup
+
+* Use an array `bookings` to store booking objects.
+* Each booking has: `flightNum`, `numPassengers`, and `price`.
+* Booking object uses enhanced object literal syntax:
+
+ 
+  const booking = { flightNum, numPassengers, price };
+  bookings.push(booking);
+
+
+---
+
+### 3. Old (Pre-ES6) Way to Set Defaults
+
+* Use short-circuiting with OR (`||`) operator inside the function body:
+
+
+  numPassengers = numPassengers || 1;
+  price = price || 199;
+
+* Problem: Doesn't work if falsy values like `0` or `''` are valid inputs.
+
+* Verbose and boilerplate-y.
+
+---
+
+### 4. Modern ES6 Syntax for Default Parameters
+
+* Set defaults directly in the function parameter list:
+
+
+  function createBooking(flightNum, numPassengers = 1, price = 199) {
+    // function body
+  }
+
+* Cleaner and more readable.
+
+* If arguments omitted or `undefined` passed, defaults are used.
+
+---
+
+### 5. Default Parameter Expressions
+
+* Default values can be expressions or calculations:
+
+
+  function createBooking(flightNum, numPassengers = 1, price = numPassengers * 199) {
+    // ...
+  }
+
+* Parameters are initialized left to right.
+
+* You can only use default parameters that were defined **before** in the list.
+
+* Example that doesn't work:
+
+ 
+  function f(a = b, b = 1) { } // Error because b isn't defined before a
+ 
+
+---
+
+### 6. Skipping Parameters
+
+* You **cannot** skip parameters by leaving them empty when calling the function:
+
+  
+  createBooking('LH123', , 1000); // Syntax error
+ 
+* To skip a parameter and use its default, explicitly pass `undefined`:
+
+ 
+  createBooking('LH123', undefined, 1000);
+  
+* Passing `undefined` triggers the default value.
+
+---
+
+### 7. Summary
+
+* Default parameters simplify function calls.
+* They reduce boilerplate code.
+* Enable dynamic defaults based on previous parameters.
+* Use `undefined` to skip parameters and still apply defaults.
+
