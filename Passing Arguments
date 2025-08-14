@@ -1,0 +1,99 @@
+## 1. Review: Primitive vs. Reference Types
+
+* **Primitive types**: Strings, numbers, booleans, `null`, `undefined`, `symbol`, `bigint`.
+
+* **Reference types**: Objects, arrays, functions.
+
+* Passing values into functions follows the same rules as variable assignment.
+
+---
+
+## 2. Behavior When Passing Arguments
+
+### a) Passing Primitives
+
+* The value is **copied** into the function parameter.
+* Changing the parameter **does not** affect the original variable.
+* Example:
+
+
+  let flight = 'LH234';
+  function changeFlight(num) {
+    num = 'LH999';
+  }
+  changeFlight(flight);
+  console.log(flight); // LH234 (unchanged)
+
+
+### b) Passing Objects
+
+* The **reference** (memory address) is copied into the parameter.
+
+* Both the original variable and the parameter point to the **same object in memory**.
+
+* Changing the parameter’s properties **does** affect the original object.
+
+* Example:
+
+
+  const passenger = { name: 'Jonas', passport: 12345 };
+  function changeName(person) {
+    person.name = 'Mr ' + person.name;
+  }
+  changeName(passenger);
+  console.log(passenger.name); // "Mr Jonas"
+
+
+---
+
+## 3. Real-World Issue Example
+
+* Multiple functions modifying the **same object** can lead to unexpected bugs.
+
+* Example:
+
+
+  function newPassport(person) {
+    person.passport = Math.trunc(Math.random() * 1000000000);
+  }
+
+  function checkIn(flightNum, passenger) {
+    if (passenger.passport === 12345) {
+      console.log('Checked in');
+    } else {
+      console.log('Wrong passport');
+    }
+  }
+
+  const jonas = { name: 'Jonas', passport: 12345 };
+
+  newPassport(jonas);
+
+  checkIn('LH234', jonas); // "Wrong passport"
+  ```
+
+---
+
+## 4. Pass by Value vs. Pass by Reference in JS
+
+* **JavaScript only passes by value**.
+
+* For objects, the "value" passed is the reference (memory address).
+
+* The reference itself is copied, not the object.
+
+* **Pass by reference** (in languages like C++) means the function gets direct access to the original variable itself — JavaScript does not do this.
+
+---
+
+## 5. Key Takeaways
+
+* **Primitives**: Safe from unintended changes inside functions.
+
+* **Objects**: Changes inside functions affect the original object.
+
+* Always be careful when passing objects to functions — unexpected changes can occur.
+
+* JavaScript passes everything **by value** — but for objects, that value is a reference.
+
+
