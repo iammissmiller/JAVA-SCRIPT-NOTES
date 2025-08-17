@@ -1,0 +1,71 @@
+First-Class Functions and Higher-Order Functions in JavaScript
+
+1. First-Class Functions
+
+Definition: In JavaScript, functions are first-class citizens.
+
+Meaning: Functions are treated as values, just like objects, strings, or numbers.
+
+Why: Functions in JavaScript are actually a special type of object.
+
+Implications:
+
+Functions can be:
+
+Stored in variables.
+
+Assigned as object properties (methods).
+
+Passed as arguments to other functions.
+
+Returned from other functions.
+
+Functions also have their own methods (e.g., bind).
+
+2. Higher-Order Functions
+
+Definition: A function that does one of the following:
+
+Receives another function as an argument.
+
+Returns a new function.
+
+a) Functions Receiving Functions
+
+Example:
+
+document.querySelector('.btn').addEventListener('click', greet);
+
+
+addEventListener → higher-order function.
+
+greet → callback function (executed later).
+
+Callback function:
+
+A function passed into another function to be “called back” later.
+Example: Run when an event occurs, or after a task finishes.
+
+b) Functions Returning Functions
+
+A function can also return another function.
+
+This is commonly used in advanced patterns (e.g., function factories, closures).
+
+3. Distinguishing the Two Concepts
+
+First-Class Functions: A language feature. Functions are values.
+
+Higher-Order Functions: A programming practice. Functions that use other functions (either receive or return them).
+
+Key point: Higher-order functions are possible because JavaScript has first-class functions.
+
+4. Key Takeaways
+
+JavaScript treats functions as values → first-class functions.
+
+Higher-order functions are functions that take or return functions.
+
+First-class functions are a concept; higher-order functions are used in real programs.
+
+Callback functions are a common example of first-class and higher-order function usage.
