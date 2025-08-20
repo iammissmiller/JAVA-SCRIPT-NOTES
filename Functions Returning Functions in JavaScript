@@ -1,0 +1,60 @@
+Functions Returning Functions in JavaScript
+
+1. Concept
+
+Functions in JavaScript can return other functions.
+
+This is possible because functions are values (first-class citizens).
+
+The returned function can then be stored in a variable and called later.
+
+This concept is heavily used in functional programming and advanced patterns.
+
+2. Example with Normal Function Syntax
+
+// Function that returns a new function
+function greet(greeting) {
+  return function (name) {
+    console.log(`${greeting} ${name}`);
+  };
+}
+
+// Use it
+const greeterHey = greet('Hey');  // returns a new function
+
+greeterHey('Jonas');   // Hey Jonas
+greeterHey('Steven');  // Hey Steven
+
+// Call directly in one go
+greet('Hello')('Jonas');  // Hello Jonas
+
+Explanation
+
+greet('Hey') → returns a function that expects a name.
+
+greeterHey now holds that function.
+
+Calling greeterHey('Jonas') → outputs "Hey Jonas".
+
+We can also call it directly in one step: greet('Hello')('Jonas').
+
+3. Arrow Function Version (Shorter but Confusing)
+
+// Arrow function returning another arrow function
+const greetR = greeting => name => console.log(`${greeting} ${name}`);
+
+greetR('Hi')('Jonas');  // Hi Jonas
+
+4. Why Is This Useful?
+
+Creates customized functions (e.g., greeterHey, greeterHello).
+
+Forms the basis of closures (inner function remembers variables from outer function).
+
+Used in functional programming for cleaner, reusable patterns.
+
+👉 Key takeaway:
+
+A function can return another function.
+
+This makes it possible to create specialized functions with preset data (like “Hey”, “Hello”).
