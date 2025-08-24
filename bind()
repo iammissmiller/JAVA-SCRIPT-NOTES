@@ -1,0 +1,109 @@
+# JavaScript `bind()` Method
+
+## 1. What is `bind()`?
+
+* Like `call()`, it sets the value of `this`.
+
+* **Difference**: `bind()` does not call the function immediately.
+
+* Instead, it **returns a new function** with `this` (and optionally arguments) “locked in”.
+
+---
+
+## 2. Basic Example (Airline Booking)
+
+
+const lufthansa = {
+  airline: 'Lufthansa',
+  iataCode: 'LH',
+  bookings: [],
+  book(flightNum, name) {
+    console.log(`${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`);
+    this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
+  },
+};
+
+const book = lufthansa.book;
+
+// Bind Lufthansa
+const bookLH = book.bind(lufthansa);
+bookLH(239, 'Jonas Schmedtmann');
+// Jonas booked a seat on Lufthansa flight LH239
+```
+
+---
+
+## 3. Binding with Arguments (Partial Application)
+
+const eurowings = { airline: 'Eurowings', iataCode: 'EW', bookings: [] };
+const book = lufthansa.book;
+
+// Bind airline + flight number
+const bookEW23 = book.bind(eurowings, 23);
+bookEW23('Steven Williams'); // Steven booked a seat on Eurowings flight EW23
+bookEW23('Martha Cooper');   // Martha booked a seat on Eurowings flight EW23
+```
+
+Here, **flight number is preset** → only passenger name is needed.
+This pattern is called **partial application**.
+
+---
+
+## 4. `bind()` with Event Listeners
+
+lufthansa.planes = 300;
+lufthansa.buyPlane = function () {
+  console.log(this); // Should be lufthansa
+  this.planes++;
+  console.log(this.planes);
+};
+
+// Without bind → "this" points to button element
+document.querySelector('.buy').addEventListener('click', lufthansa.buyPlane);
+
+// Fix with bind → "this" points to lufthansa
+document.querySelector('.buy').addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
+```
+
+---
+
+## 5. `bind()` for Partial Application (Taxes Example)
+
+
+// General tax function
+const addTax = (rate, value) => value + value * rate;
+
+// Create a VAT function (23%)
+const addVAT = addTax.bind(null, 0.23);
+
+console.log(addVAT(100)); // 123
+console.log(addVAT(200)); // 246
+```
+
+Here, `null` is used because we don’t care about `this`.
+
+---
+
+## 6. Alternative: Function Returning Function
+
+Instead of `bind`, we can use closures:
+
+
+function addTaxRate(rate) {
+  return function (value) {
+    return value + value * rate;
+  };
+}
+
+const addVAT2 = addTaxRate(0.23);
+console.log(addVAT2(100)); // 123
+console.log(addVAT2(200)); // 246
+```
+
+---
+
+✅ Key Uses of `bind()`:
+
+1. Fixing `this` inside event listeners.
+2. Creating specialized functions (partial application).
+3. Avoiding repetitive use of `.call()`.
