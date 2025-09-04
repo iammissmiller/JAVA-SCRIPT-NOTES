@@ -1,0 +1,89 @@
+Arrays and Methods
+
+* Arrays in JavaScript are objects, so they have methods (functions attached to them).
+* These methods are like tools to manipulate arrays.
+* Important to know: Some methods mutate (change) the original array, while others don’t.
+
+
+1. slice()
+
+* Purpose: Extracts part of an array into a new array (does not mutate the original).
+* Syntax: arr.slice(begin, end)
+
+  * begin: start index (inclusive).
+  * end: stop index (exclusive).
+
+* Examples:
+
+  const arr = ['a', 'b', 'c', 'd', 'e'];
+  arr.slice(2);       // ['c', 'd', 'e']
+  arr.slice(2, 4);    // ['c', 'd']
+  arr.slice(-2);      // ['d', 'e']
+  arr.slice(-1);      // ['e']  (last element)
+  arr.slice(1, -1);   // ['b', 'c', 'd']
+  arr.slice();        // shallow copy ['a', 'b', 'c', 'd', 'e']
+  
+* Alternative: Shallow copy can also be done with spread:
+
+
+  [...arr];
+
+
+2. splice()
+
+* Purpose: Removes or replaces elements (mutates original array).
+* Syntax: arr.splice(start, deleteCount)
+
+  * start: index to start changing.
+  * deleteCount: how many elements to remove.
+* Examples:
+
+
+  const arr = ['a', 'b', 'c', 'd', 'e'];
+  arr.splice(2);     // ['c', 'd', 'e'], arr becomes ['a', 'b']
+  arr.splice(-1);    // removes last element
+  arr.splice(1, 2);  // removes 2 elements starting at index 1 → arr becomes ['a', 'd', 'e']
+
+
+
+3. reverse()
+
+* Purpose: Reverses the order of elements (mutates the array).
+* Example:
+
+
+  const arr = ['a', 'b', 'c'];
+  arr.reverse(); // ['c', 'b', 'a'], arr is now changed
+
+
+
+4. concat()
+
+* Purpose: Joins two arrays into a new one (does not mutate originals).
+* Syntax: `arr1.concat(arr2)`
+* Examples:
+
+  const arr1 = ['a', 'b', 'c'];
+  const arr2 = ['d', 'e', 'f'];
+  arr1.concat(arr2); // ['a', 'b', 'c', 'd', 'e', 'f']
+  // Alternative:
+  [...arr1, ...arr2];
+
+
+
+5. join()
+
+* Purpose: Joins all array elements into a single string.
+* Syntax: `arr.join(separator)
+* Example:
+
+  const arr = ['a', 'b', 'c'];
+  arr.join('-'); // 'a-b-c'
+
+
+Key Takeaways
+
+* Non-mutating methods: `slice`, `concat`, `join`
+* Mutating methods: `splice`, `reverse`
+* Use `slice()` or spread `[...arr]` for shallow copies.
+* Use MDN documentation for detailed references.
