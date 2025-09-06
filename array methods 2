@@ -1,0 +1,73 @@
+`at()` Method (ES2022)
+
+1. What it is
+
+* A **new array method** introduced in ES2022.
+* Allows accessing array elements using an index, similar to `[]`.
+* Syntax:
+
+  arr.at(index)
+
+---
+
+2. Traditional vs `at()`
+
+* Traditional:
+
+
+  arr[0]        // first element
+  arr[arr.length - 1] // last element
+  ```
+* With `at()`:
+
+
+  arr.at(0)   // first element
+  arr.at(-1)  // last element
+  ```
+
+---
+
+3. Why it’s useful
+
+* Supports **negative indices**:
+
+  * `-1` → last element
+  * `-2` → second last element, etc.
+* Makes code **cleaner** compared to `arr.length - 1`.
+* Works with **method chaining** (`map().filter().at(-1)`).
+
+---
+
+4. Comparison with slice method
+
+* Using `slice(-1)` gives an array with the last element:
+
+  arr.slice(-1)[0]  // last element
+  ```
+* Using `at(-1)` directly gives the value:
+
+  arr.at(-1)  // last element
+  ```
+
+---
+5. Works with Strings too
+
+const str = "jonas";
+str.at(0);   // "j"
+str.at(-1);  // "s"
+```
+
+---
+6. When to use
+
+Use `at()`:
+
+  * When accessing last/near-last elements.
+  * When chaining methods.
+Use `[]`:
+
+  * For quick, simple indexing (like `arr[0]`).
+
+---
+Key takeaway:
+`at()` is especially powerful for **negative indexing** and **method chaining**, making it cleaner and more readable than traditional approaches.
