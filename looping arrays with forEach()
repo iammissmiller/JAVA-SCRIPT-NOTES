@@ -1,0 +1,105 @@
+1. What is `forEach()`?
+
+* An array method used to loop over elements.
+* Works differently from the `for...of` loop.
+* Executes a callback function once for each array element.
+* Syntax:
+
+  array.forEach(function(element, index, array) {
+    // logic here
+  });
+
+
+ 2. Using `for...of` (Traditional way)
+
+
+for (const movement of movements) {
+  if (movement > 0) {
+    console.log(`You deposited ${movement}`);
+  } else {
+    console.log(`You withdrew ${Math.abs(movement)}`);
+  }
+}
+
+
+
+ 3. Using `forEach()` (Modern way)
+
+
+movements.forEach(function(movement) {
+  if (movement > 0) {
+    console.log(`You deposited ${movement}`);
+  } else {
+    console.log(`You withdrew ${Math.abs(movement)}`);
+  }
+});
+
+
+* Produces the same result as `for...of`.
+* Cleaner and easier for many developers.
+
+
+4. Parameters in `forEach()` Callback
+
+* First parameter → current element.
+* Second parameter → index.
+* Third parameter → entire array.
+* Example:
+
+
+  movements.forEach(function(mov, i, arr) {
+    if (mov > 0) {
+      console.log(`Movement ${i + 1}: You deposited ${mov}`);
+    } else {
+      console.log(`Movement ${i + 1}: You withdrew ${Math.abs(mov)}`);
+    }
+    console.log(arr); // optional, shows the entire array
+  });
+
+
+
+ 5. Comparison with `for...of` (using `entries()`)
+
+for (const [i, mov] of movements.entries()) {
+  if (mov > 0) {
+    console.log(`Movement ${i + 1}: You deposited ${mov}`);
+  } else {
+    console.log(`Movement ${i + 1}: You withdrew ${Math.abs(mov)}`);
+  }
+}
+
+
+* `for...of` + `entries()` → `[index, element]`.
+* `forEach()` → `(element, index, array)`.
+*  Order of parameters is different.
+
+
+
+ 6. Key Differences
+
+* `forEach()`:
+
+  * Always iterates the **entire array**.
+  *  Cannot use `break` or `continue`.
+  *  Better when you want to run logic on *all* elements.
+* `for...of`:
+
+  *  Can use `break` and `continue`.
+  *  Useful when you may need to stop early.
+
+
+
+ 7. Why `forEach()` is Important
+
+* Helps you understand **callback functions**.
+* Most array methods (`map`, `filter`, `reduce`, etc.) follow the **same principle**.
+* Essential building block for modern JavaScript.
+
+
+
+Key takeaway:
+
+* Use `forEach()` when you want to loop through all elements without breaking.
+* Use `for...of` when you might need `break`/`continue`.
+* Understanding the callback + arguments mechanism is crucial for mastering advanced array methods.
+
