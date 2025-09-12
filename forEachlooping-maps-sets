@@ -1,0 +1,114 @@
+# `forEach()` on Arrays, Maps, and Sets
+
+1. Recap: `forEach()` on Arrays
+
+* Arrays store values in an ordered list (with indices).
+* The `forEach()` method executes a provided callback function once for each array element.
+* Callback function parameters:
+
+  1. element → the current element of the array.
+  2. index → the position of the current element in the array.
+  3. array → the entire array being iterated.
+
+Example:
+
+const numbers = [10, 20, 30];
+
+numbers.forEach((element, index, array) => {
+  console.log(`Element: ${element}, Index: ${index}, Array: ${array}`);
+});
+
+---
+
+2. `forEach()` on Maps
+
+* A Map stores key–value pairs, where keys can be of any type (not just strings).
+* The `forEach()` method in Maps also accepts a callback with three parameters:
+
+  1. value → the current value of the Map entry.
+  2. key → the key associated with the current value.
+  3. map → the entire Map object.
+
+Example:
+
+const currencies = new Map([
+  ['USD', 'United States Dollar'],
+  ['EUR', 'Euro'],
+  ['GBP', 'Pound Sterling'],
+]);
+
+currencies.forEach((value, key, map) => {
+  console.log(`${key}: ${value}`);
+});
+
+Output:
+
+USD: United States Dollar
+EUR: Euro
+GBP: Pound Sterling
+
+Key Points:
+
+* Order of iteration in Maps is the insertion order, meaning entries are iterated in the order they were added.
+* Useful when you need to process both keys and values.
+
+---
+
+3. `forEach()` on Sets
+
+* A Set stores only unique values (no duplicates).
+* The `forEach()` method here also accepts a callback with three parameters:
+
+  1. value → the current value in the Set.
+  2. key → identical to the value (since Sets have no keys or indices).
+  3. set → the entire Set object.
+
+Example:
+
+const currenciesUnique = new Set(['USD', 'GBP', 'USD', 'EUR']);
+
+currenciesUnique.forEach((value, _, set) => {
+  console.log(value);
+});
+
+Output:
+
+USD
+GBP
+EUR
+
+Key Points:
+
+* The second parameter (key) exists only for consistency with Maps and Arrays.
+* Developers typically use `_` as a placeholder when the argument is unused.
+* Iteration order in Sets is also based on insertion order.
+
+---
+
+4. Summary Table of `forEach()` Parameters
+
+| Data Structure | First Parameter | Second Parameter | Third Parameter |
+| -------------- | --------------- | ---------------- | --------------- |
+| Array          | element         | index            | array           |
+| Map            | value           | key              | map             |
+| Set            | value           | value (same)     | set             |
+
+
+5. Key Differences Between `forEach()` in Arrays, Maps, and Sets
+
+1. Arrays → Have ordered elements with indices.
+2. Maps → Store key–value pairs; `forEach()` gives access to both.
+3. Sets → Contain only unique values, no indices; key is redundant.
+4. Breaking out → Unlike `for` or `for...of` loops, you **cannot use `break` or `continue`** in a `forEach()` loop. It always iterates the entire structure.
+5. Use case choice:
+
+   * Use `forEach()` when you want to process every item.
+   * Use `for...of` or traditional loops if you need more control (breaking/continuing).
+
+---
+
+6. Best Practices
+
+* Use descriptive parameter names in callbacks when clarity is important (e.g., `(value, key, map)` instead of `(v, k, m)` in study examples).
+* Use short names or `_` for unused parameters in production code to reduce clutter.
+* Prefer `forEach()` when readability matters and you don’t need to stop early.
