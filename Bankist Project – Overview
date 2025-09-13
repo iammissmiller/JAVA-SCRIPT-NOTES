@@ -1,0 +1,103 @@
+# Bankist Project – Overview and Data Setup
+
+1. Introduction to Bankist
+
+* Bankist is a minimalist online banking application.
+* Purpose: Practice array methods and build a real-world style project.
+* Demo: available at *bankist.netlify.app*.
+
+2. Features of the Application
+
+* Login with username + PIN.
+* View account movements (deposits = positive, withdrawals = negative).
+* Overall account balance display.
+* Summary data: totals for deposits, withdrawals, interest.
+* Operations available:
+
+  1. Transfer money to another account.
+  2. Request a loan.
+  3. Close account.
+* Additional features:
+
+  * Sorting movements.
+  * Accounts formatted in different currencies and locales (handled later).
+  * Automatic logout timer (handled later).
+
+3. Example Workflow
+
+1. Login with `user: js`, `pin: 1111`.
+2. Request loan → amount added as deposit.
+3. Transfer to another user (e.g., JD with pin `2222`).
+4. JD’s account shows received amount.
+5. Movements can be sorted ascending.
+
+---
+
+4. Flow Chart Overview
+
+* Yellow nodes = user actions (e.g., login, transfer, loan request).
+* After login:
+
+  * Check credentials.
+  * If correct:
+
+    * Display UI.
+    * Update UI (calculate balance, summary, display movements, etc.).
+* Other operations follow from the flow (transfer, loan, close account).
+* Flow chart serves as a road map for feature implementation.
+* Provides structure when coding complex applications.
+
+---
+
+5. Data Files and Setup
+
+* Account objects: Each account is represented as an object.
+
+  * Example fields:
+
+    * `owner` (account holder name)
+    * `movements` (array of transaction amounts)
+    * `interestRate` (for calculating interest)
+    * `pin` (login credential)
+* All accounts stored inside an array `accounts = [acc1, acc2, ...]`.
+* Reason for using objects:
+
+  * Real-world APIs usually return JSON → objects.
+  * Easier to simulate real-world application structure.
+
+Example account object:
+
+const account1 = {
+  owner: 'Jonas Schmedtmann',
+  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  interestRate: 1.2, // %
+  pin: 1111,
+};
+```
+
+* Why not use Maps here?
+
+  * Maps are useful, but API responses almost always return objects.
+  * Using objects keeps the project realistic.
+
+---
+
+6. Other Project Files
+
+* `index.html`: complex structure, pre-written UI with selected elements.
+* `style.css`: \~300 lines of CSS for professional styling.
+* `flowchart.png`: overview of logic and actions.
+* Configuration files (e.g., Prettier).
+* Icons and logos (e.g., favicon).
+
+---
+
+7. Key Learning Goals
+
+* Practice **array methods** through realistic operations (filter, map, reduce, forEach, etc.).
+* Learn how to organize **data** (objects in arrays).
+* Understand how to update the UI dynamically.
+* Gain experience in reading flow charts and applying them to coding.
+
+---
+
