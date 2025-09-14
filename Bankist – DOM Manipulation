@@ -1,0 +1,179 @@
+Bankist – DOM Manipulation 
+
+### 1. Context
+
+* The project continues with the Bankist App.
+* We return to DOM manipulation to display account movements (transactions) dynamically on the web page.
+* Goal:
+
+  * Use `forEach` to loop through an array of movements.
+  * Create DOM elements for each movement.
+  * Insert them into the application’s UI.
+
+---
+
+### 2. Application Structure
+
+* HTML:
+
+  * A `nav` element for navigation bar (top).
+  * A `main` element containing the app (initially hidden via CSS).
+* CSS:
+
+  * App is invisible because `opacity: 0` in `.app`.
+  * Logging in/out = toggling opacity (0 or 1).
+
+---
+
+### 3. Displaying Movements
+
+#### a) Best practice
+
+* Wrap DOM manipulation logic inside a function instead of writing directly in the global scope.
+* Example function:
+
+
+const displayMovements = function(movements) {
+  // Code to display movements dynamically
+};
+```
+
+* Why?
+
+  * Cleaner code.
+  * Functions can be reused with different data.
+  * Avoids reliance on global variables.
+
+---
+
+#### b) Looping through movements
+
+* Use `forEach` to iterate over the movements array:
+
+movements.forEach(function(mov, i) {
+  // mov = current movement
+  // i = index (0,1,2,...)
+});
+```
+
+* Index is useful for numbering transactions (e.g., “Movement 1, Movement 2…”).
+
+---
+
+#### c) Creating HTML for each row
+
+* Each movement is displayed as a `movements__row` in the UI.
+* Use template literals to build HTML dynamically:
+
+const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+const html = `
+  <div class="movements__row">
+    <div class="movements__type movements__type--${type}">
+      ${i + 1} ${type}
+    </div>
+    <div class="movements__value">${mov}€</div>
+  </div>
+`;
+```
+
+* Benefits of template literals:
+
+  * Easier multi-line strings.
+  * Easy variable interpolation (`${}`).
+
+---
+
+#### d) Inserting HTML into DOM
+
+* Use `insertAdjacentHTML(position, string)`:
+
+containerMovements.insertAdjacentHTML('afterbegin', html);
+```
+
+* Positions:
+
+  * `'afterbegin'`: inserts element as the first child.
+  * `'beforeend'`: inserts as the last child.
+  * `'beforebegin'` / `'afterend'`: insert outside parent element.
+
+* Here we use `afterbegin` so newest movement appears at the top.
+
+---
+
+#### e) Clearing the container before rendering
+
+* Otherwise, old movements remain duplicated.
+* Solution:
+
+containerMovements.innerHTML = '';
+```
+
+* `innerHTML`:
+
+  * As setter: clears/replaces content.
+  * As getter: returns the raw HTML (tags + text).
+
+---
+
+### 4. Key Learnings
+
+1. Separation of concerns:
+
+   * Always pass data into functions instead of using global variables.
+   * Keeps code modular and testable.
+
+2. DOM insertion techniques:
+
+   * `insertAdjacentHTML()` = quick and efficient for rendering multiple elements.
+   * Template literals make string-based HTML much easier.
+
+3. Order control:
+
+   * Choosing `'afterbegin'` ensures the latest movement appears on top.
+   * `'beforeend'` would invert order (newest at bottom).
+
+4. innerHTML vs textContent:
+
+   * `textContent` → returns plain text (ignores HTML).
+   * `innerHTML` → returns or sets HTML including tags.
+
+---
+
+### 5. Example – Full `displayMovements` function
+
+const displayMovements = function(movements) {
+  // Clear previous movements
+  containerMovements.innerHTML = '';
+
+  // Loop through each movement
+  movements.forEach(function(mov, i) {
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+    const html = `
+      <div class="movements__row">
+        <div class="movements__type movements__type--${type}">
+          ${i + 1} ${type}
+        </div>
+        <div class="movements__value">${mov}€</div>
+      </div>
+    `;
+
+    // Insert movement into container
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
+};
+
+// Example usage
+displayMovements(account1.movements);
+```
+
+---
+
+With this, we have built the first part of the Bankist UI:
+
+* Movements are displayed dynamically.
+* Deposits appear in green, withdrawals in red.
+* Newest transaction appears on top.
+
+---
