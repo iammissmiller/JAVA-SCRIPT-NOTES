@@ -1,0 +1,126 @@
+Bankist – Array Transformation Methods (map, filter, reduce)
+
+1. Why These Methods?
+
+* Used to transform data in arrays.
+* Return new arrays or values without mutating the original.
+* Very common in modern JavaScript (functional programming style).
+* Core difference from `.forEach()` → these methods return useful new data instead of just looping for side effects.
+
+---
+
+2. `.map()`
+
+* Purpose: Transforms each element of an array and returns a **new array** of the same length.
+
+* How it works:
+
+  * Loops through original array.
+  * Applies a callback function to each element.
+  * Stores the result in a new array.
+
+* Syntax:
+
+  const newArray = arr.map(function(element, index, array) {
+    return transformation;
+  });
+  ```
+
+* Example:
+
+  const numbers = [1, 2, 3, 4];
+  const doubled = numbers.map(num => num * 2);
+  console.log(doubled); // [2, 4, 6, 8]
+  ```
+
+* Key Point: Always returns a new array (does not mutate the original).
+
+---
+
+3. `.filter()`
+
+* Purpose: Selects certain elements based on a condition.
+
+* How it works:
+
+  * Loops through the array.
+  * Includes only the elements for which the callback returns `true`.
+  * Returns a new array (may be shorter than the original).
+
+* Syntax:
+
+  const newArray = arr.filter(function(element, index, array) {
+    return condition;
+  });
+  ```
+
+* Example:
+
+  const numbers = [1, 2, 3, 4, 5];
+  const greaterThanTwo = numbers.filter(num => num > 2);
+  console.log(greaterThanTwo); // [3, 4, 5]
+  ```
+
+* Key Point: Filters out elements that don’t pass the condition.
+
+---
+
+4. `.reduce()`
+
+* Purpose: Reduces (boils down) an array into one single value.
+
+* How it works:
+
+  * Uses an accumulator (like a rolling total).
+  * Applies a callback for each element.
+  * Returns a final value, not an array.
+
+* Syntax:
+
+  const result = arr.reduce(function(accumulator, element, index, array) {
+    return updatedAccumulator;
+  }, initialValue);
+  ```
+
+* Example (Sum):
+
+  const numbers = [1, 2, 3, 4];
+  const sum = numbers.reduce((acc, num) => acc + num, 0);
+  console.log(sum); // 10
+  ```
+
+* Analogy: Snowball effect → the accumulator grows step by step.
+
+* Other Uses:
+
+  * Multiplying values.
+  * Finding max/min.
+  * Flattening arrays.
+  * Building objects.
+
+---
+
+5. Comparison
+
+| Method      | Input → Output                | Returns                                     | Use Case                               |
+| ----------- | ----------------------------- | ------------------------------------------- | -------------------------------------- |
+| `.map()`    | Array → Array (same length)   | New transformed array                       | Transform each element                 |
+| `.filter()` | Array → Array (≤ same length) | New filtered array                          | Keep only elements that meet condition |
+| `.reduce()` | Array → Single Value          | Single value (number, object, string, etc.) | Summaries, totals, aggregations        |
+
+---
+
+6. Key Takeaways
+
+* `.map()` → transformation per element.
+* `.filter()` → selection of elements.
+* `.reduce()` → accumulation into one value.
+* All three methods are immutable → they do not change the original array.
+* Chaining is very powerful:
+
+  const result = numbers
+    .filter(num => num > 2)
+    .map(num => num * 2)
+    .reduce((acc, num) => acc + num, 0);
+  console.log(result);
+  ```
