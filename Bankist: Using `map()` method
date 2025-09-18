@@ -1,0 +1,139 @@
+Bankist: Using `map()` method
+
+## 1. Context: Bankist App & Movements
+
+* In Bankist, movements represent deposits and withdrawals of money.
+
+* Example:
+
+  const movements = [200, -100, 340, -300];
+  ```
+
+  * Positive numbers → deposits.
+  * Negative numbers → withdrawals.
+
+* The task: transform these movements (e.g., converting them from Euros to USD, or creating readable transaction descriptions).
+
+---
+
+## 2. `map()` for Currency Conversion
+
+* Suppose movements are in Euros, and we want them in USD.
+* Conversion rate:
+
+  const euroToUsd = 1.1;
+  ```
+* Using `map()`:
+
+  const movementsUSD = movements.map(mov => mov * euroToUsd);
+  ```
+* Outcome:
+
+  * Returns a new array with all movements converted into USD.
+  * Original `movements` array remains unchanged.
+* Example Result:
+
+  movements    // [200, -100, 340, -300]
+  movementsUSD // [220, -110, 374, -330]
+  ```
+
+Application Insight:
+In the Bankist app, such transformations are useful when a user wants to view their balance or transaction history in a different currency.
+
+---
+
+## 3. Difference from `for...of` Loop
+
+* Same task using `for...of`:
+
+  const movementsUSDfor = [];
+  for (const mov of movements) {
+    movementsUSDfor.push(mov * euroToUsd);
+  }
+  ```
+* Both approaches give the same result.
+* But:
+
+  * `for...of` = imperative (step-by-step instructions).
+  * `map()` = functional (declarative, uses transformation functions).
+
+Bankist Philosophy:
+The app prefers functional programming style (`map`, `filter`, `reduce`) → code becomes cleaner and easier to maintain.
+
+---
+
+## 4. Using Arrow Functions in `map()`
+
+* Clean, one-liner transformation:
+
+  const movementsUSD = movements.map(mov => mov * euroToUsd);
+  ```
+* Shorter and more readable.
+* Ideal for callback functions in `map()`.
+
+---
+
+## 5. `map()` for Transaction Descriptions
+
+* Instead of just numbers, create descriptive strings for each movement:
+
+  const movementDescriptions = movements.map(
+    (mov, i) =>
+      `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(mov)}`
+  );
+  ```
+* Example Result:
+
+  ```js
+  [
+    "Movement 1: You deposited 200",
+    "Movement 2: You withdrew 100",
+    "Movement 3: You deposited 340",
+    "Movement 4: You withdrew 300"
+  ]
+  ```
+
+Application Insight:
+
+* In the Bankist app, these descriptions could be shown directly in the UI transaction history list.
+* Makes the movements human-readable, not just raw numbers.
+
+---
+
+## 6. Key Difference from `forEach()` in Bankist
+
+* `forEach()`:
+
+  * Logs transaction descriptions directly to console/UI.
+  * Creates **side effects** during each iteration.
+
+* `map()`:
+
+  * Returns an array of all descriptions first.
+  * You can then use this array for further display or processing.
+
+Why Better for Bankist?
+
+* Allows storing and reusing descriptions (e.g., render later in UI, apply filters, or combine with other data).
+* Cleaner, functional, and avoids unintended side effects.
+
+---
+
+## 7. Takeaways for Bankist Application
+
+* Use Cases of `map()` in Bankist:
+
+  1. Convert currency for all transactions.
+  2. Create descriptive transaction histories.
+  3. Transform raw movement data into data structures ready for display in the UI.
+
+* Advantages:
+
+  * Returns a new array (original movements are preserved).
+  * Follows functional programming principles.
+  * Makes it easier to build UI features like history lists, summaries, or exporting data.
+
+---
+
+Summary: In the Bankist app, the `map()` method transforms raw movement data (like amounts in Euros) into new, meaningful arrays (e.g., USD values, descriptive transaction 
+strings). This functional approach makes the app’s code more modular, reusable, and UI-friendly compared to using `forEach()` or traditional loops.
