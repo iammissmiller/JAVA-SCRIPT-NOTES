@@ -1,0 +1,123 @@
+Bankist : Creating Usernames with `map` and `forEach`
+
+### Goal
+
+* Each account owner in the Bankist app should have a **username**.
+* The username = **initials of the account owner’s name** in lowercase.
+
+  * Example: *"Stephen Thomas Williams"* → **stw**
+
+---
+
+### Step 1: Building Username for a Single User
+
+1. Start with one owner name string:
+
+   const user = "Stephen Thomas Williams";
+
+   ```
+2. Convert the string to lowercase:
+
+   user.toLowerCase();
+
+   ```
+3. Split the name into an array of words:
+
+   user.toLowerCase().split(" "); // ["stephen", "thomas", "williams"]
+
+   ```
+4. Use `map()` to take the **first letter of each word**:
+
+   .map(name => name[0]); // ["s", "t", "w"]
+
+   ```
+5. Join the letters together into one string:
+
+   .join(""); // "stw"
+
+   ```
+
+The `map()` method is perfect here because:
+
+* It transforms each element into something new (word → first letter).
+
+* Produces a **new array** of initials without mutating the original.
+
+---
+
+### Step 2: Wrapping into a Function
+
+const createUsername = function (user) {
+  return user
+    .toLowerCase()
+    .split(" ")
+    .map(name => name[0])
+    .join("");
+};
+console.log(createUsername("Stephen Thomas Williams")); // "stw"
+```
+
+---
+
+### Step 3: Applying to All Accounts
+
+* In the Bankist app, we have an `accounts` array with multiple account objects:
+
+  const account1 = { owner: "Jonas Schmedtmann", movements: [200, 450, -400, 3000, -650, -130, 70, 1300] };
+  const account2 = { owner: "Jessica Davis", movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30] };
+  const account3 = { owner: "Steven Thomas Williams", movements: [200, -200, 340, -300, -20, 50, 400, -460] };
+  const accounts = [account1, account2, account3];
+  ```
+
+#### Why `forEach` instead of `map` here?
+
+* We do **not** want to create a new array of usernames.
+* We want to **mutate** each account object by **adding a new property** `.username`.
+
+---
+
+### Step 4: Adding Usernames with `forEach`
+
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(" ")
+      .map(name => name[0])
+      .join("");
+  });
+};
+
+createUsernames(accounts);
+console.log(accounts);
+```
+
+Now each account object has a new property:
+
+[
+  { owner: "Jonas Schmedtmann", movements: [...], username: "js" },
+  { owner: "Jessica Davis", movements: [...], username: "jd" },
+  { owner: "Steven Thomas Williams", movements: [...], username: "stw" }
+]
+```
+
+---
+
+### Key Takeaways
+
+1. **`map()`** is used when you want to **transform** data and return a **new array**.
+
+   * Example: Convert words → initials.
+2. **`forEach()`** is used when you want to **produce side effects** (e.g., modify existing objects).
+
+   * Example: Add `.username` to account objects.
+3. This distinction is important in functional programming:
+
+   * `map()` → pure function (no mutation).
+   * `forEach()` → causes side effects (mutation).
+
+---
+
+This is how **usernames are generated** in the **Bankist application** using both `map()` and `forEach()` effectively.
+
+---
