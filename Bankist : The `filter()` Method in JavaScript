@@ -1,0 +1,104 @@
+Bankist : The `filter()` Method in JavaScript 
+
+# Purpose
+
+* The `filter()` method is used to filter out elements of an array based on a given condition.
+* It returns a new array containing only the elements that satisfy the condition.
+* Does not mutate the original array.
+
+---
+
+# Syntax
+
+
+const newArray = arr.filter(function (element, index, array) {
+  return condition;
+});
+```
+
+* Callback arguments:
+
+  * `element` → current element (most commonly used).
+  * `index` → position of the element.
+  * `array` → the full array being processed.
+* Typically, only the `element` is needed.
+* The callback must return a Boolean value:
+
+  * `true` → element is included in the new array.
+  * `false` → element is excluded.
+
+---
+
+# Example: Filtering Deposits
+
+Suppose `movements` represents money transactions:
+
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+```
+
+Using filter:
+
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
+console.log(deposits); // [200, 450, 3000, 70, 1300]
+```
+
+Using arrow function (shorter):
+
+
+const deposits = movements.filter(mov => mov > 0);
+```
+
+---
+
+# Example: Filtering Withdrawals
+
+
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals); // [-400, -650, -130]
+```
+
+---
+
+# Comparison with `for...of` Loop
+
+The same logic using a loop:
+
+const depositsFor = [];
+for (const mov of movements) {
+  if (mov > 0) depositsFor.push(mov);
+}
+console.log(depositsFor); // same result
+```
+
+Difference:
+
+* `for...of` loop → imperative style (explicit instructions: loop, check, push).
+* `filter()` → declarative style (describe what you want: filter by condition).
+* Advantages of `filter()`:
+
+  1. Cleaner, more concise.
+  2. Returns a new array automatically.
+  3. Works well when chaining with other methods (e.g., `map()`, `reduce()`).
+
+---
+
+# Use in Bankist Application
+
+* Deposits: filter all positive `movements` to analyze incoming funds.
+* Withdrawals: filter all negative `movements` to track expenses.
+* Later, these filtered results can be chained with `map()` and `reduce()` to calculate summaries like total deposits or total withdrawals.
+
+---
+
+# Key Takeaways
+
+1. `filter()` is the second main array transformation method (after `map()` and before `reduce()`).
+2. Returns a new array with only the elements passing the condition.
+3. Works best for selection problems (e.g., separating deposits and withdrawals).
+4. Preferred in modern JavaScript due to readability and ability to chain with other array methods.
+5. Unlike `forEach()`, it does not create side effects—it returns data instead.
+
+---
