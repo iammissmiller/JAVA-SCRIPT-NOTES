@@ -1,0 +1,146 @@
+Bankist : The Reduce Method in JavaScript
+
+## 1. What is `reduce()`?
+
+* The **reduce() method** is one of the three main **data transformation methods** in JavaScript (along with `map()` and `filter()`).
+* It is used to **boil down an entire array into a single value**.
+* That single value can be:
+
+  * A number (e.g., sum, max, min),
+  * A string,
+  * An object,
+  * Or even another array (though less common).
+
+---
+
+## 2. Syntax of `reduce()`
+
+array.reduce(callback, initialValue)
+```
+
+* **callback**: function that executes on each array element.
+* **initialValue**: the starting value of the accumulator. If omitted, the first array element is used.
+
+### Callback parameters:
+
+(accumulator, currentValue, index, array)
+```
+
+* **accumulator** → keeps track of the accumulated result (snowball effect).
+* **currentValue** → the current element being processed.
+* **index** (optional) → index of the current element.
+* **array** (optional) → the original array.
+
+---
+
+## 3. Example 1: Summing All Elements
+
+Goal → Calculate the account balance by summing all movements.
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// Using reduce
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
+console.log(balance); // 3840
+```
+
+* Here:
+
+  * `acc` starts at `0` (the initialValue).
+  * Each iteration adds `cur` (the current movement) to `acc`.
+  * The final result is a single number = **3840**.
+
+### Visualizing Iterations
+
+* Iteration 0 → acc = 0, cur = 200 → new acc = 200
+* Iteration 1 → acc = 200, cur = 450 → new acc = 650
+* Iteration 2 → acc = 650, cur = -400 → new acc = 250
+* … continues until final balance = 3840.
+
+---
+
+## 4. Example 2: Manual Equivalent with `for` Loop
+
+let balance2 = 0;
+for (const mov of movements) {
+  balance2 += mov;
+}
+console.log(balance2); // 3840
+```
+
+### Key Difference
+
+* With a `for` loop → we need an **external variable** (`balance2`).
+* With `reduce()` → no extra variable needed, it directly **returns the final result**.
+
+This makes `reduce()` more **functional, concise, and chainable** with other methods.
+
+---
+
+## 5. Example 3: Finding Maximum Value with `reduce()`
+
+const max = movements.reduce((acc, mov) => {
+  if (mov > acc) return mov;
+  else return acc;
+}, movements[0]);
+
+console.log(max); // 3000
+```
+
+* Initial accumulator = first element (`200`).
+* Each step compares the `acc` with the current value `mov`.
+* If `mov` is greater, `acc` becomes `mov`.
+* Final result = **3000** (the maximum).
+
+---
+
+## 6. Important Notes
+
+* **Initial Value**:
+
+  * Always specify an **initialValue** unless you want to start with the first array element.
+  * For sum → start with `0`.
+  * For max/min → start with `array[0]`.
+* **Reduce is versatile**:
+
+  * Summation
+  * Maximum / Minimum
+  * Multiplication
+  * Flattening arrays
+  * Building objects or maps
+
+---
+
+## 7. Comparison with Map & Filter
+
+* **map()** → transforms each element, returns a new array.
+* **filter()** → filters elements based on condition, returns a subset array.
+* **reduce()** → boils the array down to a **single value**.
+
+---
+
+## 8. Practical Applications of Reduce
+
+1. Calculate account balance.
+2. Find maximum/minimum transaction.
+3. Count occurrences of values.
+
+   const fruits = ['apple', 'banana', 'apple', 'orange', 'banana', 'apple'];
+   const count = fruits.reduce((acc, fruit) => {
+     acc[fruit] = (acc[fruit] || 0) + 1;
+     return acc;
+   }, {});
+   console.log(count); // { apple: 3, banana: 2, orange: 1 }
+   ```
+4. Flatten nested arrays.
+
+   const arr = [[1,2],[3,4],[5,6]];
+   const flat = arr.reduce((acc, cur) => acc.concat(cur), []);
+   console.log(flat); // [1,2,3,4,5,6]
+   ```
+
+---
+
+**Takeaway**:
+The **reduce method is the most powerful array method** because it can replicate `map()`, `filter()`, and many other operations if used correctly. It may look confusing 
+at first, but the key is always to **decide what the accumulator should represent**.
