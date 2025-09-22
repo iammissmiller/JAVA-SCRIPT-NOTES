@@ -1,0 +1,114 @@
+Bankist : Method Chaining with `map()`, `filter()`, and `reduce()`
+
+### What is Method Chaining?
+
+* **Chaining**: Calling multiple array methods **one after another** on the result of the previous one.
+* Works because most array methods (`map`, `filter`, `slice`) return **new arrays**, which can be processed further.
+* `reduce` is different — it returns a **single value**, so chaining stops after reduce.
+
+---
+
+### Example: Deposits in USD (Chaining)
+
+Suppose we want to:
+
+1. Get all **deposits** (positive movements).
+2. Convert them from **Euros to USD**.
+3. **Add them all up**.
+
+const euroToUsd = 1.1;
+
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0)          // 1. Keep deposits only
+  .map(mov => mov * euroToUsd)     // 2. Convert to USD
+  .reduce((acc, mov) => acc + mov, 0); // 3. Sum them up
+
+console.log(totalDepositsUSD);
+```
+
+* This replaces three separate variables with a **pipeline-like flow**.
+* Each method transforms data step by step.
+
+---
+
+### Debugging in Chains
+
+* Can be hard to identify where errors occur.
+* Use the **third parameter** in callbacks (`array`) to log intermediate results:
+
+.map((mov, i, arr) => {
+  console.log(arr);  // shows current array passed into map
+  return mov * euroToUsd;
+})
+```
+
+---
+
+### Chaining in the Bankist Application
+
+#### 1. Calculate **Incomes (Deposits Total)**
+
+const incomes = movements
+  .filter(mov => mov > 0)
+  .reduce((acc, mov) => acc + mov, 0);
+
+labelSumIn.textContent = `${incomes}€`;
+```
+
+#### 2. Calculate **Outcomes (Withdrawals Total)**
+
+const out = movements
+  .filter(mov => mov < 0)
+  .reduce((acc, mov) => acc + mov, 0);
+
+labelSumOut.textContent = `${Math.abs(out)}€`; // use abs to remove minus sign
+```
+
+#### 3. Calculate **Interest**
+
+* Rule: Bank pays **1.2% interest on each deposit**, only if interest ≥ 1.
+
+const interest = movements
+  .filter(mov => mov > 0)                 // deposits only
+  .map(deposit => (deposit * 1.2) / 100)  // interest per deposit
+  .filter(int => int >= 1)                // keep only ≥ 1
+  .reduce((acc, int) => acc + int, 0);    // sum interests
+
+labelSumInterest.textContent = `${interest}€`;
+```
+
+---
+
+### Key Analogy
+
+* Think of chaining as a **pipeline**:
+  Input data → filter → map → reduce → final output.
+
+---
+
+### Best Practices & Cautions
+
+1. **Performance**:
+
+   * Avoid unnecessary long chains on very large arrays.
+   * Combine operations when possible (e.g., two maps can often be merged).
+
+2. **Mutation Warning**:
+
+   * Do not chain methods that **mutate the original array** (`splice`, `reverse`, `sort`).
+   * These can lead to bugs in large applications.
+   * Prefer **non-mutating methods** (`slice`, `map`, `filter`, `reduce`).
+
+3. **Readability vs Overuse**:
+
+   * Chaining improves readability and functional style.
+   * But over-chaining may make debugging harder.
+
+---
+
+### Takeaways
+
+* Chaining lets us combine `filter()`, `map()`, and `reduce()` to build complex logic in a **clear, functional way**.
+* In Bankist: Used to calculate **incomes, outcomes, and interest** neatly.
+* Debugging can be aided by logging the intermediate arrays.
+* Avoid chaining with **mutating methods** to keep functional purity and prevent bugs.
