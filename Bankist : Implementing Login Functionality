@@ -1,0 +1,176 @@
+Bankist : Implementing Login Functionality in the Bankist App
+
+### 1. Initial Setup
+
+* At the start, no user is logged in and the UI is hidden.
+
+* The user can input:
+
+  * **Username** (precomputed earlier, e.g., `js` for Jonas Schmedtmann).
+  * **PIN** (like an ATM PIN, acts as the password).
+
+* Logging in should work on both:
+
+  * Clicking the login button.
+  * Pressing **Enter** inside an input field.
+
+---
+
+### 2. HTML Form Behavior
+
+* Login is a **form element** with:
+
+  * Input for **username**.
+  * Input for **PIN**.
+  * Login **button**.
+
+* Default form behavior: clicking submit causes a **page reload**.
+
+* Solution:
+
+  ```js
+  btnLogin.addEventListener('click', function (e) {
+    e.preventDefault(); // Prevents page reload
+    console.log('LOGIN');
+  });
+  ```
+
+* Hitting **Enter** inside an input automatically triggers the form’s `submit` event, which is the same as clicking the login button.
+
+---
+
+### 3. Finding the Logged-in User
+
+* Use the **`find()` method** to locate the account object:
+
+  ```js
+  let currentAccount;
+
+  btnLogin.addEventListener('click', function (e) {
+    e.preventDefault();
+    currentAccount = accounts.find(
+      acc => acc.username === inputLoginUsername.value
+    );
+  });
+  ```
+* `.value` is required to read the text from input fields.
+* Important: check against **username**, not owner’s full name.
+
+---
+
+### 4. Checking the PIN
+
+* After finding the account:
+
+  ```js
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    console.log('LOGGED IN');
+  }
+  ```
+* `Number()` → converts input string to number.
+* `?.` (optional chaining) → prevents errors if no account is found (avoids `undefined.pin`).
+
+---
+
+### 5. Displaying UI After Login
+
+* If login succeeds:
+
+  1. **Display welcome message**:
+
+     ```js
+     labelWelcome.textContent = 
+       `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
+     ```
+
+     * Uses `.split(' ')` to take the first name.
+
+  2. **Reveal the app**:
+
+     ```js
+     containerApp.style.opacity = 100;
+     ```
+
+  3. **Display account data dynamically**:
+
+     ```js
+     displayMovements(currentAccount.movements);
+     calcDisplayBalance(currentAccount);
+     calcDisplaySummary(currentAccount);
+     ```
+
+* Functions now take the **account object**, not just movements, so we can access interest rate and other properties.
+
+---
+
+### 6. Clearing Input Fields
+
+* Reset inputs after login:
+
+  ```js
+  inputLoginUsername.value = inputLoginPin.value = '';
+  inputLoginPin.blur(); // removes cursor focus
+  ```
+
+---
+
+### 7. Dynamic Interest Rate
+
+* Previously interest was fixed at `1.2`.
+
+* Now it should depend on each account’s property:
+
+  ```js
+  const calcDisplaySummary = function (acc) {
+    const incomes = acc.movements
+      .filter(mov => mov > 0)
+      .reduce((sum, mov) => sum + mov, 0);
+
+    const out = acc.movements
+      .filter(mov => mov < 0)
+      .reduce((sum, mov) => sum + mov, 0);
+
+    const interest = acc.movements
+      .filter(mov => mov > 0)
+      .map(dep => (dep * acc.interestRate) / 100)
+      .filter(int => int >= 1)
+      .reduce((sum, int) => sum + int, 0);
+
+    labelSumIn.textContent = incomes;
+    labelSumOut.textContent = Math.abs(out);
+    labelSumInterest.textContent = interest;
+  };
+  ```
+
+* Now each account has its **own personalized interest rate**.
+
+---
+
+### 8. Error Handling
+
+* If user not found or PIN incorrect → nothing happens.
+* No errors occur thanks to optional chaining.
+
+---
+
+### 9. Key Concepts Used
+
+* **Event handling** with `addEventListener`.
+* **Preventing default behavior** with `event.preventDefault()`.
+* **Finding account** with `find()`.
+* **Optional chaining (`?.`)** to avoid runtime errors.
+* **String methods** (`split`) for extracting first name.
+* **Dynamic UI rendering** based on the logged-in user’s data.
+* **Clearing inputs** and improving UX (`blur()`).
+
+---
+
+### 10. Takeaways
+
+* Login feature relies on:
+
+  * Matching **username** with `find()`.
+  * Validating **PIN**.
+  * Dynamically updating **UI and stats**.
+* Data is now **fully dynamic**, depending on which user logs in.
+* This marks a key step: **from static demo data → to interactive application**.
