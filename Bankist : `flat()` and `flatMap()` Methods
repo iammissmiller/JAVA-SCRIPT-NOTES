@@ -1,0 +1,123 @@
+Bankist : `flat()` and `flatMap()` Methods
+
+## 1. Introduction
+
+* Both methods were introduced in **ES2019** (modern browsers required).
+* They are used to handle **nested arrays**.
+* `flat()` → flattens arrays.
+* `flatMap()` → combines `map()` and `flat()` in one step.
+
+---
+
+## 2. `flat()`
+
+### Purpose:
+
+* Flattens a **nested array** into a single array.
+
+### Example 1: Simple Nested Array
+
+```js
+const arr = [1, 2, 3, [4, 5, 6], 7, 8];
+console.log(arr.flat()); 
+// [1, 2, 3, 4, 5, 6, 7, 8]
+```
+
+* Removes one level of nesting by default.
+
+### Example 2: Deeper Nesting
+
+```js
+const arrDeep = [1, [2, 3], [4, [5, 6]], 7, 8];
+console.log(arrDeep.flat()); 
+// [1, 2, 3, 4, [5, 6], 7, 8] (only 1 level deep)
+```
+
+* By default, `flat()` flattens **only one level**.
+
+### Depth Parameter
+
+* We can control how many levels to flatten:
+
+```js
+console.log(arrDeep.flat(2)); 
+// [1, 2, 3, 4, 5, 6, 7, 8]
+```
+
+* Default depth = `1`.
+* Use higher values if more deeply nested.
+
+---
+
+## 3. Practical Example: Overall Bank Balance
+
+Suppose we have multiple accounts, each with its own `movements` array.
+We want the **total balance across all accounts**.
+
+### Step-by-step with `flat()`
+
+```js
+const accounts = [
+  { movements: [200, -100, 340] },
+  { movements: [3000, -650, -130, 70] },
+  { movements: [430, 1000, -750] }
+];
+
+// Step 1: Extract all movements (nested arrays)
+const accountMovements = accounts.map(acc => acc.movements);
+
+// Step 2: Flatten into one array
+const allMovements = accountMovements.flat();
+
+// Step 3: Reduce to total balance
+const overallBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
+
+console.log(overallBalance);
+```
+
+### Chained Version (cleaner)
+
+```js
+const overallBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+
+console.log(overallBalance);
+```
+
+---
+
+## 4. `flatMap()`
+
+### Purpose:
+
+* A **combination** of `map()` and `flat()` (only one level deep).
+* More **performant and concise**.
+
+### Example:
+
+```js
+const overallBalance = accounts
+  .flatMap(acc => acc.movements) // combines map + flat(1)
+  .reduce((acc, mov) => acc + mov, 0);
+
+console.log(overallBalance);
+```
+
+### Limitation:
+
+* `flatMap()` only flattens **one level deep**.
+* For deeper levels, use `flat()` with a depth parameter.
+
+---
+
+## 5. Summary
+
+* `flat(depth)` → Flattens arrays up to `depth` levels.
+* `flatMap(callback)` → Maps and flattens one level in a single step.
+* **Use Cases**:
+
+  * Flattening nested arrays.
+  * Extracting and combining data from objects (e.g., account transactions).
+* **Performance Tip**: Use `flatMap()` when mapping then flattening, otherwise use `flat()` with depth control.
