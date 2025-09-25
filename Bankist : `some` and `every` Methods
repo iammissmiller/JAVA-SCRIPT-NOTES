@@ -1,0 +1,120 @@
+Bankist : `some` and `every` Methods in JavaScript
+
+## 1. Recap: `includes()`
+
+* `includes(value)` → checks if an array contains a given value.
+* Example:
+
+  ```js
+  const movements = [200, 450, -400, 3000, -650];
+  console.log(movements.includes(-400)); // true
+  ```
+* Limitation: Only checks for **strict equality** (`===`). Cannot handle conditions like “greater than 0.”
+
+---
+
+## 2. `some()`
+
+* **Purpose**: Tests if **at least one element** in the array passes a condition.
+* **Returns**: `true` if any element satisfies the callback condition, otherwise `false`.
+
+### Example: Any deposits?
+
+```js
+const movements = [200, -400, 3000, -650, -130, 70, 1300, -130];
+
+const anyDeposits = movements.some(mov => mov > 0);
+console.log(anyDeposits); // true (since there are positive values)
+```
+
+### Example: Deposit above 5000?
+
+```js
+console.log(movements.some(mov => mov > 5000)); // false
+console.log(movements.some(mov => mov > 1500)); // true (3000 qualifies)
+```
+
+### Relationship with `includes()`
+
+```js
+console.log(movements.includes(-130));           // true
+console.log(movements.some(mov => mov === -130)); // true (same result)
+```
+
+* Use **`includes`** for equality checks.
+* Use **`some`** for **conditions**.
+
+---
+
+## 3. Practical Example: Loan Approval
+
+* Bank grants a loan **only if there’s a deposit ≥ 10% of the requested loan**.
+
+```js
+btnLoan.addEventListener('click', function(e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+
+  if (
+    amount > 0 &&
+    currentAccount.movements.some(mov => mov >= amount * 0.1)
+  ) {
+    currentAccount.movements.push(amount);
+    updateUI(currentAccount);
+  }
+
+  inputLoanAmount.value = '';
+});
+```
+
+**Logic**:
+
+* `some()` checks if **any deposit ≥ 10% of loan request**.
+* If yes → loan granted.
+* If not → loan denied.
+
+---
+
+## 4. `every()`
+
+* **Purpose**: Tests if **all elements** in the array satisfy a condition.
+* **Returns**: `true` only if every element passes the condition.
+
+### Example: All deposits?
+
+```js
+console.log(movements.every(mov => mov > 0)); // false (array has withdrawals)
+
+const account4 = { movements: [200, 500, 1000] };
+console.log(account4.movements.every(mov => mov > 0)); // true
+```
+
+---
+
+## 5. Reusing Callback Functions
+
+* Instead of repeating the callback inline, define it separately:
+
+```js
+const deposit = mov => mov > 0;
+
+console.log(movements.some(deposit));  // true
+console.log(movements.every(deposit)); // false
+console.log(movements.filter(deposit)); // [200, 3000, 70, 1300]
+```
+
+* **Advantage**: Follows the **DRY principle** (Don’t Repeat Yourself).
+* Easy to reuse across multiple array methods.
+
+---
+
+## 6. Summary
+
+* `includes(value)` → checks equality.
+* `some(callback)` → true if **any** element passes condition.
+* `every(callback)` → true if **all** elements pass condition.
+* **Use Cases**:
+
+  * `some` → detecting if an array has at least one match (e.g., at least one withdrawal, at least one deposit above X).
+  * `every` → validating entire datasets (e.g., all transactions positive, all users above age 18).
+* Encouraged to define reusable condition functions for clarity and maintainability.
