@@ -1,0 +1,76 @@
+Bankist : `findLast` and `findLastIndex` (ES2023)
+
+## 1. Background
+
+* `find` → returns the **first element** that satisfies a condition (searches **left → right**).
+* `findIndex` → returns the **index** of the first element that satisfies a condition.
+* **New in ES2023**:
+
+  * `findLast` → returns the **last element** that matches a condition (searches **right → left**).
+  * `findLastIndex` → returns the **index of the last element** that matches a condition.
+
+These methods are especially useful when working with **ordered data** (e.g., bank transactions, logs, event histories) where the most recent occurrence matters.
+
+---
+
+## 2. `findLast`
+
+* Works like `find`, but searches from the **end of the array**.
+* Example use case:
+
+  ```js
+  const movements = [200, -400, 3000, -650, -130, 70, 1300, -130];
+
+  const lastWithdrawal = movements.findLast(mov => mov < 0);
+  console.log(lastWithdrawal); // -130 (last negative number from the end)
+  ```
+* If `find` was used, the result would be `-400` (first negative number from the start).
+
+---
+
+## 3. `findLastIndex`
+
+* Works like `findIndex`, but returns the **index of the last element** that satisfies the condition.
+* Example use case:
+
+  ```js
+  const latestLargeMovementIndex = movements.findLastIndex(mov => Math.abs(mov) > 1000);
+  console.log(latestLargeMovementIndex); // 7 (index of 1300)
+  ```
+* Useful for calculating how many items ago the last occurrence happened:
+
+  ```js
+  const ago = movements.length - 1 - latestLargeMovementIndex;
+  console.log(`Your latest large movement was ${ago} movements ago.`);
+  ```
+
+---
+
+## 4. Key Use Cases
+
+* **`findLast`** → retrieve the most recent matching value (e.g., last withdrawal, last login attempt).
+* **`findLastIndex`** → find how far back something happened (e.g., "X transactions ago").
+
+---
+
+## 5. Differences with `indexOf`
+
+* `indexOf` only finds the **exact value**.
+* `findIndex` / `findLastIndex` allow for **complex conditions**.
+* Example:
+
+  ```js
+  const arr = [10, 20, 30];
+  console.log(arr.indexOf(20)); // 1
+  // But for conditions:
+  console.log(arr.findIndex(num => num > 15)); // 1
+  ```
+
+---
+
+## 6. Summary
+
+* `find` / `findIndex` → start from beginning.
+* `findLast` / `findLastIndex` → start from end.
+* Great for **time-ordered data** where latest activity matters.
+* Introduced in **ES2023**, may not work in older browsers without polyfills.
