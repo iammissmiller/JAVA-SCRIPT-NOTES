@@ -1,0 +1,112 @@
+Bankist : Sorting Arrays in JavaScript
+
+## 1. Introduction
+
+* Sorting is a key concept in computer science, with many algorithms.
+* In JavaScript, the **built-in `sort()` method** is commonly used.
+* Important: **`sort()` mutates the original array**.
+
+---
+
+## 2. Sorting Strings
+
+```js
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+owners.sort();
+console.log(owners); 
+// ['Adam', 'Jonas', 'Martha', 'Zach']
+```
+
+* Works alphabetically (A → Z).
+* Changes the original `owners` array.
+
+---
+
+## 3. Sorting Numbers (Problem)
+
+```js
+const movements = [200, -400, 450, 3000, -650, -130, 70, 1300];
+console.log(movements.sort());
+```
+
+* Result looks incorrect for numbers.
+* Why?
+
+  * By default, **`sort()` converts values to strings**.
+  * Example: `'200' < '3'` → `"200"` comes before `"3"`.
+
+---
+
+## 4. Fixing with Compare Callback
+
+The `sort()` method accepts a **compare function** with two arguments `a` and `b`.
+
+### Compare Rules
+
+* If callback returns `< 0` → **a comes before b**.
+* If callback returns `> 0` → **b comes before a**.
+* If callback returns `0` → order unchanged.
+
+### Ascending Order (small → large)
+
+```js
+movements.sort((a, b) => a - b);
+```
+
+### Descending Order (large → small)
+
+```js
+movements.sort((a, b) => b - a);
+```
+
+---
+
+## 5. Simplifying Compare Function
+
+* Instead of writing full `if/else`, use subtraction:
+
+  * `a - b` → ascending.
+  * `b - a` → descending.
+
+---
+
+## 6. Applying Sort in Application
+
+* Goal: **sort bank account movements when clicking a button**.
+* Problem: `sort()` mutates the array → we need a **copy**.
+* Solution:
+
+  ```js
+  const movs = sort
+    ? movements.slice().sort((a, b) => a - b) // sorted copy
+    : movements; // original order
+  ```
+* Use `.slice()` to copy before sorting.
+
+---
+
+## 7. Toggle Sort with State Variable
+
+* We need to **toggle sorting on/off** when the button is clicked.
+* Use a boolean state variable outside the event handler:
+
+```js
+let sorted = false;
+
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted; // toggle state
+});
+```
+
+---
+
+## 8. Key Takeaways
+
+* `sort()` mutates the original array. Use `.slice()` for a copy.
+* Works correctly for strings by default.
+* For numbers, always use a compare function.
+* Ascending: `(a, b) => a - b`.
+* Descending: `(a, b) => b - a`.
+* State variables help track sort status in UI applications.
