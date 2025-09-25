@@ -1,0 +1,100 @@
+Bankist : Non-Destructive Array Methods in Modern JavaScript
+
+### 1. The Problem with Destructive Methods
+
+* Some array methods **mutate the original array**, which is often not desired because it destroys the original data.
+* Examples of destructive methods:
+
+  * `reverse()`
+  * `sort()`
+  * `splice()`
+  * Direct assignment (`arr[index] = newValue`)
+
+---
+
+### 2. Non-Destructive Alternatives
+
+#### a) `toReversed()`
+
+* Alternative to `reverse()`.
+* Returns a **new array reversed**, leaving the original intact.
+
+```js
+const arr = [1, 2, 3];
+const reversed = arr.toReversed();
+
+console.log(arr);      // [1, 2, 3] (unchanged)
+console.log(reversed); // [3, 2, 1]
+```
+
+---
+
+#### b) `toSorted()`
+
+* Alternative to `sort()`.
+* Returns a **new sorted array**, without touching the original.
+
+```js
+const arr = [3, 1, 2];
+const sorted = arr.toSorted();
+
+console.log(arr);     // [3, 1, 2]
+console.log(sorted);  // [1, 2, 3]
+```
+
+---
+
+#### c) `toSpliced()`
+
+* Alternative to `splice()`.
+* Returns a **new array with elements added/removed**, but original stays intact.
+
+```js
+const arr = [1, 2, 3, 4];
+const spliced = arr.toSpliced(1, 2); 
+
+console.log(arr);      // [1, 2, 3, 4]
+console.log(spliced);  // [1, 4] (removed elements at index 1 and 2)
+```
+
+---
+
+### 3. Updating Elements Non-Destructively
+
+#### Destructive Way:
+
+```js
+const arr = [100, 450, 700];
+arr[1] = 2000; 
+console.log(arr); // [100, 2000, 700]
+```
+
+* Mutates the original array.
+
+#### Non-Destructive Way: `with()`
+
+* Introduced in modern JavaScript.
+* Returns a **copy of the array with one element changed**.
+
+```js
+const arr = [100, 450, 700];
+const newArr = arr.with(1, 2000);
+
+console.log(arr);    // [100, 450, 700] (unchanged)
+console.log(newArr); // [100, 2000, 700]
+```
+
+---
+
+### 4. Why Non-Destructive Methods Matter
+
+* They **preserve immutability** of data, which is especially important in:
+
+  * Functional programming
+  * React/Frontend frameworks (state management)
+  * Avoiding bugs caused by unintended side effects
+
+---
+
+**Key Takeaway**:
+Use `toReversed()`, `toSorted()`, `toSpliced()`, and `with()` whenever you want a **new array without mutating the original one**.
