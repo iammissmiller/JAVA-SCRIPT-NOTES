@@ -1,0 +1,130 @@
+Bankist : Array Grouping in JavaScript (ES2024)
+
+## 1. Introduction
+
+* Added in **ES2024**.
+* Allows grouping array elements based on a **condition**.
+* Different from usual array methods (`map`, `filter`, etc.).
+* Uses **`Object.groupBy()`** instead of being a direct array method.
+
+---
+
+## 2. Syntax
+
+```js
+Object.groupBy(array, callbackFn);
+```
+
+* **`array`** → array to group.
+* **`callbackFn(element, index, array)`** → function that returns the **group key** for each element.
+* Returns an **object** where:
+
+  * Keys = group names (from callback).
+  * Values = arrays of elements belonging to that group.
+
+---
+
+## 3. Example 1: Deposits vs Withdrawals
+
+```js
+const movements = [200, -400, 450, 3000, -650, -130, 70, 1300];
+
+const groupedMovements = Object.groupBy(movements, mov => 
+  mov > 0 ? 'deposits' : 'withdrawals'
+);
+
+console.log(groupedMovements);
+// {
+//   deposits: [200, 450, 3000, 70, 1300],
+//   withdrawals: [-400, -650, -130]
+// }
+```
+
+* Groups movements into **deposits** and **withdrawals**.
+* Callback decides which group each value belongs to.
+
+---
+
+## 4. Example 2: Classify Accounts by Activity
+
+```js
+const accounts = [
+  { owner: 'Jonas', movements: [200, 450, -400, 3000, -650, -130, 70, 1300] },
+  { owner: 'Sarah', movements: [500, -100, 200] },
+  { owner: 'Steven', movements: [] },
+  { owner: 'Martha', movements: [100, 200, 300, 400, 500] }
+];
+
+const groupedByActivity = Object.groupBy(accounts, acc => {
+  const count = acc.movements.length;
+  if (count >= 8) return 'very active';
+  if (count >= 4) return 'active';
+  if (count >= 1) return 'moderate';
+  return 'inactive';
+});
+
+console.log(groupedByActivity);
+```
+
+* Creates groups: **very active, active, moderate, inactive**.
+* Group names are fully customizable by conditions.
+* If no element falls into a category, that category won’t appear.
+
+---
+
+## 5. Example 3: Group by Object Property
+
+```js
+const accounts = [
+  { owner: 'Jonas', type: 'premium' },
+  { owner: 'Sarah', type: 'basic' },
+  { owner: 'Steven', type: 'standard' },
+  { owner: 'Martha', type: 'premium' }
+];
+
+const groupedAccounts = Object.groupBy(accounts, acc => acc.type);
+
+console.log(groupedAccounts);
+// {
+//   premium: [{ owner: 'Jonas', type: 'premium' }, { owner: 'Martha', type: 'premium' }],
+//   basic: [{ owner: 'Sarah', type: 'basic' }],
+//   standard: [{ owner: 'Steven', type: 'standard' }]
+// }
+```
+
+* Very common use case: grouping by a property.
+* If destructuring is used:
+
+```js
+const groupedAccounts = Object.groupBy(accounts, ({ type }) => type);
+```
+
+---
+
+## 6. Key Points
+
+* **Not an array method** → belongs to `Object`.
+* Callback returns **group key (string or symbol)**.
+* Groups are **dynamic**; no empty groups unless at least one element matches.
+* Great for:
+
+  * Categorizing data (e.g., users by type).
+  * Grouping financial transactions.
+  * Aggregating results before further analysis.
+
+---
+
+## 7. Comparison with Other Methods
+
+* **`filter()`** → extracts matching elements but doesn’t group.
+* **`reduce()`** → can build grouped objects manually, but verbose.
+* **`Object.groupBy()`** → dedicated for grouping, more concise and expressive.
+
+---
+
+**Tip for exams/placements**: Be ready to explain
+
+* The difference between `filter`, `reduce`, and `groupBy`.
+* Why `Object.groupBy` is not an array method.
+* That group names come from **callback return values**.
+
