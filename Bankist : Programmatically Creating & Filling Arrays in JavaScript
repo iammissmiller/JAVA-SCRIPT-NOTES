@@ -1,0 +1,143 @@
+Bankist : Programmatically Creating & Filling Arrays in JavaScript
+
+## 1. Traditional Array Creation
+
+* **Manual creation:**
+
+  ```js
+  const arr = [1, 2, 3, 4, 5];
+  ```
+* **Using `new Array()`:**
+
+  ```js
+  const arr = new Array(1, 2, 3, 4, 5);
+  ```
+* Works well if data is already known.
+* But **not useful** for dynamically generating values.
+
+---
+
+## 2. `new Array(length)` Special Behavior
+
+```js
+const x = new Array(7);
+console.log(x); // [empty × 7]
+```
+
+* Creates an **empty array with length 7** (sparse array).
+* Does **not** create `[7]`.
+* Problem: Methods like `map()` **don’t work** on empty slots.
+* Only some methods (like `fill`) can be used.
+
+---
+
+## 3. `fill()` Method
+
+* Fills an array with a given value.
+
+* **Mutates** the original array.
+
+* Syntax: `arr.fill(value, start?, end?)`
+
+  ```js
+  const x = new Array(7);
+  x.fill(1); // [1, 1, 1, 1, 1, 1, 1]
+
+  x.fill(5, 3);        // [1, 1, 1, 5, 5, 5, 5] (start at index 3)
+  x.fill(9, 2, 4);     // [1, 1, 9, 9, 5, 5, 5] (fills index 2–3)
+  ```
+
+* Can be used on existing arrays too:
+
+  ```js
+  const arr = [1, 2, 3, 4, 5];
+  arr.fill(23, 2, 4); // [1, 2, 23, 23, 5]
+  ```
+
+---
+
+## 4. `Array.from()` (ES6)
+
+* Cleaner way to create arrays programmatically.
+* Syntax:
+
+  ```js
+  Array.from({ length: n }, (curr, i) => expression)
+  ```
+
+### Examples:
+
+1. **Create array of 7 ones:**
+
+   ```js
+   const y = Array.from({ length: 7 }, () => 1);
+   console.log(y); // [1, 1, 1, 1, 1, 1, 1]
+   ```
+
+2. **Array from 1 to 7:**
+
+   ```js
+   const z = Array.from({ length: 7 }, (_, i) => i + 1);
+   console.log(z); // [1, 2, 3, 4, 5, 6, 7]
+   ```
+
+3. **100 Random Dice Rolls:**
+
+   ```js
+   const diceRolls = Array.from({ length: 100 }, () => Math.trunc(Math.random() * 6) + 1);
+   console.log(diceRolls);
+   ```
+
+* `_` (underscore) is often used as a **throwaway variable** when the first parameter (current element) isn’t needed.
+
+---
+
+## 5. Real-World Use Case: Converting Iterables
+
+* `Array.from()` was designed to create arrays **from array-like structures** (iterables).
+* Examples: `strings`, `Sets`, `Maps`, and **NodeLists** from the DOM.
+
+### Example: Convert NodeList from `querySelectorAll`
+
+```js
+// Suppose DOM has elements with class 'movements__value'
+const movementsUI = Array.from(
+  document.querySelectorAll('.movements__value'),
+  el => Number(el.textContent.replace('€', ''))
+);
+
+console.log(movementsUI); 
+// [200, -400, 3000, ...]
+```
+
+* `Array.from()` converts **NodeList → Array**.
+* Mapping function runs immediately to format values.
+
+Alternative using **spread operator**:
+
+```js
+const movementsUI2 = [...document.querySelectorAll('.movements__value')];
+```
+
+* But requires a separate `.map()` afterward.
+* `Array.from()` is cleaner since mapping can be done inline.
+
+---
+
+## 6. Comparison of Methods
+
+| Method                 | Use Case                                                         |
+| ---------------------- | ---------------------------------------------------------------- |
+| `new Array(n)`         | Creates empty array of length `n` (not useful by itself).        |
+| `fill(value)`          | Fills array with a value (mutates original).                     |
+| `Array.from()`         | Generates arrays programmatically OR converts iterables.         |
+| Spread `[...iterable]` | Converts iterables to arrays, but needs extra steps for mapping. |
+
+---
+
+## 7. Key Takeaways
+
+* **`fill`** → Good for filling arrays with a repeated value.
+* **`Array.from`** → Best for programmatic array creation (dynamic values).
+* **Real-world**: Often used to convert `NodeList` (from DOM) into a real array.
+* Cleaner and more flexible than older hacks like looping or manual pushing.
