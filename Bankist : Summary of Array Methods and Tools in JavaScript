@@ -1,0 +1,153 @@
+Bankist : Summary of Array Methods and Tools in JavaScript
+
+JavaScript arrays have **30+ built-in methods**. Choosing the right one depends on what you want:
+
+* Mutate the original array?
+* Create a new array?
+* Get an element or its index?
+* Transform into another type?
+* Just loop?
+
+---
+
+## 1. Mutating (Destructive) Methods
+
+These **change the original array**. Should be avoided in modern practice unless needed.
+
+* **Add/remove elements**:
+
+  * `push()` → add to end
+  * `unshift()` → add to start
+  * `pop()` → remove last
+  * `shift()` → remove first
+  * `splice()` → add/remove at specific positions
+
+* **Other destructive methods**:
+
+  * `reverse()` → reverse order
+  * `sort()` → sort elements
+  * `fill(value, start?, end?)` → fill with a static value
+
+---
+
+## 2. Non-Destructive Alternatives (Modern JS)
+
+Instead of mutating, these return **new arrays**.
+
+* `toReversed()` → like `reverse`, but non-mutating
+* `toSorted(compareFn?)` → like `sort`, but non-mutating
+* `toSpliced(start, deleteCount, ...items)` → like `splice`, but non-mutating
+* `with(index, newValue)` → returns new array with one element changed
+
+---
+
+## 3. Creating New Arrays from Old Ones
+
+* **Transformation (same length)**:
+
+  * `map(callback)` → transform each element
+
+* **Filtering**:
+
+  * `filter(callback)` → keep only elements that pass condition
+
+* **Slicing/Copying**:
+
+  * `slice(start?, end?)` → copy part of array
+  * Spread operator `[...arr]` → copy whole array
+
+* **Replacing Elements (immutably)**:
+
+  * `with(index, newValue)`
+
+* **Flattening**:
+
+  * `flat(depth)` → flatten nested arrays
+  * `flatMap(callback)` → map + flatten in one
+
+* **Concatenation**:
+
+  * `concat(arr2)`
+  * Spread operator `[...arr1, ...arr2]`
+
+---
+
+## 4. Finding Elements and Indexes
+
+* **Indexes**:
+
+  * `indexOf(value)` → index of first occurrence
+  * `findIndex(callback)` → index of first element matching condition
+  * `findLastIndex(callback)` → index of last element matching condition
+
+* **Elements**:
+
+  * `find(callback)` → first element matching condition
+  * `findLast(callback)` → last element matching condition
+  * `at(index)` → get element at position (supports negative index)
+
+---
+
+## 5. Checking for Existence
+
+* `includes(value)` → true/false if value present
+* `some(callback)` → true if at least one passes condition
+* `every(callback)` → true if all pass condition
+
+---
+
+## 6. Reducing or Transforming to Other Types
+
+* `join(separator)` → convert to string
+* `reduce(callback, initialValue)` → reduce array to a single value
+
+  * Can accumulate numbers, strings, arrays, objects
+
+---
+
+## 7. Iteration
+
+* `forEach(callback)` → loop through elements
+
+  * Does not create new arrays
+  * Good for side effects (logging, DOM changes)
+
+---
+
+## 8. Additional Tools & Techniques
+
+* **Grouping**:
+
+  * `Object.groupBy(array, callback)` → group items by property/key
+
+* **Creating arrays programmatically**:
+
+  * `Array.from({ length: n }, (_, i) => i + 1)` → generate array
+  * `new Array(n).fill(value)` → create and fill array
+
+* **Unique Values**:
+
+  * `[...new Set(arr)]` → remove duplicates
+
+* **Intersection of Two Arrays**:
+
+  ```js
+  const intersection = [...new Set(arr1)].filter(x => new Set(arr2).has(x));
+  ```
+
+---
+
+## 9. Method Selection Framework
+
+Ask yourself:
+
+1. Do I need to mutate or preserve the original?
+2. Do I want a new array or a single value?
+3. Do I need an index or the element itself?
+4. Do I want to check conditions or just loop?
+
+---
+
+**Key Takeaway**:
+Arrays are the most-used structure in JavaScript. Mastering these 30+ methods and tools allows you to solve almost any data problem **without writing loops manually**.
+
