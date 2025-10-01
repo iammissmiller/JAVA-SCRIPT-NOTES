@@ -1,0 +1,110 @@
+Bankist: Remainder Operator (`%`) in JavaScript
+
+### 1. What is the Remainder Operator?
+
+* The **remainder operator (`%`)** returns the remainder left after division.
+
+* Example:
+
+  ```js
+  5 % 2; // 1
+  ```
+
+  Explanation:
+
+  * 5 ÷ 2 = 2 (integer part)
+  * 2 × 2 = 4
+  * 5 − 4 = 1 → remainder
+
+* Another example:
+
+  ```js
+  8 % 3; // 2
+  ```
+
+  Because `8 = 2 × 3 + 2`.
+
+---
+
+### 2. General Formula
+
+For `a % b`:
+
+```
+a = b × q + r
+```
+
+* `q` → integer quotient
+* `r` → remainder
+* Result of `%` is always `r`.
+
+---
+
+### 3. Use Cases of `%`
+
+#### a) Checking Even or Odd Numbers
+
+* **Even number**: divisible by 2 → remainder = 0
+* **Odd number**: remainder = 1
+
+```js
+const isEven = n => n % 2 === 0;
+
+console.log(isEven(8));  // true
+console.log(isEven(23)); // false
+```
+
+---
+
+#### b) Check Divisibility by Any Number
+
+* If `a % b === 0` → `a` is divisible by `b`.
+
+```js
+12 % 4 === 0; // true (12 is divisible by 4)
+```
+
+---
+
+#### c) Styling or Running Code Every Nth Time
+
+* Useful in loops, UI styling, or timed events.
+* Example: Color every 2nd row of a table.
+
+```js
+document.querySelectorAll('.movements__row')
+  .forEach((row, i) => {
+    if (i % 2 === 0) row.style.backgroundColor = 'orangered'; // every 2nd row
+    if (i % 3 === 0) row.style.backgroundColor = 'blue';      // every 3rd row
+  });
+```
+
+---
+
+### 4. Practical Examples
+
+1. **Even/Odd**:
+
+   ```js
+   6 % 2; // 0 → even
+   7 % 2; // 1 → odd
+   ```
+
+2. **Random Use in UI**:
+
+   * Alternate row coloring in tables or lists.
+   * Apply special formatting every Nth element.
+
+3. **Game Development / Algorithms**:
+
+   * Trigger events every Nth loop iteration.
+   * Cycle through a pattern (e.g., 3-frame animation).
+
+---
+
+### 5. Key Takeaways
+
+* `%` gives the **remainder of division**.
+* Often used to check **even/odd**, **divisibility**, or perform actions **every Nth time**.
+* Great tool for **patterns, styling, and algorithmic checks**.
+
