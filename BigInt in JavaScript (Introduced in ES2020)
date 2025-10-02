@@ -1,0 +1,128 @@
+BigInt in JavaScript (Introduced in ES2020)
+
+### 1. Why BigInt?
+
+* In JavaScript, **numbers are stored as 64-bit floating point values (IEEE 754 standard)**.
+* Out of 64 bits:
+
+  * **53 bits** → store the digits
+  * Remaining bits → for decimal position and sign
+* This limits JavaScript to represent integers safely up to:
+
+  ```
+  2^53 - 1 = 9007199254740991
+  ```
+* This number is called **MAX_SAFE_INTEGER**:
+
+  ```js
+  Number.MAX_SAFE_INTEGER; // 9007199254740991
+  ```
+* Any integer larger than this is **unsafe** → cannot be represented accurately.
+
+Example:
+
+```js
+console.log(9007199254740991 + 1); // 9007199254740992
+console.log(9007199254740991 + 2); // 9007199254740992 (❌ wrong!)
+```
+
+➡️ To solve this, JavaScript introduced **BigInt** in ES2020.
+
+---
+
+### 2. Creating BigInt Values
+
+Two ways:
+
+1. By adding `n` at the end of an integer:
+
+   ```js
+   const big = 123456789012345678901234567890n;
+   ```
+2. Using the **BigInt() constructor**:
+
+   ```js
+   const big2 = BigInt(123456); 
+   ```
+
+⚠️ But:
+
+* `BigInt(123456789012345678901234567890)` may still lose precision first because the number literal itself is too large.
+* Best practice: use `n` suffix for very large numbers.
+
+---
+
+### 3. Operations with BigInt
+
+* All standard arithmetic operators (`+`, `-`, `*`, `/`, `%`, `**`) work.
+
+* Example:
+
+  ```js
+  const a = 10000n;
+  const b = 20000n;
+  console.log(a + b); // 30000n
+  console.log(a * b); // 200000000n
+  ```
+
+* **Division (`/`) truncates decimals** because BigInt is always an integer:
+
+  ```js
+  10n / 3n;  // 3n (decimal part is cut off)
+  11n / 3n;  // 3n
+  12n / 3n;  // 4n
+  ```
+
+---
+
+### 4. Mixing BigInt and Numbers
+
+* ❌ Not allowed directly:
+
+  ```js
+  const big = 1000n;
+  const num = 20;
+  console.log(big * num); // TypeError ❌
+  ```
+* ✅ Convert explicitly:
+
+  ```js
+  console.log(big * BigInt(num)); // Works
+  ```
+
+---
+
+### 5. Exceptions (Where Mixing Works)
+
+* **Comparisons**:
+
+  ```js
+  console.log(20n > 15);  // true
+  console.log(20n == 20); // true (loose equality → type coercion)
+  console.log(20n === 20); // false (different types)
+  ```
+* **String concatenation**:
+
+  ```js
+  console.log(1000n + " is big!"); // "1000 is big!"
+  ```
+
+---
+
+### 6. Limitations of BigInt
+
+* **Math functions don’t work** (e.g., `Math.sqrt(16n)` ❌).
+* **Not usable with JSON** (e.g., `JSON.stringify({x: 10n})` throws).
+* Cannot be mixed directly with regular numbers (must cast).
+
+---
+
+### 7. Key Takeaways
+
+* **BigInt** allows safe representation of arbitrarily large integers.
+* Created by adding `n` suffix or `BigInt()` constructor.
+* Supports most arithmetic operators but **not floating-point operations**.
+* Cannot mix with regular numbers unless explicitly converted.
+* Useful for **cryptography, large database IDs, precise integer math, and APIs returning 64-bit integers**.
+
+
