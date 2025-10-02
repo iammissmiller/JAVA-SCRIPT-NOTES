@@ -1,0 +1,98 @@
+Bankist : Numeric Separators (`_`) in JavaScript
+
+### 1. Purpose of Numeric Separators
+
+* Large numbers are **hard to read** in raw form:
+
+  ```js
+  const solarDiameter = 287460000000; // Hard to read
+  ```
+* Normally in English, we use commas: `287,460,000,000`.
+* In **JavaScript (since 2021)**, we can use the **underscore (`_`)** as a numeric separator:
+
+  ```js
+  const solarDiameter = 287_460_000_000; // Easier to read
+  ```
+* Underscores improve readability for developers.
+* JavaScript engines **ignore the underscores** → they don’t affect the numeric value.
+
+---
+
+### 2. Examples of Usage
+
+#### a) Large Numbers
+
+```js
+const diameter = 287_460_000_000;
+console.log(diameter); // 287460000000
+```
+
+#### b) Grouping Digits by Meaning
+
+```js
+const price = 345_99;     // 345 dollars and 99 cents
+const transferFee = 1_500; // Same as 1500, easier to see as $1500
+```
+
+* You can group digits to highlight **thousands**, **cents**, or other logical chunks.
+
+---
+
+### 3. Restrictions (Where Underscores Can & Cannot Be Used)
+
+Allowed:
+
+* Between digits:
+
+  ```js
+  const PI = 3.141_592; // valid
+  const amount = 1_000_000; // valid
+  ```
+
+Not Allowed:
+
+* At the start or end of a number
+
+  ```js
+  const x = _1000;  //  Error
+  const y = 1000_;  //  Error
+  ```
+* Next to a decimal point
+
+  ```js
+  const z = 3_.1415; //  Error
+  const w = 3._1415; //  Error
+  ```
+* Multiple consecutive underscores
+
+  ```js
+  const bad = 100__000; //  Error
+  ```
+
+---
+
+### 4. Important Caveat: Strings with Numeric Separators
+
+* Numeric separators **only work in numeric literals inside code**.
+* They **do not work when parsing strings**.
+
+Example with `Number()` and `parseInt()`:
+
+```js
+Number('230000');     // 230000
+Number('230_000');    // NaN ❌
+
+parseInt('230_000');  // 230 (stops at underscore)
+```
+
+ Only use `_` in numeric literals written directly in your source code, **not in strings or APIs**.
+
+---
+
+### 5. Key Takeaways
+
+* Numeric separators improve **readability** of large or meaningful numbers.
+* Use underscores to group digits logically (e.g., `1_000_000` or `12_34_56` depending on your style).
+* Only valid **inside number literals** in code.
+* Invalid in strings, decimals next to `.`, at start/end, or in multiple consecutive positions.
+
