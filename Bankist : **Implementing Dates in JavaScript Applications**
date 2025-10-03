@@ -1,0 +1,139 @@
+Bankist : **Implementing Dates in JavaScript Applications**
+
+## 1. Where Dates Are Needed
+
+* Dates are required in the **Bankist application** at:
+
+  * The **current date** displayed when the user logs in.
+  * Each **movement (transaction)** so that deposits/withdrawals also display their date.
+
+---
+
+## 2. Fake Login (for testing)
+
+* To simplify development, we can **fake being logged in**:
+
+  ```js
+  currentAccount = account1;
+  updateUI(currentAccount);
+  containerApp.style.opacity = 1; // make UI visible
+  ```
+* Skips login each time during testing.
+
+---
+
+## 3. Displaying the Current Date
+
+* Create a new date object:
+
+  ```js
+  const now = new Date();
+  ```
+* Select label element and display:
+
+  ```js
+  labelDate.textContent = now;
+  ```
+* But default format is not user-friendly. Instead, extract parts:
+
+  ```js
+  const day = `${now.getDate()}`.padStart(2, '0');
+  const month = `${now.getMonth() + 1}`.padStart(2, '0');
+  const year = now.getFullYear();
+  const hour = `${now.getHours()}`.padStart(2, '0');
+  const minute = `${now.getMinutes()}`.padStart(2, '0');
+
+  labelDate.textContent = `${day}/${month}/${year}, ${hour}:${minute}`;
+  ```
+* `padStart(2, '0')` ensures single-digit values show as two-digit (e.g., `01`).
+
+---
+
+## 4. Displaying Dates for Movements
+
+* Each account has a **movementsDates** array (parallel to movements array).
+* Modify `displayMovements` to accept the **entire account** instead of just movements:
+
+  ```js
+  const displayMovements = function (acc, sort = false) {
+    containerMovements.innerHTML = '';
+
+    const movs = sort
+      ? acc.movements.slice().sort((a, b) => a - b)
+      : acc.movements;
+
+    movs.forEach(function (mov, i) {
+      const date = new Date(acc.movementsDates[i]);
+      const day = `${date.getDate()}`.padStart(2, '0');
+      const month = `${date.getMonth() + 1}`.padStart(2, '0');
+      const year = date.getFullYear();
+      const displayDate = `${day}/${month}/${year}`;
+
+      const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+      const html = `
+        <div class="movements__row">
+          <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+          <div class="movements__date">${displayDate}</div>
+          <div class="movements__value">${mov}€</div>
+        </div>`;
+      containerMovements.insertAdjacentHTML('afterbegin', html);
+    });
+  };
+  ```
+* Using index `i` ensures that the correct date matches the correct transaction.
+
+---
+
+## 5. Adding Dates for New Movements
+
+* When making a **transfer** or **loan**, a new date must also be recorded.
+
+* Example for transfer:
+
+  ```js
+  currentAccount.movements.push(-amount);
+  currentAccount.movementsDates.push(new Date().toISOString());
+  receiverAcc.movements.push(amount);
+  receiverAcc.movementsDates.push(new Date().toISOString());
+  ```
+
+* Example for loan:
+
+  ```js
+  currentAccount.movements.push(amount);
+  currentAccount.movementsDates.push(new Date().toISOString());
+  ```
+
+* `.toISOString()` ensures the date is stored in a **standard format** (ISO 8601).
+
+---
+
+## 6. Why Store Dates Separately?
+
+* Ideally, each movement would be an **object**:
+
+  ```js
+  { amount: 200, date: '2025-08-16T12:45:30.000Z' }
+  ```
+* But in this project, movements and movementDates are stored in **parallel arrays** for simplicity.
+
+---
+
+## 7. Fixing Formatting Issues
+
+* Ensure **hours and minutes** are padded:
+
+  ```js
+  const hour = `${now.getHours()}`.padStart(2, '0');
+  const min = `${now.getMinutes()}`.padStart(2, '0');
+  ```
+
+---
+
+## 8. Key Takeaways
+
+* Always **synchronize dates with movements** (add a date whenever you add a transaction).
+* Use **ISO strings** (`toISOString()`) when storing dates for reliability.
+* Use **padStart** for proper formatting of single-digit day/month/hour/minute.
+* When refactoring functions, pass the **whole account object** instead of just part of the data. This avoids bugs and makes adding new features easier.
