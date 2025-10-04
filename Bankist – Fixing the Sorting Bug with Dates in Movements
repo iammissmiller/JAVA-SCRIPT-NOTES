@@ -1,0 +1,61 @@
+Bankist – Fixing the Sorting Bug with Dates in Movements
+
+1. **The Bug:**
+
+   * When sorting movements in the UI, only the movement values get sorted.
+   * The dates stay in their original positions.
+   * Example: A withdrawal on Aug 1st always shows as Aug 1st, even if that transaction is moved to a different position.
+
+2. **Reason:**
+
+   * Movements and their dates are stored in separate arrays.
+   * Sorting only the movements array does not reorder the corresponding dates.
+
+3. **Real-World Approach:**
+
+   * Usually, movements are stored as **objects** (e.g., `{value, date}`).
+   * This way, value and date always stay together.
+
+4. **Fix Approach in This App:**
+
+   * Since the current project keeps movements and dates in separate arrays, we create a **combined structure** only while displaying.
+   * Use `.map()` to build an array of objects:
+
+     ```js
+     const combinedMovsDates = acc.movements.map((mov, i) => ({
+       movement: mov,
+       date: acc.movementsDates[i],
+     }));
+     ```
+   * Now each element is `{movement, date}`.
+
+5. **Sorting Combined Data:**
+
+   * When sorting is requested:
+
+     ```js
+     combinedMovsDates.sort((a, b) => a.movement - b.movement);
+     ```
+   * This ensures the date always stays with its movement.
+
+6. **Destructuring for Display:**
+
+   * When looping over combined objects:
+
+     ```js
+     combinedMovsDates.forEach(({ movement, date }) => {
+       // render movement and date
+     });
+     ```
+   * Use destructuring to extract `movement` and `date`.
+
+7. **Changes in Code:**
+
+   * Replace references to `mov` with `movement`.
+   * Replace references to `acc.movementsDates[i]` with `date` from the new combined object.
+
+8. **Result:**
+
+   * Movements and their dates now stay linked after sorting.
+   * Sorting works correctly, keeping both value and date consistent.
+
