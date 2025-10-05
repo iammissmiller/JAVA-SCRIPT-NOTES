@@ -1,0 +1,110 @@
+ Bankist — Operations with Dates
+
+### **1. Performing Calculations with Dates**
+
+* Dates in JavaScript can be subtracted from each other to find the difference in time.
+* When a `Date` is converted to a number, it becomes a **timestamp** (milliseconds since January 1, 1970).
+* Subtracting two dates returns the difference in **milliseconds**.
+
+Example:
+
+```js
+const date1 = new Date(2024, 3, 14);
+const date2 = new Date(2024, 3, 24);
+console.log(date2 - date1); // Difference in milliseconds
+```
+
+---
+
+### **2. Converting Milliseconds to Days**
+
+* 1 second = 1000 milliseconds
+* 1 minute = 60 seconds
+* 1 hour = 60 minutes
+* 1 day = 24 hours
+
+To convert milliseconds to days:
+
+```js
+const calcDaysPassed = (date1, date2) =>
+  Math.abs(date2 - date1) / (1000 * 60 * 60 * 24);
+```
+
+`Math.abs()` ensures the result is always positive.
+
+---
+
+### **3. Rounding Days**
+
+If dates include time (hours/minutes), results may include fractions.
+
+```js
+Math.round(calcDaysPassed(date1, date2));
+```
+
+---
+
+### **4. Example Calculation**
+
+```js
+const d1 = new Date(2024, 3, 14);
+const d2 = new Date(2024, 3, 24);
+console.log(calcDaysPassed(d1, d2)); // 10 days
+```
+
+If reversed (`calcDaysPassed(d2, d1)`), still returns `10` due to `Math.abs()`.
+
+---
+
+### **5. Formatting Dates for Display**
+
+Goal: display human-readable text like
+
+* “Today”
+* “Yesterday”
+* “5 days ago”
+* or the actual date if more than a week ago.
+
+#### Function Example:
+
+```js
+const formatMovementDate = function(date) {
+  const daysPassed = Math.round(
+    Math.abs(new Date() - date) / (1000 * 60 * 60 * 24)
+  );
+
+  if (daysPassed === 0) return 'Today';
+  if (daysPassed === 1) return 'Yesterday';
+  if (daysPassed <= 7) return `${daysPassed} days ago`;
+
+  return new Intl.DateTimeFormat('en-US').format(date);
+};
+```
+
+#### Usage:
+
+```js
+const displayDate = formatMovementDate(someDate);
+console.log(displayDate);
+```
+
+---
+
+### **6. Explanation**
+
+* `new Date()` → current date
+* Subtracting gives difference in milliseconds.
+* Dividing by `(1000 * 60 * 60 * 24)` converts to days.
+* `Math.round()` ensures no decimal results.
+* `Intl.DateTimeFormat()` formats the date when older than 7 days.
+
+---
+
+### **7. Key Points**
+
+* Date arithmetic in JS works because of timestamps.
+* Use absolute values to handle order of inputs.
+* Round to avoid fractional day results.
+* Use conditional logic for readable date labels.
+* Libraries like **Moment.js** handle complex edge cases (e.g., daylight savings).
+
