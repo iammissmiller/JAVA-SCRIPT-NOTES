@@ -1,0 +1,166 @@
+Bankist — Internationalization (Intl) API for Number Formatting
+
+### **1. Overview**
+
+* The **Internationalization API (Intl)** allows formatting of numbers, currencies, and units based on different locales.
+* Similar to how it formats **dates**, it can also format **numbers** according to a region’s standards.
+
+---
+
+### **2. Basic Number Formatting**
+
+To format a number according to a specific locale:
+
+```js
+const num = 3884764.23;
+
+// U.S. format
+console.log(new Intl.NumberFormat('en-US').format(num));
+// → 3,884,764.23
+
+// German format
+console.log(new Intl.NumberFormat('de-DE').format(num));
+// → 3.884.764,23
+
+// Arabic (Syria) format
+console.log(new Intl.NumberFormat('ar-SY').format(num));
+```
+
+#### Notes:
+
+* The locale string determines formatting style (e.g., decimal separators, grouping).
+* You can use the **browser locale** dynamically:
+
+```js
+navigator.language // e.g. "en-GB"
+new Intl.NumberFormat(navigator.language).format(num);
+```
+
+---
+
+### **3. Using Options for Number Formatting**
+
+The `Intl.NumberFormat()` constructor also accepts an **options object** to define specific formatting styles.
+
+#### Example:
+
+```js
+const options = {
+  style: 'unit',
+  unit: 'mile-per-hour',
+};
+console.log(new Intl.NumberFormat('en-US', options).format(50));
+// → 50 mph
+```
+
+#### Common `style` options:
+
+1. **unit** — Formats with measurement units
+   Example units: `"mile-per-hour"`, `"celsius"`, `"liter"`, etc.
+
+2. **percent** — Displays percentage
+
+   ```js
+   new Intl.NumberFormat('en-US', { style: 'percent' }).format(0.25);
+   // → 25%
+   ```
+
+3. **currency** — Displays currency
+
+   ```js
+   new Intl.NumberFormat('en-US', {
+     style: 'currency',
+     currency: 'USD',
+   }).format(1234.56);
+   // → $1,234.56
+   ```
+
+---
+
+### **4. Currency Formatting Details**
+
+* The **currency must be defined manually** — it is **not inferred** from the locale.
+* Example:
+
+  ```js
+  new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'EUR',
+  }).format(1234.56);
+  // → 1.234,56 €
+  ```
+* The **currency position** (before/after number) depends on locale.
+* You can mix locales and currencies (e.g., show USD in a German locale).
+
+---
+
+### **5. Disabling Grouping**
+
+You can turn off grouping separators (commas, dots, etc.):
+
+```js
+new Intl.NumberFormat('en-US', {
+  useGrouping: false,
+}).format(3884764.23);
+// → 3884764.23
+```
+
+---
+
+### **6. Reusable Currency Formatting Function**
+
+To avoid repetition, define a helper function:
+
+```js
+const formatCur = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
+};
+```
+
+#### Usage:
+
+```js
+formatCur(12345.67, 'en-US', 'USD'); // → $12,345.67
+formatCur(12345.67, 'de-DE', 'EUR'); // → 12.345,67 €
+```
+
+This function:
+
+* Works for any locale or currency.
+* Keeps code clean and reusable.
+* Can be used across multiple sections (balance, transactions, stats, etc.).
+
+---
+
+### **7. Applying in Applications**
+
+Example integration for displaying formatted balances:
+
+```js
+const displayBalance = function (acc) {
+  labelBalance.textContent = formatCur(acc.balance, acc.locale, acc.currency);
+};
+```
+
+Or for movements:
+
+```js
+const formattedMov = formatCur(mov, acc.locale, acc.currency);
+```
+
+---
+
+### **8. Key Points**
+
+* `Intl.NumberFormat()` simplifies localization.
+* **Locale** controls number style and separators.
+* **Currency** must be explicitly set.
+* Supports **units**, **percent**, and **currency** styles.
+* Helps avoid manual formatting (e.g., adding “$” or “€” manually).
+* Keeps UI consistent across regions.
+* Use **helper functions** to follow DRY (Don’t Repeat Yourself) principle.
+* For advanced customization, refer to **MDN Intl.NumberFormat documentation**.
+
