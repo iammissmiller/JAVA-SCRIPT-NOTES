@@ -1,0 +1,198 @@
+Bankist - Timers and Auto Logout Feature
+
+### **1. Types of Timers in JavaScript**
+
+JavaScript provides two main timer functions:
+
+1. **`setTimeout(callback, delay, arg1, arg2, …)`**
+
+   * Executes a function **once** after a specified delay (in milliseconds).
+   * Delay is non-blocking — JavaScript continues executing the rest of the code.
+   * Returns a **timer ID**, which can be used to cancel the timeout.
+
+   ```js
+   const timerId = setTimeout(() => {
+     console.log("Your pizza is ready!");
+   }, 3000); // Executes after 3 seconds
+   ```
+
+   * To **cancel** before it runs:
+
+     ```js
+     clearTimeout(timerId);
+     ```
+
+   * You can also pass **arguments** to the callback function:
+
+     ```js
+     const pizzaTimer = setTimeout(
+       (ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2}`),
+       3000,
+       "olives",
+       "spinach"
+     );
+     ```
+
+   * To **cancel conditionally**:
+
+     ```js
+     const ingredients = ["olives", "spinach"];
+     if (ingredients.includes("spinach")) clearTimeout(pizzaTimer);
+     ```
+
+---
+
+2. **`setInterval(callback, interval)`**
+
+   * Executes a function **repeatedly** at fixed intervals (in milliseconds).
+   * Returns an interval ID which can be used to stop it.
+
+   ```js
+   const clock = setInterval(() => {
+     const now = new Date();
+     console.log(now);
+   }, 1000); // Prints current time every 1 second
+   ```
+
+   * To stop it:
+
+     ```js
+     clearInterval(clock);
+     ```
+
+---
+
+### **2. Auto Logout Timer in a Banking App**
+
+**Goal:**
+Automatically log out a user after a period of inactivity (e.g., 5 minutes).
+
+**Approach:**
+Use `setInterval()` to create a countdown timer that:
+
+* Starts on login.
+* Decreases every second.
+* Updates the countdown on the user interface.
+* Logs the user out when time reaches zero.
+* Resets if the user performs any activity (like transfer or loan).
+
+---
+
+### **3. Step-by-Step Implementation**
+
+#### **Function: `startLogoutTimer()`**
+
+```js
+const startLogoutTimer = function () {
+  let time = 120; // Example: 2 minutes = 120 seconds
+
+  const tick = function () {
+    // Convert time to minutes and seconds
+    const min = String(Math.trunc(time / 60)).padStart(2, '0');
+    const sec = String(time % 60).padStart(2, '0');
+
+    // Display time in UI (e.g., "01:30")
+    labelTimer.textContent = `${min}:${sec}`;
+
+    // When time is zero, stop timer and log out user
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = "Log in to get started";
+      containerApp.style.opacity = 0;
+    }
+
+    // Decrease time by 1 second
+    time--;
+  };
+
+  // Call tick immediately (so it doesn't wait 1s for first update)
+  tick();
+
+  // Run tick every second
+  const timer = setInterval(tick, 1000);
+
+  return timer; // Return timer ID to use outside
+};
+```
+
+---
+
+### **4. Starting and Managing the Timer**
+
+#### **On User Login**
+
+```js
+let timer;
+
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+  
+  // If a timer already exists (previous user), clear it
+  if (timer) clearInterval(timer);
+
+  // Start new timer for current session
+  timer = startLogoutTimer();
+});
+```
+
+#### **When Performing an Activity (Transfer / Loan)**
+
+To prevent logout when user is active, **reset the timer**:
+
+```js
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  
+  // Clear old timer
+  clearInterval(timer);
+  
+  // Restart timer
+  timer = startLogoutTimer();
+});
+
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  
+  // Simulate loan processing delay
+  setTimeout(function () {
+    // Loan approved...
+    
+    // Reset timer
+    clearInterval(timer);
+    timer = startLogoutTimer();
+  }, 2500);
+});
+```
+
+---
+
+### **5. Key Concepts and Best Practices**
+
+| Concept                                | Explanation                                                                                        |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| **Asynchronous Execution**             | Timers do not block execution. Code after `setTimeout()` or `setInterval()` continues running.     |
+| **Clearing Timers**                    | Use `clearTimeout()` and `clearInterval()` to stop scheduled actions.                              |
+| **Returning Timer IDs**                | Always return timer IDs when creating timers so they can be controlled later.                      |
+| **Immediate Execution with Intervals** | Call your function once before `setInterval()` to avoid a 1-second initial delay.                  |
+| **Timer Resetting**                    | Always reset timers on user actions to prevent unintended logout.                                  |
+| **Global Timer Variable**              | Define the timer variable in the outer scope so it persists across functions (e.g., `let timer;`). |
+
+---
+
+### **6. Common Errors to Avoid**
+
+* Forgetting to clear existing timers before starting new ones (causes multiple intervals to run).
+* Not calling the timer function immediately (results in a one-second display lag).
+* Checking the zero condition before decrementing time (leads to early logout).
+* Using the wrong timer function (`setTimeout` vs. `setInterval`).
+
+---
+
+### **7. Summary**
+
+* **`setTimeout()`** → Executes once after delay.
+* **`setInterval()`** → Executes repeatedly at regular intervals.
+* Both return IDs that can be cleared using `clearTimeout()` or `clearInterval()`.
+* Use timers to implement delayed actions, repeating tasks, or inactivity features (like auto-logout).
+* Reset timers when the user performs actions to prevent premature logout.
+
