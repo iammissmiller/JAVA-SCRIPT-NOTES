@@ -1,0 +1,235 @@
+Bankist — Timers (`setTimeout` and `setInterval`)
+
+---
+
+### **1. Overview**
+
+JavaScript provides two types of timers to execute code after a certain period or repeatedly over time:
+
+1. **`setTimeout()`** — Executes a function **once** after a specified delay.
+2. **`setInterval()`** — Executes a function **repeatedly** at specified time intervals until stopped.
+
+Timers are part of the **Web APIs**, not the core JavaScript language itself, but are available in browsers and Node.js environments.
+
+---
+
+### **2. `setTimeout()` — One-Time Delayed Execution**
+
+#### **Definition**
+
+`setTimeout()` allows you to **schedule** a function to execute after a specified number of milliseconds.
+
+#### **Syntax**
+
+```js
+setTimeout(callbackFunction, delay, arg1, arg2, ...);
+```
+
+* **callbackFunction** → Function to be executed later.
+* **delay** → Time in milliseconds (1 second = 1000 ms).
+* **arg1, arg2, ...** → Optional arguments passed to the callback function.
+
+---
+
+#### **Example 1 — Simple Usage**
+
+```js
+setTimeout(() => {
+  console.log("Here is your pizza!");
+}, 3000);
+```
+
+**Explanation:**
+
+* Logs "Here is your pizza!" **after 3 seconds**.
+* The function is passed **as a callback**, not executed immediately.
+* The code execution **does not stop** for 3 seconds — JavaScript continues executing other lines and calls the function later.
+
+---
+
+#### **Example 2 — Passing Arguments**
+
+```js
+setTimeout((ing1, ing2) => {
+  console.log(`Here is your pizza with ${ing1} and ${ing2}.`);
+}, 3000, 'olives', 'spinach');
+```
+
+**Output after 3 seconds:**
+
+```
+Here is your pizza with olives and spinach.
+```
+
+* The third and subsequent arguments of `setTimeout` are passed as parameters to the callback function.
+
+---
+
+#### **Example 3 — Using an Array and Spread Operator**
+
+```js
+const ingredients = ['olives', 'spinach'];
+
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => console.log(`Pizza with ${ing1} and ${ing2} 🍕`),
+  3000,
+  ...ingredients
+);
+```
+
+Here, the **spread operator (`...`)** expands the array elements into individual arguments.
+
+---
+
+### **3. Cancelling a Timer**
+
+#### **Why?**
+
+Sometimes you may want to **cancel** a timer before it runs — for example, if certain conditions are met.
+
+#### **How?**
+
+Use **`clearTimeout()`** and pass it the timer reference returned by `setTimeout()`.
+
+#### **Example**
+
+```js
+const ingredients = ['olives', 'spinach'];
+
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => console.log(`Pizza with ${ing1} and ${ing2}`),
+  3000,
+  ...ingredients
+);
+
+if (ingredients.includes('spinach')) clearTimeout(pizzaTimer);
+```
+
+**Explanation:**
+
+* `setTimeout()` returns a **timer ID**.
+* `clearTimeout(pizzaTimer)` cancels the scheduled function if it hasn’t executed yet.
+* The message won’t appear if spinach is included.
+
+---
+
+### **4. Real-World Example — Simulating a Loan Approval Delay**
+
+Example from an app simulation:
+
+```js
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount > 0) {
+    setTimeout(() => {
+      currentAccount.movements.push(amount);
+      updateUI(currentAccount);
+    }, 2500);
+  }
+
+  inputLoanAmount.value = '';
+});
+```
+
+**Explanation:**
+
+* When a loan is requested, approval is simulated with a **2.5-second delay**.
+* The function executes **asynchronously** without pausing the rest of the code.
+* It creates a **more realistic banking app** experience.
+
+---
+
+### **5. `setInterval()` — Repeated Execution**
+
+#### **Definition**
+
+`setInterval()` repeatedly calls a function at **fixed time intervals**, until explicitly stopped.
+
+#### **Syntax**
+
+```js
+setInterval(callbackFunction, interval, arg1, arg2, ...);
+```
+
+* **callbackFunction** → Function executed repeatedly.
+* **interval** → Delay (in milliseconds) between each call.
+
+---
+
+#### **Example 1 — Simple Clock**
+
+```js
+setInterval(function () {
+  const now = new Date();
+  console.log(now);
+}, 1000);
+```
+
+**Explanation:**
+
+* A new `Date` object is created every second.
+* Logs the current time repeatedly to the console.
+* Useful for clocks, timers, and live counters.
+
+---
+
+#### **Example 2 — Changing Interval**
+
+```js
+setInterval(() => {
+  const now = new Date();
+  console.log(now.toLocaleTimeString());
+}, 3000);
+```
+
+Prints the **current time** every **3 seconds**.
+
+---
+
+### **6. Stopping an Interval**
+
+Like timeouts, intervals can also be **stopped** using `clearInterval()`.
+
+```js
+const timer = setInterval(() => console.log('Running...'), 1000);
+
+// Stop after 5 seconds
+setTimeout(() => clearInterval(timer), 5000);
+```
+
+**Explanation:**
+
+* `setInterval()` runs every second.
+* After 5 seconds, `setTimeout()` calls `clearInterval()` to stop it.
+
+---
+
+### **7. Key Points Summary**
+
+| Concept            | Function                                                  | Description                                       |
+| ------------------ | --------------------------------------------------------- | ------------------------------------------------- |
+| One-time delay     | `setTimeout()`                                            | Executes a function once after given milliseconds |
+| Repeated execution | `setInterval()`                                           | Executes a function repeatedly at intervals       |
+| Cancel timeout     | `clearTimeout(timerID)`                                   | Stops a pending timeout before it executes        |
+| Cancel interval    | `clearInterval(intervalID)`                               | Stops a running interval loop                     |
+| Non-blocking       | Both are **asynchronous**; they don’t pause other JS code |                                                   |
+| Timer ID           | Returned by both functions — used to cancel the timer     |                                                   |
+
+---
+
+### **8. Challenge Exercise (Practice)**
+
+Create a **digital clock** in the console using `setInterval()`:
+
+```js
+setInterval(() => {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const mins = now.getMinutes().toString().padStart(2, '0');
+  const secs = now.getSeconds().toString().padStart(2, '0');
+  console.log(`${hours}:${mins}:${secs}`);
+}, 1000);
+```
