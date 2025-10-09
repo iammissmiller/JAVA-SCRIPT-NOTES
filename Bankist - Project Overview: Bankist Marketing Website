@@ -1,0 +1,115 @@
+Bankist - Project Overview: Bankist Marketing Website
+
+### **Purpose**
+
+* Build a **marketing website** for the fictional **Bankist** bank (previously we built its banking app).
+* The **HTML** and **CSS** are provided in starter files.
+* You will use **JavaScript** to add all interactive and dynamic effects.
+
+---
+
+## **Key Features (All Built Using JavaScript)**
+
+1. **Modal (Popup) Window**
+
+   * Opens when clicking “Open Account” or similar buttons.
+   * Closes when clicking the overlay, close button, or pressing Escape.
+   * Prevents the page from jumping to the top when opened (using `event.preventDefault()`).
+
+2. **Smooth Scrolling**
+
+   * Clicking on navigation links or “Learn more” buttons smoothly scrolls to sections on the same page.
+
+3. **Sticky Navigation Bar**
+
+   * The navigation bar sticks to the top of the viewport once the user scrolls past the header section.
+
+4. **Section Reveal on Scroll (Fade-in Effect)**
+
+   * Each section initially hidden.
+   * Gradually fades and slides in when scrolled into view.
+
+5. **Lazy Loading of Images**
+
+   * Low-resolution (blurred) placeholders load first.
+   * As the user scrolls, full-resolution images are loaded only when needed — improving performance.
+
+6. **Tabbed Component**
+
+   * A common UI pattern: clicking on a tab (e.g., “Operations”, “Features”, “About”) shows related content.
+   * Implemented by toggling CSS classes and handling click events.
+
+7. **Menu Hover Animation**
+
+   * When hovering over one nav link, the others fade out slightly for a focus effect.
+
+8. **Image Slider / Carousel**
+
+   * Multiple slides (usually 3).
+   * Move between slides using:
+
+     * Left/Right arrow buttons
+     * Keyboard arrow keys
+     * Small clickable navigation dots below the slider
+   * Slides loop continuously.
+
+---
+
+## **Starter Files Provided**
+
+1. **index.html**
+
+   * Contains all page structure.
+   * You’ll connect JavaScript through `<script src="script.js"></script>` at the bottom.
+
+2. **style.css**
+
+   * Prewritten CSS for the entire site (hundreds of lines).
+   * Already styled — no changes required for now.
+
+3. **script.js**
+
+   * Already contains the **modal window code** from previous lessons.
+   * You’ll add new JS functionality step-by-step.
+
+---
+
+## **Initial Improvements to Existing Modal Code**
+
+1. **Prevent Default Link Behavior**
+
+   * Some buttons are `<a href="#">` links.
+   * Default behavior makes the page jump to the top.
+   * Fix using:
+
+     ```js
+     btnOpenModal.addEventListener('click', function (e) {
+       e.preventDefault(); // Stops the jump
+       openModal();
+     });
+     ```
+
+2. **Use forEach() Instead of for Loop**
+
+   * Cleaner way to attach event listeners to multiple buttons.
+   * Replace:
+
+     ```js
+     for (let i = 0; i < btnsOpenModal.length; i++)
+       btnsOpenModal[i].addEventListener('click', openModal);
+     ```
+
+     with:
+
+     ```js
+     btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
+     ```
+
+---
+
+## **Outcome**
+
+* The modal popup now works smoothly.
+* Page no longer jumps on click.
+* Code is modernized using `forEach()`.
+* Project is set up and ready for further JavaScript DOM manipulation features.
