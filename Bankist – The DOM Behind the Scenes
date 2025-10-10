@@ -1,0 +1,102 @@
+Bankist – The DOM Behind the Scenes
+
+### 1. What is the DOM
+
+* The **DOM (Document Object Model)** is the interface between **JavaScript and the browser**, specifically the **HTML document** rendered in the browser.
+* It allows JavaScript to **interact** with web pages by:
+
+  * Creating, modifying, and deleting elements
+  * Setting styles, attributes, and classes
+  * Listening to and handling events
+
+---
+
+### 2. DOM Tree Structure
+
+* The DOM is represented as a **tree-like structure** made up of **nodes**.
+* Each part of an HTML document (elements, text, comments) becomes a **node** in this tree.
+* JavaScript interacts with the DOM tree using the **DOM API**, which provides various methods and properties (e.g. `querySelector()`, `addEventListener()`, `createElement()`, `innerHTML`, etc.).
+
+---
+
+### 3. Node Types
+
+Every node in the DOM tree is of type **Node**, which is represented internally as an object.
+Different types of nodes inherit from the `Node` base type:
+
+1. **Element Node** – represents HTML elements.
+2. **Text Node** – represents text inside elements.
+3. **Comment Node** – represents HTML comments.
+4. **Document Node** – represents the entire HTML document.
+
+Each node type has its own methods and properties.
+
+---
+
+### 4. The Element Type
+
+* Represents actual HTML elements like `<div>`, `<button>`, `<img>`, etc.
+* Common properties: `innerHTML`, `classList`, `children`, `parentElement`
+* Common methods: `append()`, `remove()`, `insertAdjacentHTML()`, `querySelector()`, `closest()`
+
+Each HTML element type (button, image, link, etc.) has its own **specialized subclass**:
+
+* **HTMLButtonElement**, **HTMLImageElement**, **HTMLAnchorElement**, etc.
+* These provide element-specific properties (e.g. `src` for images, `href` for links).
+
+---
+
+### 5. Inheritance in the DOM
+
+* **Inheritance** allows child node types to access the properties and methods of their parent types.
+* For example:
+
+  * `HTMLButtonElement` → inherits from `HTMLElement` → inherits from `Element` → inherits from `Node`.
+* This means every button element has access to:
+
+  * Its own properties (like `disabled`)
+  * All `Element` properties (`innerHTML`, `classList`, etc.)
+  * All `Node` properties (`childNodes`, `parentNode`, etc.)
+
+This hierarchical inheritance system is what makes DOM manipulation consistent across different element types.
+
+---
+
+### 6. The Document Node
+
+* The `document` object represents the **root** of the HTML page.
+* Important methods:
+
+  * `querySelector()`
+  * `createElement()`
+  * `getElementById()`
+* Some of these (like `querySelector`) are also available on element nodes because of inheritance.
+
+---
+
+### 7. EventTarget Type
+
+* **EventTarget** is the top-level abstract type that allows **event handling**.
+* It is the parent of both `Node` and `Window`.
+* Therefore, every node and the `window` object can use:
+
+  * `addEventListener()`
+  * `removeEventListener()`
+  * `dispatchEvent()`
+
+This is why we can listen to events on elements, the document, and even the window.
+
+---
+
+### 8. Summary
+
+* The DOM is a **hierarchical object model** that represents the HTML document.
+* Every visible and invisible part of the HTML (elements, text, comments) is a **node**.
+* Node types form an inheritance chain:
+
+  ```
+  EventTarget → Node → Element → HTMLElement → Specific HTML Element (e.g. HTMLButtonElement)
+  ```
+* Inheritance ensures that methods like `addEventListener()` or properties like `innerHTML` are available across relevant elements.
+* The **DOM API** is vast and organized to make HTML documents fully accessible and manipulable through JavaScript.
+
