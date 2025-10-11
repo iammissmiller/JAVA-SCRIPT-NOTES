@@ -1,0 +1,218 @@
+Bankist : Selecting, Creating, Inserting & Deleting Elements
+
+---
+
+## **1. Selecting Elements**
+
+The DOM (Document Object Model) represents an HTML document as a tree of nodes. To manipulate these nodes, we first need to **select** them.
+
+### **a. Special DOM Elements**
+
+* `document.documentElement` → Selects the entire HTML document (`<html>` element).
+* `document.head` → Selects the `<head>` section.
+* `document.body` → Selects the `<body>` section.
+
+These can be accessed directly without any selectors.
+
+---
+
+### **b. Query Selectors**
+
+#### **Single Selection**
+
+```js
+document.querySelector('.className');
+document.querySelector('#idName');
+document.querySelector('tagName');
+```
+
+* Returns the **first** matching element.
+* Can be used on both `document` and specific elements.
+
+#### **Multiple Selection**
+
+```js
+document.querySelectorAll('.section');
+```
+
+* Returns a **NodeList** (not live).
+* Does not automatically update if DOM changes.
+
+**Example:**
+
+```js
+const allSections = document.querySelectorAll('.section');
+console.log(allSections);  // NodeList of all .section elements
+```
+
+---
+
+### **c. Older Selection Methods**
+
+#### **getElementById**
+
+```js
+document.getElementById('section1');
+```
+
+* Returns the element with the given ID.
+* Does not require `#` prefix.
+
+#### **getElementsByTagName**
+
+```js
+document.getElementsByTagName('button');
+```
+
+* Returns an **HTMLCollection** (live collection).
+* Automatically updates when DOM changes.
+
+#### **getElementsByClassName**
+
+```js
+document.getElementsByClassName('btn');
+```
+
+* Returns a live **HTMLCollection** of all elements with the given class name.
+
+**Difference between NodeList and HTMLCollection:**
+
+| Property    | NodeList             | HTMLCollection                                       |
+| ----------- | -------------------- | ---------------------------------------------------- |
+| Returned by | `querySelectorAll()` | `getElementsByTagName()`, `getElementsByClassName()` |
+| Live Update | No                   | Yes                                                  |
+| Access      | By index             | By index                                             |
+
+---
+
+## **2. Creating Elements**
+
+### **a. Using `createElement()`**
+
+```js
+const message = document.createElement('div');
+```
+
+* Creates a new DOM element object but does **not** add it to the page yet.
+
+---
+
+### **b. Modifying the Created Element**
+
+#### Add a class:
+
+```js
+message.classList.add('cookie-message');
+```
+
+#### Add text:
+
+```js
+message.textContent = 'We use cookies for analytics and functionality.';
+```
+
+#### Add HTML:
+
+```js
+message.innerHTML = 'We use cookies for analytics. <button class="btn btn--close-cookie">Got it!</button>';
+```
+
+---
+
+## **3. Inserting Elements**
+
+Once created, elements must be inserted into the DOM.
+
+### **a. Using `append()` and `prepend()`**
+
+```js
+const header = document.querySelector('.header');
+
+// Add as first child
+header.prepend(message);
+
+// Add as last child
+header.append(message);
+```
+
+* `prepend()` inserts element at the **beginning**.
+* `append()` inserts at the **end**.
+* If you append an element already in the DOM, it **moves** instead of duplicating (since DOM elements are unique).
+
+---
+
+### **b. Cloning Elements**
+
+If you need the same element in multiple places:
+
+```js
+header.append(message.cloneNode(true));
+```
+
+* The `true` argument ensures that all child nodes are copied as well.
+
+---
+
+### **c. Inserting Before or After**
+
+```js
+header.before(message); // Inserts before the header
+header.after(message);  // Inserts after the header
+```
+
+* Adds elements as **siblings**, not children.
+
+---
+
+## **4. Deleting Elements**
+
+### **a. Using `remove()`**
+
+```js
+message.remove();
+```
+
+* Removes the element from the DOM directly.
+* Modern and preferred method.
+
+### **b. Older Method (Before `remove()` existed)**
+
+```js
+message.parentElement.removeChild(message);
+```
+
+* Required selecting the parent first.
+* Still works for compatibility with older browsers.
+
+---
+
+## **5. Example Code Summary**
+
+```js
+// Create new element
+const message = document.createElement('div');
+message.classList.add('cookie-message');
+message.innerHTML = 'We use cookies for improved functionality. <button class="btn btn--close-cookie">Got it!</button>';
+
+// Insert element
+const header = document.querySelector('.header');
+header.append(message);
+
+// Remove element on button click
+document.querySelector('.btn--close-cookie').addEventListener('click', () => {
+  message.remove();
+});
+```
+
+---
+
+## **6. Key Points Summary**
+
+* **`querySelector` / `querySelectorAll`** → modern and most used.
+* **`getElementsBy*`** → older, returns live HTMLCollections.
+* **`createElement()`** → creates a new DOM element.
+* **`append()`, `prepend()`, `before()`, `after()`** → insert elements.
+* **`cloneNode(true)`** → duplicates an element.
+* **`remove()`** → directly removes an element.
+* DOM elements are **unique** and can only exist in one place in the document.
+
