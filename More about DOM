@@ -1,0 +1,222 @@
+JavaScript DOM – Styles, Attributes, and Classes
+
+### **1. Working with Styles**
+
+#### **Setting Inline Styles**
+
+You can set styles directly on an element using the `.style` property. These are called **inline styles**.
+
+```js
+message.style.backgroundColor = '#37383d';
+message.style.width = '120%';
+```
+
+* Property names are written in **camelCase** (e.g., `backgroundColor`, not `background-color`).
+* You must always include **units** for values like width, height, margin, etc.
+
+These styles are added directly to the element’s HTML as inline CSS.
+
+#### **Reading Inline Styles**
+
+You can read inline styles that were set manually:
+
+```js
+console.log(message.style.backgroundColor); // Works
+console.log(message.style.color); // Doesn’t work (not inline)
+```
+
+It only works for **inline styles** that you’ve set using JavaScript, not for styles defined in external CSS.
+
+#### **Reading Computed Styles**
+
+To read styles that come from CSS or the browser’s defaults, use:
+
+```js
+const styles = getComputedStyle(message);
+console.log(styles.color);  // Computed color from CSS
+console.log(styles.height); // Computed height in pixels
+```
+
+This gives an object containing **all the computed styles** of the element.
+
+#### **Modifying Computed Styles**
+
+Example – Increase height by 40px:
+
+```js
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height) + 40 + 'px';
+```
+
+* `getComputedStyle()` returns values as **strings** (e.g., `"50px"`).
+* Use `Number.parseFloat()` to extract the numeric value.
+
+---
+
+### **2. CSS Custom Properties (Variables)**
+
+CSS variables (custom properties) are defined in CSS:
+
+```css
+:root {
+  --color-primary: #5ec576;
+  --color-secondary: #ffcb03;
+}
+```
+
+You can modify them using JavaScript:
+
+```js
+document.documentElement.style.setProperty('--color-primary', 'orangered');
+```
+
+* `document.documentElement` targets the `<html>` element.
+* Use `.setProperty(propertyName, value)` to change variable values dynamically.
+
+Changing one CSS variable can affect multiple elements using that variable.
+
+---
+
+### **3. Working with Attributes**
+
+#### **Reading Standard Attributes**
+
+```js
+const logo = document.querySelector('.nav__logo');
+
+console.log(logo.alt);   // "Bankist logo"
+console.log(logo.src);   // Absolute URL (e.g., http://localhost:8080/img/logo.png)
+console.log(logo.className); // "nav__logo"
+```
+
+* Standard attributes like `src`, `alt`, and `id` can be accessed directly as properties.
+
+#### **Setting Attributes**
+
+```js
+logo.alt = 'Beautiful minimalist logo';
+```
+
+#### **Reading and Setting Non-Standard Attributes**
+
+Use `.getAttribute()` and `.setAttribute()` for non-standard or custom attributes:
+
+```js
+logo.setAttribute('company', 'Bankist');
+console.log(logo.getAttribute('company')); // "Bankist"
+```
+
+**Difference between `.src` and `.getAttribute('src')`:**
+
+* `logo.src` → returns **absolute URL**
+* `logo.getAttribute('src')` → returns **relative URL** as written in HTML
+
+#### **Example with Links**
+
+```js
+const link = document.querySelector('.nav__link--btn');
+console.log(link.href); // absolute URL
+console.log(link.getAttribute('href')); // relative URL (e.g., "#section--1")
+```
+
+---
+
+### **4. Data Attributes**
+
+Data attributes allow you to store custom data on HTML elements.
+They start with `data-` and can be accessed through the `.dataset` property.
+
+**HTML:**
+
+```html
+<img class="nav__logo" data-version-number="3.0" />
+```
+
+**JavaScript:**
+
+```js
+console.log(logo.dataset.versionNumber); // "3.0"
+```
+
+* Data attributes are automatically converted from **dash-case** to **camelCase**.
+* Useful for storing configuration, metadata, or state information in HTML.
+
+---
+
+### **5. Working with Classes**
+
+You can manipulate classes using the `.classList` property.
+
+#### **Methods:**
+
+```js
+logo.classList.add('new-class', 'fade');
+logo.classList.remove('fade');
+logo.classList.toggle('hidden');
+logo.classList.contains('nav__logo'); // true or false
+```
+
+* `.add()` → Add one or more classes
+* `.remove()` → Remove one or more classes
+* `.toggle()` → Add class if not present, remove if present
+* `.contains()` → Check if class exists
+
+**Avoid using:**
+
+```js
+logo.className = 'jonas'; // Overwrites all existing classes
+```
+
+Always prefer `classList` methods to preserve existing classes.
+
+---
+
+### **Summary Table**
+
+| **Operation**       | **Method / Property**                | **Example**                                                     |
+| ------------------- | ------------------------------------ | --------------------------------------------------------------- |
+| Set inline style    | `element.style.property = value`     | `msg.style.color = 'red'`                                       |
+| Read computed style | `getComputedStyle(element)`          | `getComputedStyle(msg).height`                                  |
+| Set CSS variable    | `.style.setProperty('--var', value)` | `document.documentElement.style.setProperty('--color', 'blue')` |
+| Get attribute       | `.getAttribute('attr')`              | `logo.getAttribute('src')`                                      |
+| Set attribute       | `.setAttribute('attr', value)`       | `logo.setAttribute('alt', 'New')`                               |
+| Get data attribute  | `.dataset.name`                      | `logo.dataset.versionNumber`                                    |
+| Add class           | `.classList.add()`                   | `logo.classList.add('active')`                                  |
+| Remove class        | `.classList.remove()`                | `logo.classList.remove('active')`                               |
+| Toggle class        | `.classList.toggle()`                | `logo.classList.toggle('hidden')`                               |
+
+---
+
+### **Practice Code Example**
+
+```js
+// Select element
+const message = document.createElement('div');
+message.classList.add('cookie-message');
+message.textContent = 'We use cookies for better analytics.';
+document.body.append(message);
+
+// Apply styles
+message.style.backgroundColor = '#37383d';
+message.style.width = '100%';
+message.style.color = '#fff';
+
+// Modify style dynamically
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height) + 20 + 'px';
+
+// Work with CSS variable
+document.documentElement.style.setProperty('--color-primary', 'orangered');
+
+// Work with attributes
+const logo = document.querySelector('.nav__logo');
+logo.setAttribute('company', 'Bankist');
+console.log(logo.getAttribute('src'));
+
+// Work with data attributes
+console.log(logo.dataset.versionNumber);
+
+// Work with classes
+logo.classList.add('highlight');
+logo.classList.toggle('hidden');
+```
