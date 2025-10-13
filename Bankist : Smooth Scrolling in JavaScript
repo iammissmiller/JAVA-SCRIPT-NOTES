@@ -1,0 +1,151 @@
+Bankist : Smooth Scrolling in JavaScript
+
+### **1. Objective**
+
+To make the webpage **smoothly scroll** to a specific section when a button is clicked.
+
+Example:
+Clicking a button takes you smoothly to Section 1.
+
+---
+
+### **2. DOM Elements Selection**
+
+We first select the required elements using `document.querySelector()`:
+
+```js
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+```
+
+* `.btn--scroll-to` → Button that triggers scrolling
+* `#section--1` → Section to scroll to
+
+---
+
+### **3. Adding Event Listener**
+
+We add a `click` event listener to the button.
+
+```js
+btnScrollTo.addEventListener('click', function (e) {
+  // Scroll logic goes here
+});
+```
+
+---
+
+### **4. Getting Element Coordinates**
+
+To scroll correctly, we first find where the target section is located on the page using:
+
+```js
+const s1coords = section1.getBoundingClientRect();
+```
+
+#### **What `getBoundingClientRect()` returns:**
+
+It gives the **size and position** of the element relative to the **viewport**.
+
+Properties include:
+
+* `top` → Distance from top of viewport
+* `left` → Distance from left of viewport
+* `width` and `height` → Dimensions of the element
+
+Example:
+
+```js
+console.log(s1coords);
+// Output: {top: 729, left: 0, width: 1000, height: 500, ...}
+```
+
+---
+
+### **5. Understanding Viewport and Scroll Positions**
+
+#### **Viewport Dimensions:**
+
+```js
+document.documentElement.clientHeight; // Visible height of viewport
+document.documentElement.clientWidth;  // Visible width of viewport
+```
+
+#### **Current Scroll Position:**
+
+```js
+window.pageXOffset; // Horizontal scroll
+window.pageYOffset; // Vertical scroll
+```
+
+When at the top of the page, both values are `0`.
+
+---
+
+### **6. Old-School Scrolling Method**
+
+We can use `window.scrollTo()` to scroll to coordinates.
+
+#### **Without smooth behavior:**
+
+```js
+window.scrollTo(
+  s1coords.left + window.pageXOffset,
+  s1coords.top + window.pageYOffset
+);
+```
+
+* `s1coords.top` gives position **relative to viewport**.
+* `window.pageYOffset` adjusts it to be **relative to the full page**.
+
+#### **With smooth behavior:**
+
+```js
+window.scrollTo({
+  left: s1coords.left + window.pageXOffset,
+  top: s1coords.top + window.pageYOffset,
+  behavior: 'smooth',
+});
+```
+
+This makes the scroll **animated and smooth**.
+
+---
+
+### **7. Modern Method: `scrollIntoView()`**
+
+This is the **simpler and recommended** method.
+
+```js
+section1.scrollIntoView({ behavior: 'smooth' });
+```
+
+* No need for manual coordinate calculations.
+* Automatically handles smooth animation.
+* Works in **modern browsers**.
+
+---
+
+### **8. Key Takeaways**
+
+| Concept                                  | Description                                              |
+| ---------------------------------------- | -------------------------------------------------------- |
+| **`getBoundingClientRect()`**            | Returns element’s size and position relative to viewport |
+| **`window.scrollTo()`**                  | Scrolls window to given coordinates                      |
+| **`scrollIntoView()`**                   | Scrolls the element into view directly                   |
+| **`behavior: 'smooth'`**                 | Enables smooth scrolling animation                       |
+| **`pageXOffset`, `pageYOffset`**         | Show how far the page has been scrolled                  |
+| **`documentElement.clientHeight/Width`** | Gives the visible area of the viewport                   |
+
+---
+
+### **9. Final Modern Code Example**
+
+```js
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+btnScrollTo.addEventListener('click', function (e) {
+  section1.scrollIntoView({ behavior: 'smooth' });
+});
+```
