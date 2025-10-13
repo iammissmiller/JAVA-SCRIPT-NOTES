@@ -1,0 +1,192 @@
+Bankist : Event Propagation and Event Bubbling in JavaScript
+
+### **1. What is Event Propagation?**
+
+**Event Propagation** describes the way events travel through the **Document Object Model (DOM)** tree.
+
+When an event occurs (like a click), it does not just affect the target element — it also moves through its **ancestors** (parent, grandparent, etc.).
+
+Event propagation happens in **three phases**:
+
+1. **Capturing Phase** – The event travels from the **root (document)** down to the **target element**.
+2. **Target Phase** – The event reaches the actual **target element** where it occurred.
+3. **Bubbling Phase** – The event then **bubbles up** from the target element back to the **root** through all its parent elements.
+
+---
+
+### **2. Event Bubbling (Main Focus)**
+
+**Event Bubbling** means that an event that occurs on a specific element also triggers on all of its parent elements in the DOM hierarchy.
+
+#### **Example Scenario**
+
+Suppose we have:
+
+```html
+<nav class="nav">
+  <div class="nav_links">
+    <a class="nav_link">Click Me</a>
+  </div>
+</nav>
+```
+
+If a click occurs on `.nav_link`, it will:
+
+1. Trigger the event handler on `.nav_link` (the link itself).
+2. Then **bubble up** to `.nav_links` (its parent).
+3. Then bubble further to `.nav` (its grandparent).
+4. Continue up until it reaches the `document`.
+
+---
+
+### **3. Example Code Demonstration**
+
+#### **Random Color Generator**
+
+```js
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+
+const randomColor = () =>
+  `rgb(${randomInt(0,255)}, ${randomInt(0,255)}, ${randomInt(0,255)})`;
+```
+
+#### **Adding Event Listeners**
+
+```js
+const link = document.querySelector('.nav_link');
+const linksContainer = document.querySelector('.nav_links');
+const nav = document.querySelector('.nav');
+
+function handleClick(e) {
+  this.style.backgroundColor = randomColor();
+  console.log(this.className, e.target, e.currentTarget);
+}
+
+link.addEventListener('click', handleClick);
+linksContainer.addEventListener('click', handleClick);
+nav.addEventListener('click', handleClick);
+```
+
+#### **What Happens**
+
+* Clicking the **link** changes the background color of **all three elements** (`link`, `nav_links`, `nav`).
+* This is because the **click event bubbles up** through each parent.
+
+---
+
+### **4. Understanding `event.target` and `event.currentTarget`**
+
+| Property                  | Description                                          | Example in Bubbling                            |
+| ------------------------- | ---------------------------------------------------- | ---------------------------------------------- |
+| **`event.target`**        | The **element where the event actually occurred**.   | Always `.nav_link` (the link clicked).         |
+| **`event.currentTarget`** | The **element whose listener is currently running**. | Could be `.nav_link`, `.nav_links`, or `.nav`. |
+
+**Important:**
+`this` in a regular event handler refers to the **same element as `event.currentTarget`**.
+
+So:
+
+```js
+this === e.currentTarget; // true
+```
+
+---
+
+### **5. Stopping Event Propagation**
+
+Sometimes you may want to stop the event from bubbling up further.
+
+Use:
+
+```js
+e.stopPropagation();
+```
+
+#### **Example:**
+
+```js
+link.addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  e.stopPropagation();
+});
+```
+
+* This stops the click from reaching parent elements.
+* The parent elements (`.nav_links` and `.nav`) will **not react**.
+
+**Note:**
+While this can help fix complex bugs, it is generally **not recommended** unless absolutely necessary. Stopping propagation can make debugging and event management more difficult.
+
+---
+
+### **6. Capturing Phase**
+
+By default, `addEventListener()` listens during the **bubbling phase**.
+However, you can choose to listen during the **capturing phase** by adding a third argument as `true`.
+
+#### **Example:**
+
+```js
+nav.addEventListener('click', handleClick, true);
+```
+
+* Setting the third parameter to `true` makes the event listener trigger **on the way down** (capturing phase) instead of **on the way up** (bubbling phase).
+* Normally, capturing is **rarely used** in modern web development.
+
+#### **Default Behavior**
+
+```js
+element.addEventListener('event', handler, false);
+```
+
+or simply
+
+```js
+element.addEventListener('event', handler);
+```
+
+means the listener reacts **during the bubbling phase**.
+
+---
+
+### **7. Order of Event Handling**
+
+When you click the inner link:
+
+1. During **capturing phase**, events go from **document → html → body → nav → nav_links → nav_link**.
+2. The **target phase** triggers on the link itself.
+3. During **bubbling phase**, events go **back up** through each ancestor:
+   `nav_link → nav_links → nav → body → html → document`.
+
+So, if you have handlers on all three:
+
+* With **default (bubbling)** → order is `nav_link → nav_links → nav`.
+* With **capture = true** on nav → order is `nav → nav_links → nav_link`.
+
+---
+
+### **8. Summary Table**
+
+| Concept                 | Description                                | Default? | Common Usage      |
+| ----------------------- | ------------------------------------------ | -------- | ----------------- |
+| **Capturing Phase**     | Event travels down from document to target | ❌        | Rarely used       |
+| **Target Phase**        | Event reaches the target element           | —        | Always occurs     |
+| **Bubbling Phase**      | Event travels up from target to document   | ✅        | Commonly used     |
+| **stopPropagation()**   | Prevents event from bubbling further       | —        | Occasionally used |
+| **event.target**        | Actual element clicked                     | —        | Very useful       |
+| **event.currentTarget** | Element whose listener is running          | —        | Commonly used     |
+| **this**                | Same as currentTarget                      | —        | Commonly used     |
+
+---
+
+### **9. Key Takeaways**
+
+* **Event Bubbling** allows parent elements to respond to events triggered by their children.
+* `event.target` shows **where** the event originated; `event.currentTarget` shows **which element’s listener** is running.
+* `this` and `event.currentTarget` are equivalent inside event handlers.
+* Use `stopPropagation()` **sparingly** — only when absolutely necessary.
+* **Capturing phase** is mostly for learning and debugging, rarely practical in modern code.
+* Understanding propagation is essential for mastering **event delegation**, which helps handle many events efficiently (next topic).
+
+
