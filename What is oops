@@ -1,0 +1,171 @@
+# **Object-Oriented Programming (OOP) — Lecture Notes**
+
+## **1. Introduction to OOP**
+
+* **Definition:**
+  Object-Oriented Programming (OOP) is a **programming paradigm** based on the concept of **objects**.
+
+  * *Paradigm* = Style or approach to writing and organizing code.
+
+* **Purpose:**
+  OOP is used to **model real-world entities** (e.g., a user, to-do item, HTML component, etc.) by combining:
+
+  * **Data (Properties)**
+  * **Behavior (Methods)**
+
+* **Core idea:**
+  Objects combine data and corresponding behavior in a single, self-contained **block of code**.
+
+* **Objects as Building Blocks:**
+
+  * Objects are **independent, self-contained units** of code.
+  * Applications are built by making **objects interact** with each other.
+  * These interactions occur via a **public interface (API)** — a set of methods accessible from outside.
+
+---
+
+## **2. Why OOP Exists**
+
+* **Problem before OOP:**
+  Code was often disorganized (“**spaghetti code**”) — hard to maintain, scale, or modify.
+
+* **OOP Solution:**
+  Provides structure → **flexible, maintainable, organized codebases**.
+
+* **Comparison:**
+
+  * Other paradigms also solve this (e.g., **Functional Programming**) but OOP remains the most widely used in **large-scale software engineering**.
+
+---
+
+## **3. Classes and Objects**
+
+* **Class:**
+  A **blueprint** or **template** for creating objects.
+
+  * Describes the **structure** (data) and **behavior** (methods).
+  * Does not hold actual data, only the plan.
+
+* **Object:**
+  An **instance** of a class — the actual implementation containing real data.
+
+* **Analogy:**
+
+  * **Class = Blueprint** (architect’s plan)
+  * **Object = Real house built from that blueprint**
+
+* **Key Points:**
+
+  * A class can produce **multiple objects (instances)**.
+  * All instances share the same **methods** but may have **different data**.
+  * Classes make it easy to **generate and manage multiple similar objects**.
+
+---
+
+## **4. Designing Classes**
+
+* There’s **no single correct way** to design a class.
+* Guided by **four fundamental principles** of OOP:
+
+  1. **Abstraction**
+  2. **Encapsulation**
+  3. **Inheritance**
+  4. **Polymorphism**
+
+---
+
+## **5. Four Fundamental Principles of OOP**
+
+### **(i) Abstraction**
+
+* **Meaning:**
+  Hide unnecessary details to focus on relevant aspects.
+* **Purpose:**
+  Simplifies complexity — focus on “what” an object does, not “how.”
+* **Example:**
+
+  * A **phone user** only interacts with buttons and screen, not with voltage or hardware details.
+  * In programming, you use `addEventListener()` without knowing its internal workings.
+* **Benefit:**
+  Reduces complexity, improves usability, and helps build higher-level concepts.
+
+---
+
+### **(ii) Encapsulation**
+
+* **Meaning:**
+  Restrict direct access to some of an object’s components.
+* **Implementation:**
+
+  * Some **properties and methods** are kept **private** (not accessible from outside).
+  * Only selected **public methods (API)** are exposed for external interaction.
+* **Example:**
+
+  * A `User` class might hide properties like `password` but allow `login()` as public.
+* **Benefits:**
+
+  * Protects internal data (state).
+  * Prevents unintended changes or misuse.
+  * Reduces bugs in large projects.
+  * Allows safe modification of internal code without affecting external parts.
+
+---
+
+### **(iii) Inheritance**
+
+* **Meaning:**
+  A **child class** inherits properties and methods from a **parent class**.
+* **Goal:**
+  Reuse shared logic and avoid code duplication.
+* **Analogy:**
+
+  * A child inherits traits from parents.
+* **Example:**
+
+  * `Admin` class inherits from `User` class.
+  * `Admin` can reuse `login()` and `email` from `User`, but also add its own features.
+* **Result:**
+
+  * Forms a **hierarchy**.
+  * Allows **code reuse** and **logical organization** (general → specific).
+
+---
+
+### **(iv) Polymorphism**
+
+* **Meaning:**
+  “**Many forms**” — child classes can **override** inherited methods to provide their own implementation.
+* **Example:**
+
+  * `User` class has a `login()` method.
+  * `Admin` and `Author` classes both inherit `login()` but implement it differently:
+
+    * `Admin` may use 2-factor authentication.
+    * `Author` may have a simpler login.
+* **Benefit:**
+
+  * Allows flexibility and adaptability of code.
+  * Same method name behaves differently based on the object’s type.
+
+---
+
+## **6. Summary**
+
+| Concept           | Description                     | Example / Analogy                                     |
+| ----------------- | ------------------------------- | ----------------------------------------------------- |
+| **Class**         | Blueprint or template           | Architect’s plan                                      |
+| **Object**        | Instance created from class     | Real house                                            |
+| **Abstraction**   | Hide unnecessary details        | Using phone buttons without knowing internal circuits |
+| **Encapsulation** | Keep data and methods private   | Password hidden in class                              |
+| **Inheritance**   | Child inherits from parent      | Admin inherits from User                              |
+| **Polymorphism**  | Same method behaves differently | Admin and Author both override `login()`              |
+
+---
+
+## **7. Key Takeaways**
+
+* OOP organizes code into **modular, reusable, and maintainable** structures.
+* It solves the problem of **spaghetti code**.
+* The **four pillars** (Abstraction, Encapsulation, Inheritance, Polymorphism) are foundational design principles.
+* Understanding these concepts conceptually is essential **before applying OOP in code** (e.g., in JavaScript).
+
