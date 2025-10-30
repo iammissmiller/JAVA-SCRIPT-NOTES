@@ -1,0 +1,156 @@
+# **Object-Oriented Programming in JavaScript**
+
+## **1. Overview**
+
+* In this lecture, OOP is explored **specifically in JavaScript**.
+* Focus:
+
+  * How OOP in JavaScript differs from *traditional/classical OOP*.
+  * The **three ways** to implement OOP in JavaScript.
+
+---
+
+## **2. Recap of Classical OOP**
+
+* In traditional languages (like Java, C++, Python):
+
+  * **Class** → Blueprint/template for creating objects.
+  * **Object (Instance)** → Actual entity created from a class.
+  * **Instantiation** → The process of creating an object from a class.
+* Analogy:
+  **Class = Blueprint**, **Object = House built from that blueprint.**
+
+---
+
+## **3. OOP in JavaScript — Key Difference**
+
+* **JavaScript does not use classical class-based inheritance.**
+* Instead, it uses **prototypes**.
+
+### **Prototype Concept**
+
+* Every object in JavaScript is **linked to a prototype object**.
+* That prototype contains **methods and properties** that are **shared** across all linked objects.
+
+### **Prototypal Inheritance**
+
+* Definition:
+  Objects inherit methods and properties from their **prototype**.
+* Example idea:
+  All arrays inherit methods like `.map()` and `.filter()` from **Array.prototype**.
+
+### **Delegation**
+
+* Objects **delegate behavior** (methods) to their prototype.
+* Hence, this is also called **delegation**.
+* **Important distinction:**
+
+  * In **classical OOP**, methods are **copied** from class → object.
+  * In **JavaScript**, methods are **shared via linkage** (delegated upward).
+
+---
+
+## **4. Classical Inheritance vs. Prototypal Inheritance**
+
+| Feature              | Classical OOP             | JavaScript OOP                      |
+| -------------------- | ------------------------- | ----------------------------------- |
+| **Model**            | Classes & Instances       | Prototypes & Linked Objects         |
+| **Inheritance Type** | Copying behavior          | Delegating behavior                 |
+| **Method Location**  | Copied into each instance | Stored in prototype object          |
+| **Terminology**      | Inheritance               | Delegation (Prototypal Inheritance) |
+
+**Note:**
+In JavaScript, the inheritance is **instance-to-prototype**, not **class-to-class** like traditional OOP.
+
+---
+
+## **5. Example: Array Methods and Prototypes**
+
+* Example:
+  When we use an array method like `map()`, the method is **not defined on the array itself**.
+* Instead:
+
+  * All array methods are defined on `Array.prototype`.
+  * Every array (e.g., `const num = [1,2,3]`) is **linked to** `Array.prototype`.
+  * So, `num.map()` works because `num` inherits the `map()` method from its prototype.
+
+**Summary:**
+→ Array inherits methods via **prototypal inheritance**,
+or equivalently, delegates behavior to its prototype.
+
+---
+
+## **6. Questions Raised**
+
+You might wonder:
+
+* How are **prototypes created**?
+* How are **objects linked** to prototypes?
+* How can we create objects **without classes**?
+
+These are answered by the **three ways to implement OOP in JavaScript.**
+
+---
+
+## **7. Three Ways to Implement OOP in JavaScript**
+
+### **1. Constructor Function Technique (Traditional Method)**
+
+* Uses **functions** to create and initialize objects.
+* Each function sets the new object’s **prototype**.
+* This is how **built-in objects** (like `Array`, `Map`, `Set`) are implemented.
+* Used since the **beginning of JavaScript**.
+
+---
+
+### **2. ES6 Classes (Modern Method)**
+
+* Introduced in **ECMAScript 2015 (ES6)**.
+* Provide a **cleaner syntax** for OOP.
+* **Important:**
+
+  * ES6 classes are **not true classes** like in Java or C++.
+  * They are **syntactic sugar** over constructor functions.
+  * Internally, they still rely on **prototypal inheritance**.
+
+---
+
+### **3. `Object.create()` Method**
+
+* Simplest and most direct way to **link an object to a prototype**.
+* Doesn’t use constructor functions or classes.
+* **Less commonly used**, but **conceptually simplest**.
+
+---
+
+## **8. OOP Principles Still Apply**
+
+Even though JavaScript uses **prototypal inheritance**,
+the **four pillars of OOP** remain valid and important:
+
+| Principle         | Meaning                     | Still Used in JS? |
+| ----------------- | --------------------------- | ----------------- |
+| **Abstraction**   | Hiding unnecessary details  | ✅                 |
+| **Encapsulation** | Restricting access to data  | ✅                 |
+| **Inheritance**   | Reusing code via prototypes | ✅                 |
+| **Polymorphism**  | Overriding methods          | ✅                 |
+
+---
+
+## **9. Summary**
+
+| Concept                    | Classical OOP                                         | JavaScript OOP                                      |
+| -------------------------- | ----------------------------------------------------- | --------------------------------------------------- |
+| **Core Idea**              | Classes & instances                                   | Prototypes & objects                                |
+| **Inheritance Type**       | From class to subclass                                | From object to prototype                            |
+| **Implementation Methods** | Class definitions                                     | Constructor Functions, ES6 Classes, Object.create() |
+| **Mechanism Name**         | Inheritance                                           | Prototypal Inheritance / Delegation                 |
+| **OOP Principles**         | Abstraction, Encapsulation, Inheritance, Polymorphism | Same, applied via prototypes                        |
+
+---
+
+## **10. Final Notes**
+
+* Understanding **how prototypal inheritance works** is key.
+* Don’t stress over terminology — *inheritance* and *delegation* both describe the same idea in JavaScript.
+* The next step: Implementing prototypes **in code** to see this mechanism in action.
