@@ -1,0 +1,114 @@
+Constructor Functions in JavaScript
+
+🔹 What is a Constructor Function?
+
+A constructor function is a special type of function used to create multiple objects with the same structure and behavior.
+
+It acts like a blueprint for creating objects.
+
+
+---
+
+🔹 Syntax:
+
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.sayHello = function() {
+    console.log("Hi, I'm " + this.name);
+  };
+}
+
+
+---
+
+🔹 Creating Objects using Constructor:
+
+Use the new keyword:
+
+const person1 = new Person("Alice", 22);
+const person2 = new Person("Bob", 25);
+
+Each object (person1, person2) gets its own copy of the properties and methods.
+
+
+---
+
+⚙️ How the new Operator Works
+
+When you call a function with new, JavaScript does 4 things automatically:
+
+1. Creates a new empty object {}
+
+
+2. Links this new object to the constructor’s prototype
+
+
+3. Sets this inside the constructor to refer to that new object
+
+
+4. Returns the new object automatically (unless the constructor explicitly returns another object)
+
+
+
+Example:
+
+const user = new Person("Miller", 20);
+
+is equivalent to (behind the scenes):
+
+let user = {};
+user.__proto__ = Person.prototype;
+Person.call(user, "Miller", 20);
+return user;
+
+
+---
+
+🧩 Prototype with Constructors
+
+Methods are better defined on the prototype, so they aren’t copied to each object.
+
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+Person.prototype.sayHello = function() {
+  console.log(`Hi, I'm ${this.name}`);
+};
+
+Now all objects created with new Person() share the same sayHello() method.
+
+
+---
+
+🧠 Key Points
+
+Concept	Description
+
+this	Refers to the new object created
+new keyword	Creates and returns the new object automatically
+Prototype	Used for sharing methods among all instances
+Naming convention	Constructor function names start with capital letter (e.g., Person, Car)
+Return	If no object is returned manually, new returns the created one automatically
+
+
+
+---
+
+🧰 Example
+
+function Car(model, color) {
+  this.model = model;
+  this.color = color;
+}
+
+Car.prototype.start = function() {
+  console.log(this.model + " started!");
+};
+
+const car1 = new Car("Tesla", "Red");
+car1.start(); // Tesla started!
+
+
