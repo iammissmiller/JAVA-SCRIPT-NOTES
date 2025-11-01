@@ -1,0 +1,181 @@
+**JavaScript OOP — Working with Prototypes**
+
+## **1. Introduction**
+
+* In JavaScript, **prototypes** are the foundation of Object-Oriented Programming (OOP).
+* Every **function** in JavaScript automatically has a **`prototype` property**.
+
+  * This includes **constructor functions**.
+* All **objects created** by a constructor function **inherit** properties and methods defined on that constructor’s `prototype`.
+
+---
+
+## **2. Constructor Functions and the Prototype Property**
+
+### **Key Concept**
+
+* When you define a **constructor function** (e.g., `Person`), JavaScript automatically gives it a **`prototype` property**.
+* Any object created with that constructor (via `new`) gets access to everything inside `Person.prototype`.
+
+**Example:**
+
+```js
+function Person(firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+}
+
+// Add a method to the prototype
+Person.prototype.calcAge = function() {
+  console.log(2037 - this.birthYear);
+};
+
+const jonas = new Person("Jonas", 1991);
+jonas.calcAge(); // 46
+```
+
+### **Explanation**
+
+* The method `calcAge()` is **not stored directly** on each object.
+* It is stored **once** on the `Person.prototype` object.
+* All instances (like `jonas`, `matilda`, etc.) can **access it through prototypal inheritance**.
+
+---
+
+## **3. Why Use the Prototype**
+
+* If we added `calcAge()` **inside** the constructor, each instance would get its **own copy** → inefficient memory usage.
+* By defining it on `Person.prototype`, all instances **share one method**.
+* JavaScript automatically links the instance to its constructor’s prototype.
+
+**In short:**
+→ Only **one copy** of the function exists.
+→ All instances **reuse** it through the prototype chain.
+
+---
+
+## **4. The `__proto__` Property**
+
+### **Definition**
+
+* Every object in JavaScript has a special internal reference called **`__proto__`** (double underscore proto).
+* It **points to the prototype** from which the object inherits.
+
+**Example:**
+
+```js
+jonas.__proto__ === Person.prototype; // true
+```
+
+### **Meaning**
+
+* `jonas.__proto__` → prototype of the object (`jonas`).
+* `Person.prototype` → prototype object that all `Person` instances share.
+* Therefore, `jonas.__proto__` **points to** `Person.prototype`.
+
+---
+
+## **5. Important Clarification**
+
+> ❗ `Person.prototype` is **NOT** the prototype of the `Person` constructor itself.
+
+| Term               | Refers To                                           |
+| ------------------ | --------------------------------------------------- |
+| `Person.prototype` | Prototype used by all objects created from `Person` |
+| `Person.__proto__` | Prototype of the `Person` function object itself    |
+
+### **Naming Confusion**
+
+* The name *prototype* suggests it belongs *to* the constructor, but it’s actually the prototype **of the linked objects** created *by* that constructor.
+* Think of it as:
+  **“Prototype of objects created by this constructor.”**
+
+---
+
+## **6. Linking Through the `new` Operator**
+
+When you create an object using `new Person()`, four steps happen internally:
+
+1. A **new empty object** is created.
+2. The constructor function is **called** with `this` set to the new object.
+3. The object is **linked to the constructor’s prototype** via `__proto__`.
+4. The new object is **returned** automatically.
+
+That **step 3** (linking the prototype) is what creates the inheritance chain.
+
+---
+
+## **7. Verifying Prototype Relationships**
+
+**Example:**
+
+```js
+Person.prototype.isPrototypeOf(jonas); // true
+Person.prototype.isPrototypeOf(matilda); // true
+Person.prototype.isPrototypeOf(Person); // false
+```
+
+**Explanation:**
+
+* `Person.prototype` is the prototype of objects **created by** `Person`.
+* But it’s **not** the prototype **of** `Person` itself.
+
+---
+
+## **8. Adding Properties to the Prototype**
+
+You can also add **shared properties** (not just methods) to the prototype.
+
+**Example:**
+
+```js
+Person.prototype.species = "Homo Sapiens";
+console.log(jonas.species);   // Homo Sapiens
+console.log(matilda.species); // Homo Sapiens
+```
+
+* The property `species` is **inherited**, not stored directly on the instance.
+* It exists on the **prototype**, not inside `jonas` or `matilda`.
+
+---
+
+## **9. Checking for Own vs Inherited Properties**
+
+**Own properties:** Defined **directly** on the object.
+**Inherited properties:** Accessed through the prototype chain.
+
+**Example:**
+
+```js
+jonas.hasOwnProperty("firstName"); // true
+jonas.hasOwnProperty("species");   // false
+```
+
+* `firstName` → defined directly → own property.
+* `species` → inherited from prototype → not an own property.
+
+---
+
+## **10. Summary Table**
+
+| Concept                    | Explanation                              | Example                       |
+| -------------------------- | ---------------------------------------- | ----------------------------- |
+| **Constructor Function**   | Function used to create objects          | `function Person(...) {}`     |
+| **`prototype` property**   | Object where shared methods & props live | `Person.prototype.calcAge`    |
+| **`__proto__`**            | Link to the prototype of the object      | `jonas.__proto__`             |
+| **Shared Methods**         | Stored once in prototype                 | `calcAge()`                   |
+| **Inheritance Type**       | Prototypal (delegation)                  | Objects delegate to prototype |
+| **Own vs Inherited Props** | Directly on object vs via prototype      | `hasOwnProperty()`            |
+| **Link Creation**          | Done automatically by `new`              | Step 3 in `new` process       |
+
+---
+
+## **11. Key Takeaways**
+
+* **Every function** in JavaScript has a `prototype` property.
+* **Objects created** by a constructor function are linked to that prototype.
+* **Methods and properties** on the prototype are shared by all instances.
+* **`__proto__`** connects objects to their prototype.
+* `Person.prototype` is **not** the prototype of `Person` but of **its instances**.
+* `hasOwnProperty()` helps differentiate between **own** and **inherited** properties.
+* This mechanism — **prototypal inheritance (delegation)** — is fundamental to JavaScript’s OOP system.
