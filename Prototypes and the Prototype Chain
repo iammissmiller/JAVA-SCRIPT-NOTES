@@ -1,0 +1,161 @@
+**Prototypes and the Prototype Chain**
+
+## **1. Constructor Functions Recap**
+
+* A **constructor function** (e.g., `Person`) is used to create objects programmatically.
+* When called with the `new` operator:
+
+  1. A **new empty object** is created.
+  2. The **`this` keyword** in the constructor points to this new object.
+  3. The new object is **linked** to the constructor’s prototype (`Person.prototype`).
+  4. The new object is **automatically returned**.
+
+**Example:**
+
+```js
+function Person(firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+}
+
+Person.prototype.calcAge = function () {
+  console.log(2037 - this.birthYear);
+};
+
+const jonas = new Person('Jonas', 1991);
+```
+
+---
+
+## **2. How Prototypes Work**
+
+* Every function in JavaScript (including constructor functions) automatically has a **`prototype` property**.
+* This property is an **object** used as a blueprint for all instances created by that constructor.
+* Objects created using a constructor **inherit** properties and methods from the constructor’s prototype.
+
+**Example:**
+
+```js
+Person.prototype.calcAge = function() { ... };
+```
+
+All instances created with `new Person()` can now use `calcAge()`.
+
+---
+
+## **3. The `__proto__` Link**
+
+* Every object in JavaScript has a hidden property called `__proto__`.
+* `__proto__` points to the **prototype of its constructor**.
+
+**Example:**
+
+```js
+jonas.__proto__ === Person.prototype; // true
+```
+
+This means:
+
+* `jonas` is linked to `Person.prototype`.
+* The `__proto__` chain enables **method and property inheritance**.
+
+---
+
+## **4. The Prototype Chain**
+
+* When a property or method isn’t found on an object, JavaScript looks for it in the object’s prototype (`__proto__`).
+* If it’s not found there, JS continues searching **up the prototype chain** until it reaches the top.
+* The top of the chain is **`Object.prototype`**, whose prototype is `null`.
+
+**Chain example:**
+
+```
+jonas → Person.prototype → Object.prototype → null
+```
+
+**Analogy:**
+
+* The **prototype chain** works like the **scope chain**:
+
+  * Scope chain: looks up variables.
+  * Prototype chain: looks up object properties/methods.
+
+---
+
+## **5. Prototypal Inheritance (Delegation)**
+
+* Objects inherit methods and properties from their prototype.
+* Example:
+
+  ```js
+  jonas.calcAge(); // Works, even though calcAge isn’t directly on jonas
+  ```
+* `jonas` delegates the method call to its prototype (`Person.prototype`).
+
+This saves memory because only **one copy** of the method exists in memory (on the prototype), shared by all instances.
+
+---
+
+## **6. Adding Properties to the Prototype**
+
+You can add **shared properties** too:
+
+```js
+Person.prototype.species = 'Homo Sapiens';
+```
+
+* All instances (e.g., `jonas`, `matilda`) will have access to `species`.
+* However, it’s **not an own property** (not stored directly in the object).
+
+**Check with:**
+
+```js
+jonas.hasOwnProperty('firstName'); // true
+jonas.hasOwnProperty('species');   // false
+```
+
+---
+
+## **7. Relationship Between Prototype and Constructor**
+
+* `Person.prototype.constructor` points back to the constructor function itself.
+
+  ```js
+  Person.prototype.constructor === Person; // true
+  ```
+* This creates a circular reference:
+
+  * `Person` → `Person.prototype`
+  * `Person.prototype.constructor` → `Person`
+
+---
+
+## **8. Object.prototype and Built-in Methods**
+
+* `Object.prototype` provides common built-in methods like:
+
+  * `.hasOwnProperty()`
+  * `.toString()`
+  * `.isPrototypeOf()`
+* All objects indirectly inherit from `Object.prototype`.
+
+**Example:**
+
+```js
+jonas.hasOwnProperty('birthYear'); // Found in Object.prototype
+```
+
+---
+
+## **9. Key Takeaways**
+
+| Concept                    | Meaning                                                           |
+| -------------------------- | ----------------------------------------------------------------- |
+| **Constructor Function**   | Function used to create objects programmatically using `new`      |
+| **Prototype Property**     | Object that holds shared methods/properties                       |
+| **`__proto__`**            | Reference to the object’s prototype                               |
+| **Prototype Chain**        | Chain of linked prototypes used for property/method lookup        |
+| **Prototypal Inheritance** | Mechanism by which objects delegate property access to prototypes |
+| **Object.prototype**       | Top of the prototype chain; prototype of all objects              |
+| **Constructor Reference**  | `Person.prototype.constructor === Person`                         |
+
