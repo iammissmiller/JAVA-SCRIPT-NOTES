@@ -1,0 +1,208 @@
+**Prototypal Inheritance on Built-in Objects**
+
+## **1. Revisiting the Prototype Chain (Person Example)**
+
+* `jonas.__proto__` → points to `Person.prototype`
+
+  * Contains methods like `calcAge()` and properties like `species`.
+* The prototype of `jonas.__proto__` → `Object.prototype`.
+
+  * Contains built-in methods such as `hasOwnProperty()`.
+* The prototype of `Object.prototype` → `null`.
+
+  * Marks the **end of the prototype chain**.
+
+**Chain summary:**
+
+```
+jonas → Person.prototype → Object.prototype → null
+```
+
+---
+
+## **2. Constructor Property Recap**
+
+* Every prototype object (like `Person.prototype`) has a `constructor` property that points back to the function that created it:
+
+  ```js
+  Person.prototype.constructor === Person; // true
+  ```
+* This maintains a circular link:
+
+  ```
+  Person → Person.prototype → Person
+  ```
+
+---
+
+## **3. Arrays and Their Prototype Chain**
+
+### **Creating an Array**
+
+```js
+const arr = [3, 6, 9, 6, 9];
+```
+
+### **Prototype Lookup**
+
+* `arr.__proto__` → `Array.prototype`
+
+  * Contains built-in array methods like `map()`, `filter()`, `find()`, `reduce()`, etc.
+* `Array.prototype.__proto__` → `Object.prototype`
+
+  * Provides general object methods like `hasOwnProperty()`.
+* `Object.prototype.__proto__` → `null`
+
+**Array prototype chain:**
+
+```
+arr → Array.prototype → Object.prototype → null
+```
+
+### **Key Understanding**
+
+* Every array **inherits** methods from `Array.prototype`.
+* These methods are not copied into each array — they exist **once** in memory and are accessed via prototypal inheritance.
+* Example:
+
+  ```js
+  arr.filter(); // Works because filter() lives in Array.prototype
+  ```
+
+---
+
+## **4. Verifying the Connection**
+
+```js
+arr.__proto__ === Array.prototype; // true
+```
+
+* Just like custom objects, arrays are also created using a constructor:
+
+  ```js
+  const arr = new Array(1, 2, 3);
+  ```
+
+  which is equivalent to `[1, 2, 3]`.
+
+* Therefore:
+
+  ```js
+  Array.prototype.constructor === Array; // true
+  ```
+
+---
+
+## **5. Adding Methods to Built-in Prototypes**
+
+You can manually extend built-in prototypes — **but it’s discouraged**.
+
+### **Example: Adding a `unique()` Method to Arrays**
+
+```js
+Array.prototype.unique = function() {
+  return [...new Set(this)];
+};
+```
+
+**Usage:**
+
+```js
+const numbers = [3, 6, 9, 6, 9];
+numbers.unique(); // [3, 6, 9]
+```
+
+### **How It Works**
+
+* `this` refers to the array calling the method.
+* The method is added to `Array.prototype`, so **all arrays inherit it**.
+
+### **Why It’s a Bad Practice**
+
+1. **Name Conflicts** — Future JavaScript versions might define a method with the same name but different behavior.
+2. **Team Collisions** — Multiple developers may overwrite each other’s methods unintentionally.
+3. **Maintenance Issues** — Can cause bugs in libraries or frameworks.
+
+→ **Rule:** Never modify built-in prototypes in production code.
+
+---
+
+## **6. Prototypal Inheritance in the DOM**
+
+* DOM elements are also **objects**, created via constructor functions.
+* Example:
+
+  ```js
+  const h1 = document.querySelector('h1');
+  console.dir(h1);
+  ```
+* Prototype chain for a DOM element (e.g., `<h1>`):
+
+  ```
+  HTMLHeadingElement
+      ↑
+  HTMLElement
+      ↑
+  Element
+      ↑
+  Node
+      ↑
+  EventTarget
+      ↑
+  Object
+      ↑
+  null
+  ```
+* Each level adds new methods/properties (e.g., `addEventListener()` from `EventTarget`, `innerHTML` from `HTMLElement`, etc.).
+* This demonstrates that **DOM nodes are deeply nested objects** built from multiple constructor layers.
+
+---
+
+## **7. Prototypal Inheritance in Functions**
+
+* Functions are **objects too**.
+* Therefore, they have a prototype chain.
+
+**Example:**
+
+```js
+function greet() { console.log('Hi!'); }
+
+console.dir(greet);
+```
+
+**Prototype chain for a function:**
+
+```
+greet → Function.prototype → Object.prototype → null
+```
+
+* `Function.prototype` includes methods like:
+
+  * `.call()`
+  * `.apply()`
+  * `.bind()`
+
+**That’s why we can call these methods on any function.**
+
+---
+
+## **8. Prototype Chain Summary**
+
+| Object Type               | Constructor Function | Prototype Link          | Inherited From     |
+| ------------------------- | -------------------- | ----------------------- | ------------------ |
+| Custom Object (`jonas`)   | `Person`             | `Person.prototype`      | `Object.prototype` |
+| Array (`[]`)              | `Array`              | `Array.prototype`       | `Object.prototype` |
+| Function (`function(){}`) | `Function`           | `Function.prototype`    | `Object.prototype` |
+| DOM Element (`<h1>`)      | `HTMLHeadingElement` | DOM prototype hierarchy | `Object.prototype` |
+
+---
+
+## **9. Key Takeaways**
+
+* Every object in JS has an internal link (`__proto__`) to another object, forming a **prototype chain**.
+* **Built-in constructors** (Array, Function, Object, etc.) define their methods on their prototype objects.
+* All instances **inherit** those methods via the chain.
+* **Prototype chains can be deep** (e.g., DOM objects).
+* Extending built-in prototypes is **possible but discouraged**.
+
