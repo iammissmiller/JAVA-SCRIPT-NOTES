@@ -1,0 +1,164 @@
+**Topic: ES6 Classes and Prototypal Inheritance**
+
+### **1. Background**
+
+* Previously, we learned **prototypal inheritance** using **constructor functions** and by **manually setting methods on the prototype**.
+* **ES6 classes** provide a **cleaner, modern syntax** for doing the same thing.
+* However, **classes in JavaScript are not true classes** (like in Java or C++) —
+  they are **syntactic sugar** over prototypal inheritance.
+
+---
+
+### **2. Purpose of ES6 Classes**
+
+* To make JavaScript more familiar to developers from class-based languages (Java, C++).
+* Behind the scenes, **classes still use prototypes** for inheritance.
+* They only change how code is **written**, not how it **works internally**.
+
+---
+
+### **3. Creating a Class**
+
+#### **Syntax**
+
+```js
+class PersonCl {
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+}
+```
+
+* The `constructor()` method initializes object properties.
+* The `calcAge()` method is automatically placed **on the prototype**, not directly inside each object.
+
+---
+
+### **4. Class Declaration vs Class Expression**
+
+* **Class Declaration:**
+
+  ```js
+  class PersonCl { ... }
+  ```
+* **Class Expression:**
+
+  ```js
+  const PersonCl = class { ... };
+  ```
+
+✅ You can use whichever you prefer — both work the same.
+⚠️ **Classes are special types of functions**.
+
+---
+
+### **5. Creating an Instance**
+
+```js
+const jessica = new PersonCl('Jessica', 1996);
+```
+
+* The `new` keyword:
+
+  * Creates an empty object.
+  * Sets `this` to point to that new object.
+  * Links it to the prototype.
+  * Calls the constructor automatically.
+
+---
+
+### **6. Methods in Classes**
+
+* Methods are written directly inside the class (outside the constructor).
+* They are automatically stored on the class’s **prototype**.
+
+✅ Example:
+
+```js
+jessica.calcAge(); // works because calcAge is in PersonCl.prototype
+```
+
+✅ Proof:
+
+```js
+console.log(jessica.__proto__ === PersonCl.prototype); // true
+```
+
+---
+
+### **7. Adding Methods Manually**
+
+You can still manually add methods to the prototype:
+
+```js
+PersonCl.prototype.greet = function() {
+  console.log(`Hey ${this.firstName}`);
+};
+
+jessica.greet(); // "Hey Jessica"
+```
+
+* Works the same as with constructor functions.
+* Confirms that **ES6 classes still use prototypes internally**.
+
+---
+
+### **8. Key Points About Classes**
+
+1. **Classes are not hoisted**
+
+   * Unlike function declarations, you **cannot use a class before it’s declared**.
+
+2. **Classes are first-class citizens**
+
+   * Can be **passed as arguments**, **returned from functions**, and **assigned to variables** —
+     just like normal functions.
+
+3. **Classes always run in strict mode**
+
+   * Even if `"use strict"` is not written, all code inside classes executes in strict mode.
+
+---
+
+### **9. Constructor Functions vs Classes**
+
+| Feature     | Constructor Function     | ES6 Class                   |
+| ----------- | ------------------------ | --------------------------- |
+| Syntax      | Manual prototype setup   | Cleaner, block-based syntax |
+| Hoisting    | Supported                | Not hoisted                 |
+| Inheritance | Explicitly set prototype | Implicit prototype linkage  |
+| Nature      | Function                 | Special type of function    |
+| Readability | Messy for large code     | Organized and readable      |
+
+* **Constructor functions are not deprecated.**
+  It’s okay to keep using them.
+* **Classes are mainly syntactic sugar** — both are functionally equivalent.
+
+---
+
+### **10. Should You Use Classes?**
+
+* ✅ Use classes **only if you understand prototypal inheritance first**.
+* Some developers avoid them because they hide JavaScript’s true behavior.
+* However, using classes is **fine** if you understand how prototypes work.
+
+---
+
+### **11. Advantages of Classes**
+
+* Organizes all data and methods into one clear block.
+* Improves code readability, especially for large projects.
+* Easier for developers from OOP backgrounds.
+
+### **12. Summary**
+
+* **Classes = cleaner syntax for prototypal inheritance.**
+* **Methods go to the prototype automatically.**
+* **Objects created with `new` are linked to that prototype.**
+* **Classes are not hoisted, are first-class citizens, and use strict mode.**
+* Use classes for cleaner organization, but **understand prototypes first**.
