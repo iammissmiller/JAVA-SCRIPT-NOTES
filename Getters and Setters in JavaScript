@@ -1,0 +1,156 @@
+**Getters and Setters in JavaScript**
+
+### **1. What Are Getters and Setters?**
+
+* **Getters and Setters** are **special object properties** that **behave like functions** but are **accessed like regular properties**.
+* They allow **controlled access** to object data.
+* Also known as **accessor properties**.
+* Normal properties are called **data properties**.
+
+#### **Key Idea**
+
+* **Getter →** returns (gets) a value.
+* **Setter →** sets (updates) a value.
+
+---
+
+### **2. Getters and Setters in Object Literals**
+
+#### **Example:**
+
+```js
+const account = {
+  owner: 'Jonas',
+  movements: [200, 530, 120, 300],
+
+  // Getter
+  get latest() {
+    return this.movements.slice(-1).pop();
+  },
+
+  // Setter
+  set latest(mov) {
+    this.movements.push(mov);
+  },
+};
+```
+
+#### **Usage:**
+
+* Access getter like a property:
+
+  ```js
+  console.log(account.latest); // 300
+  ```
+* Use setter like assigning a value:
+
+  ```js
+  account.latest = 50;
+  console.log(account.movements); // [200, 530, 120, 300, 50]
+  ```
+
+#### **Notes:**
+
+* A **getter** or **setter** can exist **independently**; you don’t need both.
+* **Setter functions** must always take **exactly one parameter**.
+
+---
+
+### **3. Why Use Getters and Setters?**
+
+* To **compute or derive** a value dynamically.
+* To **validate or restrict** data before assignment.
+* To make code **cleaner** — allows method-like functionality but accessed like a property.
+
+---
+
+### **4. Getters and Setters in Classes**
+
+Getters and setters work **the same way** in ES6 classes.
+
+#### **Example:**
+
+```js
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  // Getter
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  // Setter with validation
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name!`);
+  }
+
+  // Getter to expose the "hidden" variable
+  get fullName() {
+    return this._fullName;
+  }
+}
+```
+
+#### **Usage:**
+
+```js
+const jessica = new PersonCl('Jessica Davis', 1996);
+console.log(jessica.age); // 41 (getter used like property)
+
+const walter = new PersonCl('Walter', 1965); 
+// Alerts: "Walter is not a full name!"
+```
+
+---
+
+### **5. The Underscore Convention**
+
+* When a **setter** modifies the **same property name** that’s also used in the class,
+  JavaScript can get confused → leads to **“Maximum call stack size exceeded”** error.
+* Solution: use an **underscore `_` prefix** for the **internal property** name.
+
+  ```js
+  this._fullName = fullName;
+  ```
+* This avoids naming conflicts and keeps the logic clear.
+
+✅ Convention only — JavaScript does **not enforce** it.
+The underscore signals “internal/private-like” data.
+
+---
+
+### **6. Practical Uses**
+
+* **Data validation** (e.g., ensuring a full name contains a space).
+* **Computed properties** (e.g., `age` from `birthYear`).
+* **Encapsulation** — controlling how properties are read or modified.
+
+---
+
+### **7. Key Takeaways**
+
+| Concept          | Description                               | Example                                    |
+| ---------------- | ----------------------------------------- | ------------------------------------------ |
+| **Getter**       | Allows property-like access to a function | `obj.prop` calls `get prop()`              |
+| **Setter**       | Allows property-like assignment           | `obj.prop = value` calls `set prop(value)` |
+| **Naming rule**  | Setters require one argument              | `set prop(value)`                          |
+| **Conflict fix** | Use `_property` inside setter             | `this._name = name`                        |
+| **Validation**   | Can restrict invalid data                 | Check `if(name.includes(' '))`             |
+| **In Classes**   | Work like in objects                      | Defined with `get` and `set` keywords      |
+
+---
+
+### **8. Summary**
+
+* Getters and Setters make property access **more powerful** and **intuitive**.
+* They are **functions in disguise** — look like properties but run logic behind the scenes.
+* Useful for **validation**, **computed properties**, and **encapsulation**.
+* In classes:
+
+  * Defined with `get` and `set`.
+  * Accessed like regular properties.
+  * Can prevent direct or invalid assignments.
