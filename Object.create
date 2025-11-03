@@ -1,0 +1,129 @@
+**Prototypal Inheritance Using `Object.create()`**
+
+### **1. Introduction**
+
+* JavaScript supports **three main ways** to implement *prototypal inheritance (delegation)*:
+
+  1. **Constructor functions**
+  2. **ES6 classes**
+  3. **`Object.create()`** ← (third way)
+* `Object.create()` provides a **manual and direct way** to set the prototype of an object — without using constructors, classes, or the `new` keyword.
+
+---
+
+### **2. How `Object.create()` Works**
+
+* `Object.create(proto)` creates a **new empty object** whose internal `[[Prototype]]` is set to the object passed as `proto`.
+* It allows us to **manually define the prototype** of a new object.
+
+```js
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+};
+
+// Create a new object whose prototype is PersonProto
+const steven = Object.create(PersonProto);
+```
+
+* `steven` is now an empty object but internally **linked** to `PersonProto`.
+
+```js
+steven.__proto__ === PersonProto; // true
+```
+
+---
+
+### **3. Adding Properties to the Object**
+
+```js
+steven.name = 'Steven';
+steven.birthYear = 2002;
+
+steven.calcAge(); // 35
+```
+
+* `calcAge` is not defined on `steven`, but found in its prototype (`PersonProto`).
+* This demonstrates **prototypal delegation** — the object looks up properties/methods through its prototype chain.
+
+---
+
+### **4. How It Differs from Constructor Functions / Classes**
+
+| Feature                          | Constructor Functions & Classes | `Object.create()` |
+| -------------------------------- | ------------------------------- | ----------------- |
+| **Uses `new` keyword?**          | Yes                             | No                |
+| **Prototype set automatically?** | Yes                             | No — manually set |
+| **Uses `prototype` property?**   | Yes                             | No                |
+| **Creates object instances?**    | Yes                             | Yes               |
+| **Simpler / manual control?**    | No                              | Yes               |
+
+* In constructors/classes, JS automatically links the instance prototype to `Constructor.prototype`.
+* In `Object.create()`, **you manually link** an object to a chosen prototype.
+* Prototype chain works the same way in both.
+
+---
+
+### **5. Diagram (Conceptual View)**
+
+```
+steven → PersonProto → Object.prototype → null
+```
+
+* `steven` inherits properties and methods from `PersonProto`.
+* The prototype chain behaves just like with constructor functions.
+
+---
+
+### **6. Improving Object Creation with `init()`**
+
+Instead of manually setting properties, define an **initializer method** inside the prototype.
+
+```js
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+};
+
+// Create new objects using Object.create()
+const sarah = Object.create(PersonProto);
+sarah.init('Sarah', 1979);
+sarah.calcAge(); // Works fine
+```
+
+* `init()` acts like a **custom constructor function**.
+* The `this` keyword points to the object calling the method (`sarah` in this case).
+* Unlike classes, **`init()` is manually invoked**, not automatically called by `new`.
+
+---
+
+### **7. Key Takeaways**
+
+* `Object.create(proto)` → creates a new object with its prototype set to `proto`.
+* No `constructor`, no `new` operator, and no `.prototype` property are involved.
+* Prototypal inheritance still works the same way through the prototype chain.
+* You can add an `init()` method to simulate constructors and initialize object data.
+* Although **less commonly used in real-world projects**, it is:
+
+  * Simpler and more explicit.
+  * Crucial for **implementing inheritance manually** (used in advanced class inheritance setups).
+
+---
+
+### **8. Summary**
+
+| Concept                 | Explanation                                            |
+| ----------------------- | ------------------------------------------------------ |
+| **Purpose**             | Manually create objects linked to a specific prototype |
+| **Syntax**              | `Object.create(prototypeObj)`                          |
+| **Prototype Chain**     | Works exactly like in constructors/classes             |
+| **Constructor Needed?** | No                                                     |
+| **Used For**            | Explicit inheritance setup, helper object patterns     |
+| **Practical Use**       | Less frequent, but essential for custom OOP structures |
