@@ -1,0 +1,174 @@
+**Static Methods in JavaScript**
+
+---
+
+### **1. What Are Static Methods?**
+
+* **Static methods** are functions **attached to a class or constructor itself**, not to the instances created from it.
+* They are **not inherited** by objects or instances.
+* Used for **helper** or **utility** operations related to the class, not individual objects.
+
+---
+
+### **2. Example of a Built-in Static Method**
+
+#### **`Array.from()`**
+
+```js
+Array.from(document.querySelectorAll('p'));
+```
+
+* Converts **array-like** or **iterable** objects (like NodeLists) into real arrays.
+* It is **a method on the `Array` constructor**, not on array instances.
+
+#### **Verification**
+
+```js
+[1, 2, 3].from; // ❌ Error: from is not a function
+Array.from();   // ✅ Works
+```
+
+✅ `Array.from()` → belongs to **Array constructor**
+❌ Not accessible by individual array objects because it’s **not on `Array.prototype`**.
+
+---
+
+### **3. Concept: Where Static Methods Live**
+
+* Static methods are **attached to the constructor itself**, not to its prototype.
+* Therefore, instances **don’t inherit** them.
+* They exist in what’s called a **namespace**, e.g.:
+
+  * `Array.from()` → in the *Array namespace*
+  * `Number.parseFloat()` → in the *Number namespace*
+  * `Math.trunc()` → in the *Math namespace*
+
+---
+
+### **4. Why Static Methods Exist**
+
+* They are **utility methods** related to a class or constructor.
+* Developers can easily recognize that such methods **belong to that class or data type**.
+* They’re often used for **operations that don’t depend on instance data**, e.g., conversions, parsing, or factory creation.
+
+---
+
+### **5. Static Methods in Constructor Functions**
+
+#### **Example:**
+
+```js
+const Person = function (firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+};
+
+// Add static method
+Person.hey = function () {
+  console.log('Hey there 👋');
+};
+
+// Call static method
+Person.hey(); // ✅ "Hey there 👋"
+
+const jonas = new Person('Jonas', 1991);
+jonas.hey(); // ❌ Error: jonas.hey is not a function
+```
+
+#### **Explanation:**
+
+* `Person.hey()` works because it’s defined on the constructor.
+* `jonas.hey` fails because it’s **not on Person’s prototype**, so instances don’t have access.
+
+---
+
+### **6. The `this` Keyword in Static Methods**
+
+* Inside a static method, `this` refers to the **constructor function itself** (or the **class** in class syntax).
+* This follows the usual rule:
+  → *“The object that calls the method becomes `this`.”*
+
+Example:
+
+```js
+Person.hey = function () {
+  console.log(this); // Points to the Person constructor
+};
+Person.hey();
+```
+
+---
+
+### **7. Static Methods in Classes (ES6 Syntax)**
+
+#### **Syntax:**
+
+```js
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  // Instance method (added to prototype)
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+
+  // Static method (added to class itself)
+  static hey() {
+    console.log('Hey there 👋');
+  }
+}
+```
+
+#### **Usage:**
+
+```js
+PersonCl.hey(); // ✅ Works
+const jessica = new PersonCl('Jessica Davis', 1996);
+jessica.hey();  // ❌ Error: not a function
+```
+
+---
+
+### **8. Instance vs. Static Methods**
+
+| **Feature**          | **Instance Methods**   | **Static Methods**           |
+| -------------------- | ---------------------- | ---------------------------- |
+| **Defined on**       | Prototype of the class | The class/constructor itself |
+| **Accessed by**      | Instances              | Class/constructor            |
+| **‘this’ refers to** | The instance object    | The class/constructor        |
+| **Use case**         | Object-specific logic  | Utility/helper functions     |
+| **Example**          | `person.calcAge()`     | `PersonCl.hey()`             |
+
+---
+
+### **9. Summary**
+
+* **Static methods** = class-level utilities → can’t be accessed by instances.
+* Defined using the `static` keyword (in classes).
+* Commonly used for:
+
+  * Helper or factory methods
+  * Conversions and parsing
+  * Grouping related functionality
+* Examples in built-ins:
+  `Array.from()`, `Number.parseFloat()`, `Object.create()`, `Math.random()`
+
+---
+
+### **10. Key Example Recap**
+
+```js
+class MathHelper {
+  static square(x) {
+    return x * x;
+  }
+}
+
+console.log(MathHelper.square(4)); // 16 ✅
+const obj = new MathHelper();
+obj.square(4); // ❌ TypeError
+```
+
