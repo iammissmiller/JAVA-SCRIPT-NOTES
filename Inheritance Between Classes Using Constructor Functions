@@ -1,0 +1,203 @@
+# **Inheritance Between Classes Using Constructor Functions**
+
+---
+
+## **1. Recap: Prototypal Inheritance**
+
+* In previous lessons, we learned about **prototypal inheritance** using:
+
+  1. Constructor functions
+  2. ES6 classes
+  3. `Object.create()`
+* In all these methods, **objects delegate behavior** (methods) to their prototypes.
+* Now, we move to **real inheritance between classes**, i.e.,
+  *Child class (Student)* inheriting from *Parent class (Person)*.
+
+---
+
+## **2. Concept: Real (Class-Like) Inheritance**
+
+* We simulate **class inheritance** even though JavaScript doesn’t have true classes — only objects and prototypes.
+* Example:
+
+  * `Person` → Parent class
+  * `Student` → Child class
+  * **Student “is a” Person**, but with extra properties/methods.
+* Goal: Student inherits methods like `calcAge()` from Person’s prototype.
+
+---
+
+## **3. Step 1: Define the Parent Class (Constructor Function)**
+
+```js
+const Person = function(firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+};
+
+Person.prototype.calcAge = function() {
+  console.log(2037 - this.birthYear);
+};
+```
+
+* `Person.prototype.calcAge` → shared among all instances.
+
+---
+
+## **4. Step 2: Define the Child Class (Student Constructor Function)**
+
+```js
+const Student = function(firstName, birthYear, course) {
+  // Borrowing constructor of Person
+  Person.call(this, firstName, birthYear);
+  this.course = course;
+};
+```
+
+### **Explanation**
+
+* `Person.call(this, firstName, birthYear)`:
+
+  * Calls the `Person` function **inside** the `Student` constructor.
+  * Sets the `this` context to the new `Student` instance.
+  * Avoids duplicating code.
+* Using `call()` ensures `this` refers to the new object created by `new Student()`.
+
+Without `call()`, `this` would be `undefined`, causing an error.
+
+---
+
+## **5. Step 3: Linking the Prototypes**
+
+To allow `Student` instances to inherit methods from `Person.prototype`:
+
+```js
+Student.prototype = Object.create(Person.prototype);
+```
+
+### **Why `Object.create()`?**
+
+* Creates a **new prototype object** linked to `Person.prototype`.
+* Prevents both constructors from **sharing the exact same prototype object**.
+* If we used:
+
+  ```js
+  Student.prototype = Person.prototype;
+  ```
+
+  then both prototypes would reference the same object — **wrong and dangerous**.
+
+---
+
+## **6. Step 4: Add Child-Specific Methods**
+
+```js
+Student.prototype.introduce = function() {
+  console.log(`My name is ${this.firstName} and I study ${this.course}.`);
+};
+```
+
+* `introduce()` belongs only to `Student` objects.
+* Still inherits `calcAge()` from `Person.prototype` through the prototype chain.
+
+---
+
+## **7. Step 5: Correct the Constructor Reference**
+
+When we use `Object.create()`, the `constructor` property points to the parent (`Person`).
+We must fix it manually:
+
+```js
+Student.prototype.constructor = Student;
+```
+
+---
+
+## **8. Step 6: Creating Instances and Testing**
+
+```js
+const mike = new Student('Mike', 2020, 'Computer Science');
+
+mike.introduce();  // My name is Mike and I study Computer Science
+mike.calcAge();    // 17
+```
+
+### **How It Works (Prototype Chain Lookup)**
+
+1. JS first looks for `calcAge` on `mike`.
+2. Not found → checks `Student.prototype`.
+3. Not found → looks up `Person.prototype` → found and executed.
+
+---
+
+## **9. Step 7: Verifying the Prototype Chain**
+
+```js
+mike.__proto__ === Student.prototype; // true
+mike.__proto__.__proto__ === Person.prototype; // true
+```
+
+* So the chain is:
+
+  ```
+  mike → Student.prototype → Person.prototype → Object.prototype → null
+  ```
+
+---
+
+## **10. Step 8: Testing Constructor References**
+
+```js
+Student.prototype.constructor === Student; // true
+Person.prototype.constructor === Person;   // true
+```
+
+If not fixed, `Student.prototype.constructor` would incorrectly point to `Person`.
+
+---
+
+## **11. Step 9: Using `instanceof`**
+
+```js
+mike instanceof Student; // true
+mike instanceof Person;  // true
+mike instanceof Object;  // true
+```
+
+* Works because of the prototype chain:
+
+  * `Student` inherits from `Person`
+  * `Person` inherits from `Object`
+
+---
+
+## **12. Key Takeaways**
+
+| Concept                | Explanation                                                                 |
+| ---------------------- | --------------------------------------------------------------------------- |
+| **Goal**               | Make one class inherit from another                                         |
+| **Parent Constructor** | `Person(firstName, birthYear)`                                              |
+| **Child Constructor**  | `Student(firstName, birthYear, course)`                                     |
+| **Linking Prototypes** | `Student.prototype = Object.create(Person.prototype)`                       |
+| **Fix Constructor**    | `Student.prototype.constructor = Student`                                   |
+| **Inheritance Result** | `Student` instances access both `Student` and `Person` methods              |
+| **Prototype Chain**    | `instance → Student.prototype → Person.prototype → Object.prototype → null` |
+| **Use of `call()`**    | Calls parent constructor inside child constructor, setting correct `this`   |
+
+---
+
+## **13. Common Mistakes**
+
+1. ❌ Using `Student.prototype = Person.prototype` — merges prototypes (incorrect).
+2. ❌ Forgetting to fix the `constructor` property.
+3. ❌ Forgetting to call the parent constructor with `call(this, …)`.
+
+---
+
+## **14. Summary**
+
+* We established **inheritance between constructor functions** manually.
+* Used `call()` to borrow the parent constructor.
+* Used `Object.create()` to connect prototypes.
+* Corrected the `constructor` reference.
+* Verified inheritance with `instanceof`.
