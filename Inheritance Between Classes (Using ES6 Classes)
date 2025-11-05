@@ -1,0 +1,175 @@
+## **Inheritance Between Classes (Using ES6 Classes)**
+
+### **1. Recap:**
+
+* In the previous lecture, inheritance was implemented using **constructor functions**.
+* Now, we implement the same thing using **ES6 classes**, which provide a **cleaner, more intuitive syntax**.
+
+---
+
+### **2. Base (Parent) Class**
+
+```js
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hey ${this.fullName}`);
+  }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name!`);
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+}
+```
+
+---
+
+### **3. Creating a Child Class**
+
+#### **Syntax**
+
+```js
+class StudentCl extends PersonCl {
+  constructor(fullName, birthYear, course) {
+    super(fullName, birthYear);  // must be called first
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(`My name is ${this.fullName} and I study ${this.course}.`);
+  }
+}
+```
+
+#### **Explanation:**
+
+* `extends` → establishes inheritance between classes.
+
+  * Links the prototype of `StudentCl` to `PersonCl.prototype`.
+* `super()` → calls the **parent class constructor**.
+
+  * Must be called **before** accessing `this`.
+  * Initializes the parent properties (`fullName`, `birthYear`).
+* Additional properties like `course` can be added after `super()`.
+
+---
+
+### **4. Creating Instances**
+
+```js
+const martha = new StudentCl('Martha Jones', 2012, 'Computer Science');
+```
+
+✅ **Properties available:**
+
+* Inherited: `fullName`, `birthYear`
+* Own: `course`
+
+✅ **Methods available:**
+
+* From StudentCl: `introduce()`
+* From PersonCl: `calcAge()`, `greet()`, `age`, etc.
+
+---
+
+### **5. How the Prototype Chain Works**
+
+* `martha` → `StudentCl.prototype` → `PersonCl.prototype` → `Object.prototype`
+* So:
+
+  * `introduce()` found in `StudentCl.prototype`
+  * `calcAge()` and `greet()` found in `PersonCl.prototype`
+  * `hasOwnProperty()` found in `Object.prototype`
+
+This chain is automatically set up by the `extends` keyword.
+
+---
+
+### **6. Optional Constructor**
+
+* If the child class **doesn’t add new properties**, you can **omit the constructor** entirely.
+* Example:
+
+  ```js
+  class StudentCl extends PersonCl {}
+  ```
+
+  This will automatically call `super()` with all arguments.
+
+---
+
+### **7. Method Overriding**
+
+* Child classes can **override** parent methods with the same name.
+* Example:
+
+  ```js
+  calcAge() {
+    console.log(`I'm ${2037 - this.birthYear} years old, but I feel more like ${2037 - this.birthYear + 10}.`);
+  }
+  ```
+* The new `calcAge()` method **shadows** the parent’s version (the parent’s method is still in the chain, but not used).
+
+---
+
+### **8. Summary**
+
+| Concept              | Description                                                               |
+| -------------------- | ------------------------------------------------------------------------- |
+| `extends`            | Sets up inheritance between classes                                       |
+| `super()`            | Calls parent class constructor; must come first in child constructor      |
+| `this`               | Only available **after** `super()` call                                   |
+| Inheritance chain    | `instance → subclass.prototype → superclass.prototype → Object.prototype` |
+| Method overriding    | Child can replace parent’s method with a new implementation               |
+| Optional constructor | Skip it if you don’t need new properties                                  |
+
+---
+
+### **9. Example Summary Code**
+
+```js
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+}
+
+class StudentCl extends PersonCl {
+  constructor(fullName, birthYear, course) {
+    super(fullName, birthYear);
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(`My name is ${this.fullName} and I study ${this.course}.`);
+  }
+
+  calcAge() {
+    console.log(`I'm ${2037 - this.birthYear} years old, but I feel more like ${2037 - this.birthYear + 10}.`);
+  }
+}
+
+const martha = new StudentCl('Martha Jones', 2012, 'Computer Science');
+martha.introduce(); // My name is Martha Jones and I study Computer Science.
+martha.calcAge();   // I'm 25 years old, but I feel more like 35.
