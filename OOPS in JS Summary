@@ -1,0 +1,157 @@
+**JavaScript Classes – Full Overview & Summary**
+
+## **1. What Are Classes?**
+
+* Classes are **syntactic sugar** over **constructor functions** — they simplify object-oriented programming (OOP) in JavaScript.
+* They define a **blueprint for objects** (instances) with properties and methods.
+* **Classes are not hoisted**, are **first-class citizens**, and **always execute in strict mode**.
+
+---
+
+## **2. Class Syntax Structure**
+
+### **Example:**
+
+```js
+class Student extends Person {
+  // 1. Public Field
+  university = 'University of Lisbon';
+
+  // 2. Private Field
+  #studyHours = 0;
+
+  // 3. Static Public Field
+  static campus = 'Lisbon Main Campus';
+
+  // 4. Constructor
+  constructor(fullName, birthYear, course, pin) {
+    super(fullName, birthYear); // call to parent class
+    this.course = course; // instance property
+    this.#pin = pin; // redefining a private field
+  }
+
+  // 5. Public Method
+  introduce() {
+    console.log(`Hi, I’m ${this.fullName} studying ${this.course}`);
+  }
+
+  // 6. Private Method
+  #calcTestScore() {
+    return Math.floor(Math.random() * 100);
+  }
+
+  // 7. Getter
+  get testScore() {
+    return this.#calcTestScore();
+  }
+
+  // 8. Setter
+  set testScore(value) {
+    this._testScore = value;
+  }
+
+  // 9. Static Method
+  static enroll(...students) {
+    console.log(`${students.length} students enrolled at ${this.campus}`);
+  }
+}
+```
+
+---
+
+## **3. Key Components and Their Roles**
+
+| **Feature**                    | **Syntax Example**                                   | **Description**                                                                    |
+| ------------------------------ | ---------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| **Class Declaration**          | `class Student {}`                                   | Defines the blueprint for objects.                                                 |
+| **Inheritance**                | `extends Person`                                     | Establishes parent-child relationship. Automatically sets prototype chain.         |
+| **Public Fields**              | `university = 'ULisboa'`                             | Shared across all instances, declared outside the constructor.                     |
+| **Private Fields**             | `#pin`                                               | Accessible only inside the class; ensures data privacy (encapsulation).            |
+| **Static Fields**              | `static campus = 'Lisbon'`                           | Belong to the class itself, not instances.                                         |
+| **Constructor**                | `constructor(args) { ... }`                          | Runs automatically when `new` object is created. Used to initialize instance data. |
+| **Instance Properties**        | `this.course = course;`                              | Defined inside the constructor; unique for each object.                            |
+| **Private Field Reassignment** | `this.#pin = pin;`                                   | Assigns constructor input to an existing private field.                            |
+| **Public Methods**             | `introduce() { ... }`                                | Available to all instances; define the object’s behavior.                          |
+| **Private Methods**            | `#calcTestScore() { ... }`                           | Used for internal operations only; cannot be called outside the class.             |
+| **Getter**                     | `get score() { ... }`                                | Allows reading data like a property (`obj.score`).                                 |
+| **Setter**                     | `set score(val) { ... }`                             | Allows setting data like a property (`obj.score = val`).                           |
+| **Static Methods**             | `static enroll()`                                    | Used for utility/helper logic, called on the class, not instances.                 |
+| **Instance Creation**          | `const s1 = new Student('Alice', 2002, 'CS', 1234);` | Creates a new object based on the class.                                           |
+
+---
+
+## **4. Inheritance and `super()`**
+
+* When using `extends`, the subclass **inherits** from the parent.
+* The `super()` call:
+
+  * Must appear **before** accessing `this` in the constructor.
+  * Executes the **parent class constructor**.
+
+---
+
+## **5. Encapsulation Recap**
+
+* **Goal:** Hide internal data and methods from outside interference.
+* **Tools:**
+
+  * `#privateFields` and `#privateMethods`
+  * Public methods serve as the **class API**.
+* Example:
+
+  ```js
+  class Account {
+    #movements = [];
+    deposit(val) { this.#movements.push(val); }
+  }
+  ```
+
+---
+
+## **6. Getters & Setters Recap**
+
+* **Getter:** Acts like a property reader.
+* **Setter:** Acts like a property writer or validator.
+* Example:
+
+  ```js
+  get name() { return this._name; }
+  set name(val) { if (val.includes(' ')) this._name = val; }
+  ```
+
+---
+
+## **7. Static Members Recap**
+
+* **Static fields & methods** belong to the class, **not instances**.
+* Example:
+
+  ```js
+  Student.enroll(s1, s2);
+  console.log(Student.campus);
+  ```
+
+---
+
+## **8. Essential Rules & Reminders**
+
+1. Classes are **not hoisted**.
+2. Classes are **first-class citizens** (can be passed around like values).
+3. Always **executed in strict mode**.
+4. `extends` automatically links prototypes.
+5. `super()` must be called **before `this`** in subclass constructors.
+6. Fields and methods declared with `#` are **truly private**.
+
+---
+
+## **9. Summary Mindmap**
+
+**Class → Blueprint**
+
+* **Fields:** public / private / static
+* **Methods:** public / private / static
+* **Accessors:** getters & setters
+* **Constructor:** initializes instance data
+* **Inheritance:** `extends` + `super()`
+* **Encapsulation:** private fields/methods
+* **Usage:** `new ClassName()` creates object
