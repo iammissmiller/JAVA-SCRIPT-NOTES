@@ -1,0 +1,178 @@
+**Geolocation API – Mapty App Implementation**
+
+## **1. Introduction**
+
+* Before coding the Mapty project, we must learn how to use the **Geolocation API**.
+* **Geolocation API** is a **browser API** (like `setTimeout`, `Intl`, etc.).
+* It allows us to **access the user’s current position** (latitude and longitude).
+
+### **Other Modern Browser APIs**
+
+* Access the user’s **camera**
+* Make the user’s **phone vibrate**
+* Handle **internationalization**, **timers**, and more
+* Geolocation is one of these modern APIs.
+
+---
+
+## **2. Accessing the Geolocation API**
+
+### **Basic Syntax**
+
+```javascript
+navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+```
+
+### **Explanation**
+
+* `navigator.geolocation` → The browser’s geolocation object.
+* `.getCurrentPosition()` → Method to retrieve the user’s location.
+* Takes **two callback functions**:
+
+  1. **Success Callback** → Executes when location is successfully fetched.
+  2. **Error Callback** → Executes if there’s an error (e.g., user denies permission).
+
+---
+
+## **3. Example Implementation**
+
+### **Step 1 – Check if Geolocation API is Supported**
+
+```javascript
+if (navigator.geolocation)
+  navigator.geolocation.getCurrentPosition(success, error);
+```
+
+* Prevents errors in **older browsers** that don’t support the API.
+
+---
+
+### **Step 2 – Define the Callbacks**
+
+```javascript
+function success(position) {
+  console.log(position);
+}
+
+function error() {
+  alert('Could not get your position');
+}
+```
+
+* If the user **blocks** location access → error alert appears.
+* If the user **allows** access → position object is logged in console.
+
+---
+
+## **4. The `position` Object**
+
+### **Structure**
+
+The `position` object contains:
+
+```javascript
+{
+  coords: {
+    latitude: ...,
+    longitude: ...,
+    altitude: ...,
+    accuracy: ...,
+    speed: ...
+  },
+  timestamp: ...
+}
+```
+
+### **Important Properties**
+
+* `latitude` – north–south position
+* `longitude` – east–west position
+* `altitude` and `speed` – usually available only on mobile devices
+
+---
+
+## **5. Extracting Coordinates**
+
+### **Using Destructuring**
+
+```javascript
+function success(position) {
+  const { latitude, longitude } = position.coords;
+  console.log(latitude, longitude);
+}
+```
+
+* **Destructuring** simplifies accessing nested object properties.
+* Logs the user’s coordinates (approximate, not always perfectly accurate).
+
+---
+
+## **6. Creating a Google Maps Link**
+
+### **Purpose**
+
+* To verify that latitude and longitude are correct by opening the location on Google Maps.
+
+### **Steps**
+
+1. Open **Google Maps** manually to check the URL format:
+
+   ```
+   https://www.google.com/maps/@latitude,longitude
+   ```
+2. Create a **dynamic link** in code:
+
+```javascript
+const { latitude, longitude } = position.coords;
+console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
+```
+
+3. Click the printed link → Opens Google Maps centered on your current position.
+
+---
+
+## **7. Permissions Behavior**
+
+* When you run the code:
+
+  * Browser shows a **popup** asking for location permission.
+  * If **blocked** → `errorCallback` runs.
+  * If **allowed** → `successCallback` runs and logs coordinates.
+
+* You can **reset permissions** from the browser settings or the location icon.
+
+---
+
+## **8. Key Notes**
+
+* **Always check for browser support** before calling `getCurrentPosition()`.
+* **Accuracy** depends on device hardware:
+
+  * Mobile → GPS-based (high accuracy)
+  * Desktop → Network-based (less accurate)
+* **Callback Execution**:
+
+  * Success → User grants permission
+  * Error → User denies or browser can’t determine location
+
+---
+
+## **9. What’s Next**
+
+* In the next step of the project:
+
+  * Use a **third-party library (Leaflet.js)** to **load and display a map**.
+  * Center the map using the **latitude and longitude** obtained from Geolocation.
+
+---
+
+## **10. Summary**
+
+| **Concept**   | **Description**                              |
+| ------------- | -------------------------------------------- |
+| API Type      | Browser API                                  |
+| Method        | `navigator.geolocation.getCurrentPosition()` |
+| Callbacks     | Success, Error                               |
+| Data Returned | Latitude, Longitude, Altitude, Accuracy      |
+| Use Case      | To locate and center map on user’s position  |
+| Next Step     | Load a map using coordinates                 |
