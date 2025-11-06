@@ -1,0 +1,140 @@
+**Encapsulation in Object-Oriented Programming**
+
+### **Definition**
+
+* **Encapsulation** means keeping certain **properties and methods private** within a class so they cannot be accessed directly from outside.
+* Only specific **public methods** are exposed to interact with the class — forming its **public interface (API)**.
+
+### **Purpose / Importance**
+
+1. **Data Privacy**
+
+   * Prevents external code from **accidentally or intentionally manipulating internal data**.
+   * Example: Prevent direct modification of an object’s properties like `movements`.
+
+2. **Code Maintainability & Flexibility**
+
+   * By exposing only a few public methods, internal implementations can be **changed safely** without breaking external code.
+
+---
+
+## **Encapsulation in JavaScript**
+
+* Implemented using **Private Fields and Private Methods**.
+* Introduced in **ES2022** under the **Class Fields** feature.
+* JavaScript originally used **constructor functions + prototypes**, but class fields push JS closer to **class-based OOP languages** (like Java or C++).
+
+---
+
+## **Class Fields Feature Overview**
+
+There are **four main types** of fields/methods in modern JavaScript classes:
+
+| Type                | Example                        | Description                                              |
+| ------------------- | ------------------------------ | -------------------------------------------------------- |
+| **Public Fields**   | `locale = navigator.language;` | Accessible from anywhere, defined on each instance.      |
+| **Private Fields**  | `#movements = [];`             | Only accessible inside the class, not from outside code. |
+| **Public Methods**  | `deposit(val) { ... }`         | Regular methods accessible via the public API.           |
+| **Private Methods** | `#approveLoan(val) { ... }`    | Internal helper methods, hidden from outside access.     |
+
+> Also: **Static versions** of these (public/private static fields & methods) exist but are less commonly used.
+
+---
+
+## **1. Public Fields**
+
+* Declared **outside the constructor** using the syntax:
+
+  ```js
+  class Account {
+    locale = navigator.language;
+    bank = 'Bankist';
+  }
+  ```
+* Equivalent to defining them in the constructor with `this.locale = navigator.language;`
+* Present on **each instance**, **not on the prototype**.
+* Used for data that should exist on all instances and doesn’t depend on input.
+
+---
+
+## **2. Private Fields**
+
+* Declared using `#` before the field name.
+
+  ```js
+  class Account {
+    #movements = [];
+    #pin;
+    constructor(owner, currency, pin) {
+      this.owner = owner;
+      this.currency = currency;
+      this.#pin = pin;
+    }
+  }
+  ```
+* **Cannot be accessed or modified outside** the class:
+
+  ```js
+  acc1.#movements; // ❌ Error
+  ```
+* Ensures data protection (no accidental overwrites like `acc1.movements = []`).
+
+---
+
+## **3. Public Methods**
+
+* Regular class methods (default behavior).
+
+  ```js
+  class Account {
+    deposit(val) { this.#movements.push(val); }
+    withdraw(val) { this.deposit(-val); }
+    getMovements() { return this.#movements; } // Public API
+  }
+  ```
+* Accessible from instances → form the **public API**.
+
+---
+
+## **4. Private Methods**
+
+* Declared with `#` prefix; used internally only.
+
+  ```js
+  class Account {
+    #approveLoan(val) {
+      return true; // internal logic
+    }
+    requestLoan(val) {
+      if (this.#approveLoan(val)) this.deposit(val);
+    }
+  }
+  ```
+* Not accessible from outside (`acc1.#approveLoan()` → Error).
+
+---
+
+## **5. Static Fields and Methods (Optional)**
+
+* Belong to the **class itself**, not instances.
+
+  ```js
+  class Account {
+    static bank = 'Bankist';
+    static test() { return true; }
+  }
+
+  Account.test(); // ✅ Works
+  acc1.test();    // ❌ Error
+  ```
+* Private static methods/fields also possible with `#`.
+
+---
+
+## **Key Takeaways**
+
+* **Encapsulation** = Data privacy + controlled access.
+* Use `#` for private data/methods.
+* Public API = interface other developers use.
+* Internal implementation can safely change as long as the API stays consistent.
+* Class fields make code **more self-documenting** and **easier to maintain**.
