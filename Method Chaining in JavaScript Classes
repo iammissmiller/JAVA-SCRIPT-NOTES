@@ -1,0 +1,139 @@
+**Method Chaining in JavaScript Classes**
+
+### **Concept**
+
+* **Method chaining** allows calling **multiple methods on the same object** in a single line — just like chaining array methods (`filter().map().reduce()`).
+* Instead of writing:
+
+  ```js
+  acc1.deposit(300);
+  acc1.withdraw(100);
+  acc1.requestLoan(25000);
+  ```
+
+  You can write:
+
+  ```js
+  acc1
+    .deposit(300)
+    .withdraw(100)
+    .requestLoan(25000)
+    .withdraw(4000);
+  ```
+
+---
+
+## **Why Use Method Chaining**
+
+1. **Cleaner, compact, and readable code.**
+2. **Improves flow** — multiple related operations can be performed in sequence.
+3. Commonly used in **OOP libraries and frameworks** (e.g., jQuery, D3.js, or DOM manipulation libraries).
+
+---
+
+## **How It Works**
+
+* For chaining to work, **each method must return the object itself**.
+* In class methods, `this` refers to the current object instance.
+* So by returning `this`, the method call result is again the same object — allowing the next method to run on it.
+
+---
+
+## **Implementation Example**
+
+### **Before chaining:**
+
+```js
+class Account {
+  deposit(val) {
+    this.#movements.push(val);
+  }
+  withdraw(val) {
+    this.deposit(-val);
+  }
+}
+```
+
+### **After enabling chaining:**
+
+```js
+class Account {
+  deposit(val) {
+    this.#movements.push(val);
+    return this; // enables chaining
+  }
+
+  withdraw(val) {
+    this.deposit(-val);
+    return this; // enables chaining
+  }
+
+  requestLoan(val) {
+    if (this.#approveLoan(val)) {
+      this.deposit(val);
+      console.log('Loan approved');
+    }
+    return this; // enables chaining
+  }
+}
+```
+
+### **Usage**
+
+```js
+acc1
+  .deposit(300)
+  .withdraw(100)
+  .withdraw(50)
+  .requestLoan(25000)
+  .withdraw(4000);
+```
+
+---
+
+## **How It Works Internally**
+
+* Each method returns `this`, which is the **current instance** (`acc1`).
+* So:
+
+  * After `.deposit(300)`, the result is `acc1`.
+  * Then `.withdraw(100)` runs on `acc1`.
+  * And the chain continues — every call returns the same instance.
+
+---
+
+## **Non-Chainable Methods**
+
+* Some methods **return something other than the object itself** (e.g., data arrays).
+* Example:
+
+  ```js
+  getMovements() {
+    return this.#movements; // returns array, not 'this'
+  }
+  ```
+* Therefore, `getMovements()` **cannot be chained** further:
+
+  ```js
+  acc1.deposit(300).getMovements(); // Works, but chain stops here
+  ```
+
+---
+
+## **When to Use Method Chaining**
+
+* Makes most sense for methods that **modify state** or **set properties**.
+* Avoid chaining on **getter methods** or ones that **return values**.
+
+---
+
+## **Key Takeaways**
+
+* **Return `this`** from each method to allow chaining.
+* Chaining provides **a fluid interface** for performing multiple operations.
+* Works best for **mutator methods**, not **accessors**.
+* Common OOP practice — improves code style, readability, and fluency.
+
+---
+
+Would you like me to combine this with your previous **Encapsulation notes** into a single **OOP in JavaScript – Lecture Summary (Encapsulation + Method Chaining)** PDF for neat revision?
