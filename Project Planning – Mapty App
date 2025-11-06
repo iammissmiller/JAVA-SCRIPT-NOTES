@@ -1,0 +1,141 @@
+**Project Planning – Mapty App**
+
+## **1. Why Planning Is Important**
+
+* Jumping straight into coding causes **confusion, rework, and messy code**.
+* Planning helps:
+
+  * Clarify **features**
+  * Define **structure (architecture)**
+  * Avoid **spaghetti code**
+* Real-world development **always begins with a planning phase**.
+
+---
+
+## **2. The Four Planning Steps**
+
+1. **User Stories** → Define functionality from the user’s perspective.
+2. **Features** → Translate user stories into app features.
+3. **Flowchart** → Visualize interactions, events, and data flow.
+4. **Architecture** → Decide how to organize and implement the code.
+
+---
+
+## **3. Step 1 – User Stories**
+
+**Definition:**
+
+> A user story describes the app’s functionality from the **user’s point of view** — answering *who*, *what*, and *why.*
+
+**Format:**
+
+> “As a [type of user], I want to [perform an action] so that I can [get a benefit].”
+
+### **User Stories for Mapty App**
+
+1. **Running Log:**
+
+   * As a user, I want to log running workouts with location, distance, time, pace, and cadence (steps/minute) so that I can track my running history.
+2. **Cycling Log:**
+
+   * As a user, I want to log cycling workouts with location, distance, time, speed, and elevation gain so that I can track my cycling sessions.
+3. **Workout Summary:**
+
+   * As a user, I want to see all my workouts at a glance so that I can monitor progress over time.
+4. **Map Display:**
+
+   * As a user, I want to view my workouts on a map so that I can visualize where I train the most.
+5. **Data Persistence:**
+
+   * As a user, I want my workouts to remain saved when I leave and return to the app so that I can continue using it later.
+
+---
+
+## **4. Step 2 – Deriving Features**
+
+Each **user story → corresponding features**.
+
+| **User Story**      | **Planned Features**                                                                                                                      |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Log running/cycling | • Click on map to add workout<br>• Form to input details (distance, time, cadence/elevation)<br>• Geolocation to display current position |
+| See all workouts    | • Workout list displaying details                                                                                                         |
+| View on map         | • Display workouts as markers on map                                                                                                      |
+| Persistent data     | • Store data in **Local Storage**<br>• Load and render data when page reloads                                                             |
+| Extra feature       | • Click workout in list → move map to workout location                                                                                    |
+
+---
+
+## **5. Step 3 – Flowchart Design**
+
+**Purpose:** Visualize how features, user actions, and data connect.
+
+### **Key Events & Flow**
+
+1. **Page Load**
+
+   * Get user’s current location (via **Geolocation API**) → Render map centered on current position.
+   * Fetch workouts from **Local Storage** → Render on map & list.
+2. **User Clicks Map**
+
+   * Render input **form** for new workout.
+3. **Form Submission**
+
+   * Create new workout object (running/cycling).
+   * Render workout on map and list.
+   * Save all workouts to **Local Storage**.
+4. **User Clicks Workout in List**
+
+   * Move map to workout location.
+
+**Flowchart Elements:**
+
+* **Yellow boxes:** Actions (e.g., form display, event handling)
+* **Green boxes:** UI rendering steps
+* **Red boxes:** Asynchronous operations (e.g., geolocation, fetching storage data)
+
+---
+
+## **6. Step 4 – Application Architecture**
+
+**Definition:**
+
+> Architecture defines *how* code is structured and organized.
+
+**Purpose:**
+
+* Decide how features will be implemented and connected.
+* Prevent “spaghetti code” by defining clear code organization.
+
+### **Typical Architectural Decisions**
+
+* Use of **classes** to structure logic (e.g., `Workout`, `Running`, `Cycling`, `App`).
+* Organize code into:
+
+  * **Data layer** (handling workouts and storage)
+  * **UI layer** (rendering map, form, and list)
+  * **Control flow** (event listeners and user interaction)
+* JavaScript features: **Classes**, **Modules**, **Event Handlers**, **Local Storage API**, **Asynchronous operations**.
+
+**Note:**
+You don’t need the *perfect* architecture at the start — it can evolve during coding as you understand what the app needs.
+
+---
+
+## **7. Summary – The Mapty Planning Process**
+
+| **Step**     | **Goal**                             | **Output**                    |
+| ------------ | ------------------------------------ | ----------------------------- |
+| User Stories | Define what users want               | Sentences describing features |
+| Features     | Identify necessary app functionality | List of app features          |
+| Flowchart    | Plan user interaction & data flow    | Visual event sequence         |
+| Architecture | Plan code structure                  | Organized code blueprint      |
+
+---
+
+## **8. Core Takeaways**
+
+* Always **plan before coding**.
+* Use **user stories** to think from the user’s view.
+* Translate stories → **features** → **flowchart** → **architecture**.
+* Don’t aim for perfection — **planning clarity matters more than complexity**.
+* Proper planning = **faster, cleaner, maintainable code**.
