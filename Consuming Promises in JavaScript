@@ -1,0 +1,130 @@
+# **Consuming Promises in JavaScript**
+
+## **1. Goal of the Lecture**
+
+* Learn **how to consume a promise**.
+* Use the **promise returned by `fetch()`** to fetch country data.
+* Reimplement the `getCountryData()` function using promises.
+
+---
+
+## **2. Recap of `fetch()`**
+
+* `fetch(url)` → immediately returns a **Promise**.
+* That promise represents the future result of the **asynchronous HTTP request**.
+* Initially, the promise is in the **"pending"** state.
+* Later, it becomes **fulfilled** (success) or **rejected** (error).
+
+---
+
+## **3. Consuming a Promise with `.then()`**
+
+* The **`.then()`** method handles the fulfilled state of a promise.
+* Syntax:
+
+  ```js
+  fetch(url).then(function(response) {
+      // Handle successful response
+  });
+  ```
+* `.then()` accepts a **callback function** that runs **after the promise resolves**.
+* That callback receives **one argument** → the resolved value (the response).
+
+---
+
+## **4. Example: Fetching Country Data**
+
+```js
+function getCountryData(country) {
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(function(response) {
+      console.log(response);
+    });
+}
+getCountryData('portugal');
+```
+
+* The logged object is a **Response object**.
+* Contains metadata (status code, headers, etc.).
+* The actual **data** is in the **body**, but it’s a **ReadableStream** (not directly usable).
+
+---
+
+## **5. Reading the Response Body**
+
+* To extract usable JSON data:
+
+  ```js
+  response.json();
+  ```
+* `.json()` is an **asynchronous method** that also returns a **promise**.
+* Therefore, we must handle **another promise**.
+
+---
+
+## **6. Handling the Second Promise**
+
+* To handle the `response.json()` promise:
+
+  ```js
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    });
+  ```
+* The **first `.then()`** returns a promise (`response.json()`).
+* The **second `.then()`** handles the resolved value (actual JSON data).
+
+---
+
+## **7. Rendering Data**
+
+Once data is retrieved:
+
+```js
+.then(data => renderCountry(data[0]));
+```
+
+* Displays the fetched country information on the web page.
+
+---
+
+## **8. Code Simplification**
+
+**Before (old XMLHttpRequest):**
+
+* Many nested callbacks and event listeners → hard to read.
+
+**Now (with Promises):**
+
+```js
+function getCountryData(country) {
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(response => response.json())
+    .then(data => renderCountry(data[0]));
+}
+```
+
+✅ **Cleaner and easier to understand**
+✅ Reads like natural English — “fetch, then get response, then render.”
+
+---
+
+## **9. Important Clarifications**
+
+* Promises **don’t remove callbacks**, but they **avoid callback hell**.
+* Each `.then()` still uses a callback but in a **linear, chainable way**.
+* Promises make asynchronous code more **readable and maintainable**.
+
+---
+
+## **10. Key Takeaways**
+
+| Concept       | Description                                                 |
+| ------------- | ----------------------------------------------------------- |
+| **Promise**   | A placeholder for a future value                            |
+| **`.then()`** | Handles fulfilled promises                                  |
+| **`.json()`** | Converts the body stream into JSON; returns another promise |
+| **Chaining**  | Allows sequential async operations without nesting          |
+| **Advantage** | Cleaner, more readable async code (escape callback hell)    |
