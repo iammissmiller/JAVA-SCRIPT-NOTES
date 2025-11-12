@@ -1,0 +1,200 @@
+## **Making the First API Call (Using XMLHttpRequest)**
+
+### **1. Introduction**
+
+* Goal: Build a **UI component** that displays data about countries.
+* Data Source: **Third-party online API** (REST Countries API).
+* Example shown: Portugal and USA cards with country information.
+* Importance: Demonstrates how to **fetch real data from the internet** using JavaScript.
+
+---
+
+## **2. AJAX in JavaScript**
+
+* **AJAX (Asynchronous JavaScript and XML)**: Technique to request data from a server asynchronously without reloading the page.
+* There are **multiple ways** to make AJAX calls:
+
+  1. **Old method:** `XMLHttpRequest` (XHR)
+  2. **Modern method:** `fetch()` with **Promises**
+
+> In this lecture, the old-school **XMLHttpRequest** method is used for demonstration and understanding callbacks.
+
+---
+
+## **3. Steps to Make an AJAX Call Using `XMLHttpRequest`**
+
+### **Step 1: Create the Request Object**
+
+```js
+const request = new XMLHttpRequest();
+```
+
+### **Step 2: Open the Request**
+
+```js
+request.open('GET', 'https://restcountries.com/v2/name/portugal');
+```
+
+* `'GET'` → HTTP method used to fetch data.
+* Second parameter → API endpoint (URL).
+
+---
+
+## **4. About the API Used: REST Countries API**
+
+* Found on **GitHub → Public APIs repository**.
+* Chosen API: **REST Countries**
+
+  * Provides detailed information about all countries.
+  * No authentication required.
+  * Uses HTTPS.
+  * Must have **CORS (Cross-Origin Resource Sharing)** enabled.
+
+> **CORS:** Allows browsers to make requests to other domains. Without CORS, you can’t access data from third-party APIs.
+
+### **API Versions**
+
+* Originally used: `restcountries.com/v2/`
+* New version: `restcountries.com/v3.1/`
+* Use **v2** for compatibility with lecture code.
+
+---
+
+## **5. Sending the Request**
+
+```js
+request.send();
+```
+
+* Sends the request to the server.
+* The code **does not pause** here — it continues running.
+* The request happens **asynchronously in the background**.
+
+---
+
+## **6. Handling the Response**
+
+### **Why You Can’t Access Data Immediately**
+
+* The response isn’t ready right after `send()`.
+* JavaScript doesn’t wait for it (non-blocking behavior).
+
+### **Solution: Use an Event Listener**
+
+```js
+request.addEventListener('load', function () {
+  console.log(this.responseText);
+});
+```
+
+* `load` event fires when data is fully received.
+* Inside the callback:
+
+  * `this` refers to the `request` object.
+  * Data is found in `this.responseText` (as a JSON string).
+
+---
+
+## **7. Converting the Response**
+
+```js
+const data = JSON.parse(this.responseText);
+```
+
+* Converts **JSON string → JavaScript object/array**.
+* Example response contains:
+
+  * `name`, `capital`, `region`, `population`, `flags`, etc.
+
+---
+
+## **8. Accessing Data & Destructuring**
+
+```js
+const [countryData] = data;
+```
+
+* The API returns an **array** of one country object.
+* Destructuring allows easy access to that single object.
+
+---
+
+## **9. Building the Country Card (UI)**
+
+* Create HTML markup dynamically using **template literals**.
+
+```js
+const html = `
+  <article class="country">
+    <img class="country__img" src="${data.flag}" />
+    <div class="country__data">
+      <h3 class="country__name">${data.name}</h3>
+      <h4 class="country__region">${data.region}</h4>
+      <p class="country__row"><span>👫</span>${(data.population / 1_000_000).toFixed(1)} million people</p>
+      <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+      <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+    </div>
+  </article>`;
+```
+
+### **Insert Into Page**
+
+```js
+countriesContainer.insertAdjacentHTML('beforeend', html);
+countriesContainer.style.opacity = 1;
+```
+
+---
+
+## **10. Reusing Code with a Function**
+
+To fetch **any country**, use a function:
+
+```js
+function getCountryData(country) {
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v2/name/${country}`);
+  request.send();
+
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
+    // build and insert HTML as before
+  });
+}
+
+getCountryData('portugal');
+getCountryData('usa');
+getCountryData('germany');
+```
+
+---
+
+## **11. Observing Asynchronous Behavior**
+
+* Multiple AJAX calls run **simultaneously**.
+* The order of appearance on the page can **vary each time**.
+* Shows that:
+
+  * JavaScript doesn’t block execution.
+  * Each request completes independently.
+  * Whichever request finishes first displays first.
+
+---
+
+## **12. Controlling Request Order (Preview of Next Topic)**
+
+* To make requests in a **specific order**, you must:
+
+  * Start the second request **only after** the first completes.
+  * This leads to **nested callbacks**, known as **callback hell** (topic of next lecture).
+
+---
+
+### **Key Takeaways**
+
+* AJAX allows asynchronous communication with APIs.
+* `XMLHttpRequest` is the **old** but foundational method.
+* JSON data must be **parsed** before use.
+* Asynchronous operations run in the background — **non-blocking**.
+* API data can be dynamically inserted into webpages.
+* Understanding old methods helps in learning modern approaches like **Promises** and **async/await**.
