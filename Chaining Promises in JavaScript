@@ -1,0 +1,165 @@
+# **Chaining Promises in JavaScript**
+
+---
+
+## **1. Objective**
+
+* Learn how to **chain multiple promises** together.
+* Example goal: fetch data for a **country** and then for its **neighboring country**.
+* Demonstrates **sequential AJAX calls** (second depends on data from first).
+
+---
+
+## **2. What Is Promise Chaining?**
+
+* Promise chaining means **linking multiple `.then()` methods** together.
+* Each `.then()` returns a new **promise**, which can be handled by the next `.then()`.
+* This allows **sequential asynchronous operations** without nesting callbacks.
+
+---
+
+## **3. Starting Point (Single Fetch Call)**
+
+Example:
+
+```js
+function getCountryData(country) {
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(response => response.json())
+    .then(data => {
+      renderCountry(data[0]);
+    });
+}
+```
+
+* This is already a **small promise chain**:
+
+  1. `fetch()` returns a promise (fulfilled with `response`).
+  2. `response.json()` returns another promise (fulfilled with JSON `data`).
+
+---
+
+## **4. Extending the Chain – Fetch Neighbor Country**
+
+Now we add a **second AJAX call** inside the `.then()` chain.
+
+```js
+function getCountryData(country) {
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(response => response.json())
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbor = data[0].borders?.[0];
+      if (!neighbor) return; // No neighbor case
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
+    })
+    .then(response => response.json())
+    .then(data => renderCountry(data[0], 'neighbour'));
+}
+```
+
+### **Explanation**
+
+* `return fetch(...)`:
+  Returns the **new promise** to the outer chain.
+* Because `.then()` **returns a promise**, the next `.then()` waits for that.
+* Each `.then()` handles the **resolved value** of the previous one.
+
+---
+
+## **5. How `.then()` Returns Work**
+
+Even if we don’t explicitly return a promise, `.then()` still returns one.
+
+Example:
+
+```js
+fetch(url)
+  .then(result => 23)
+  .then(x => alert(x)); // alerts 23
+```
+
+Explanation:
+
+* The value `23` becomes the **fulfilled value** of the promise returned by `.then()`.
+* So the next `.then()` receives that as input.
+
+---
+
+## **6. Applying This to Our Case**
+
+* When we return `fetch(neighborURL)`, the **fulfilled value** will be the neighbor’s response.
+* The next `.then()` can then handle that response → convert to JSON → render neighbor data.
+
+---
+
+## **7. The Correct Chaining Pattern**
+
+✅ **Good (Flat Chain):**
+
+```js
+fetch(countryURL)
+  .then(res => res.json())
+  .then(data => {
+    const neighbor = data[0].borders?.[0];
+    if (!neighbor) return;
+    return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
+  })
+  .then(res => res.json())
+  .then(data => renderCountry(data[0], 'neighbour'));
+```
+
+❌ **Bad (Nested – Callback Hell Again):**
+
+```js
+fetch(countryURL)
+  .then(res => res.json())
+  .then(data => {
+    const neighbor = data[0].borders?.[0];
+    if (!neighbor) return;
+    fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`)
+      .then(res => res.json())
+      .then(data => renderCountry(data[0], 'neighbour'));
+  });
+```
+
+> The second version **nests callbacks again**, defeating the purpose of promises.
+
+---
+
+## **8. Benefits of Promise Chaining**
+
+| Advantage                | Explanation                              |
+| ------------------------ | ---------------------------------------- |
+| **No callback hell**     | Flat, readable structure                 |
+| **Sequential execution** | Each step waits for the previous one     |
+| **Better readability**   | Reads top-down like English              |
+| **Scalable**             | You can chain as many promises as needed |
+
+---
+
+## **9. Example Output**
+
+* Fetching `Portugal` → also fetches `Spain` (neighbor).
+* Fetching `Germany` → also fetches `Austria`.
+* Works cleanly with no nested callbacks.
+
+---
+
+## **10. Key Concepts Recap**
+
+| Concept                   | Description                                     |
+| ------------------------- | ----------------------------------------------- |
+| `.then()`                 | Always returns a **new promise**                |
+| Return value in `.then()` | Becomes **fulfilled value** of that new promise |
+| `return fetch(...)`       | Allows chaining another asynchronous operation  |
+| Nested `.then()`          | Leads back to **callback hell** – avoid it      |
+| Promise chain             | Series of dependent asynchronous steps          |
+
+---
+
+## **11. Final Thoughts**
+
+* Promises allow **multiple sequential async operations** with clarity.
+* Resulting structure is a **flat promise chain**, not nested callbacks.
+* In the next step: learn how to handle **errors in promise chains**.
