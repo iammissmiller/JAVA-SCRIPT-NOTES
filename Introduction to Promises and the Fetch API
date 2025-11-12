@@ -1,0 +1,165 @@
+## **Introduction to Promises and the Fetch API**
+
+### **1. The Problem Recap: Callback Hell**
+
+* In the last lecture, we saw **callback hell** — nested callbacks used for sequential asynchronous tasks.
+* It caused **messy**, **hard-to-read**, and **error-prone** code.
+* The goal now: learn a **modern** way to handle asynchronous operations cleanly → **Promises**.
+
+---
+
+### **2. The Fetch API (Modern AJAX Method)**
+
+#### **Old Way:** Using `XMLHttpRequest`
+
+```js
+const request = new XMLHttpRequest();
+request.open('GET', 'https://restcountries.com/v2/name/portugal');
+request.send();
+```
+
+#### **New Way:** Using `fetch()`
+
+```js
+const request = fetch('https://restcountries.com/v2/name/portugal');
+```
+
+* Fetch is a **modern built-in function** in JavaScript for making **HTTP requests**.
+* It’s much **simpler and cleaner** than `XMLHttpRequest`.
+* The **Fetch API returns a Promise** immediately.
+
+---
+
+### **3. What Happens When You Call `fetch()`**
+
+* When you run:
+
+  ```js
+  const request = fetch('https://restcountries.com/v2/name/portugal');
+  console.log(request);
+  ```
+
+  → You get:
+
+  ```
+  Promise { <pending> }
+  ```
+* At first, the promise is in the **"pending"** state.
+* After a while, when the response arrives, it becomes **"fulfilled"**.
+* If something goes wrong (like no Internet), it becomes **"rejected"**.
+
+---
+
+### **4. What is a Promise?**
+
+#### **Formal Definition**
+
+> A **Promise** is an **object** used as a **placeholder for the future result** of an asynchronous operation.
+
+#### **Simplified Definitions**
+
+* A **container for an asynchronously delivered value**.
+* Or even simpler: a **container for a future value**.
+
+#### **Example**
+
+* When making an API call, the data isn’t available immediately.
+* The promise **represents that future value**, which will arrive later when the task finishes.
+
+---
+
+### **5. Analogy: Promise as a Lottery Ticket**
+
+* Buying a lottery ticket = buying a **promise** of a possible future outcome.
+* The **lottery draw** (asynchronous operation) happens later.
+* Two possibilities:
+
+  * **Fulfilled**: You guessed correctly → you get the money (success).
+  * **Rejected**: You guessed wrong → you lose (error).
+* Either way, once the result is known, it **cannot change**.
+
+---
+
+### **6. Why Promises are Better**
+
+#### **Advantages**
+
+1. **No need for event listeners or nested callbacks**
+
+   * Promises handle async results more predictably.
+2. **Chainable**
+
+   * Allows sequential asynchronous operations **without nesting**.
+   * Solves the **callback hell** problem.
+
+#### **Bonus**
+
+* Promises are part of **ES6 (2015)** and are **natively supported** in modern JavaScript.
+
+---
+
+### **7. Promise Lifecycle (States of a Promise)**
+
+| **State**     | **Description**                                  | **Example**                 |
+| ------------- | ------------------------------------------------ | --------------------------- |
+| **Pending**   | The async task is still running. No value yet.   | Fetching data…              |
+| **Fulfilled** | The task finished successfully, value available. | Data received.              |
+| **Rejected**  | The task failed, an error occurred.              | API error, network failure. |
+
+#### **Key Point**
+
+* Once settled (fulfilled or rejected), a promise’s state **cannot change again**.
+* It becomes **immutable**.
+
+---
+
+### **8. Promise States Example**
+
+```js
+const request = fetch('https://restcountries.com/v2/name/portugal');
+```
+
+* **Initially:** `Promise { <pending> }`
+* **Later:** `Promise { <fulfilled>: Response }`
+* **If error:** `Promise { <rejected>: Error }`
+
+---
+
+### **9. Consuming vs. Building Promises**
+
+#### **Consuming a Promise**
+
+* Using a promise that already exists.
+* Example: the promise returned by `fetch()` is **consumed** using `.then()` and `.catch()` (to be learned next).
+
+#### **Building a Promise**
+
+* Creating your own promise manually using the `Promise` constructor.
+* Example:
+
+  ```js
+  const myPromise = new Promise((resolve, reject) => {
+    // async work
+  });
+  ```
+* We’ll learn this later.
+
+> Most of the time, developers **consume** promises created by built-in APIs like Fetch.
+
+---
+
+### **10. Summary**
+
+* **Fetch API** replaces `XMLHttpRequest` for AJAX.
+* Fetch returns a **Promise**, which represents a future response.
+* **Promises** are:
+
+  * Containers for future values.
+  * Have a **lifecycle**: pending → fulfilled/rejected.
+  * **Immutable** after settling.
+* Benefits:
+
+  * **Avoid callback hell**
+  * **Cleaner, chainable syntax**
+  * **Widely supported** (since ES6)
+* Next step: **Using promises in practice** (consuming them with `.then()` and `.catch()`).
