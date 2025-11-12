@@ -1,0 +1,223 @@
+# **How Requests and Responses Work on the Web**
+
+---
+
+## **1. Introduction**
+
+* This video gives a **high-level overview** of how the web functions **behind the scenes**, focusing on:
+
+  * How **clients (browsers)** and **servers** communicate.
+  * How **requests** and **responses** flow across the web.
+* Conceptual basis: **Request–Response Model** or **Client–Server Architecture**.
+* This knowledge is **optional but valuable** for understanding how AJAX and APIs truly operate.
+
+---
+
+## **2. The Client–Server Model**
+
+* The **client** (usually the browser) sends a **request** to a **server**.
+* The **server** processes the request and sends a **response** back.
+* This happens every time we:
+
+  * Access a full **web page**, or
+  * Fetch **data from an API**.
+
+**→ Same mechanism for web pages and APIs.**
+
+---
+
+## **3. The Structure of a URL**
+
+Example:
+
+```
+https://restcountries.eu/rest/v2/name/portugal
+```
+
+### Breakdown:
+
+| Part                     | Description                                 |
+| ------------------------ | ------------------------------------------- |
+| `https`                  | Protocol (defines how data is transmitted). |
+| `restcountries.eu`       | **Domain name** of the web server.          |
+| `/rest/v2/name/portugal` | **Resource path** to access specific data.  |
+
+---
+
+## **4. Domain Name vs Real Address (IP)**
+
+* The **domain name** (like `restcountries.eu`) is **not the real address**.
+* Every server on the internet is identified by a unique **IP address** (e.g., `192.64.32.10`).
+* Browsers must **translate domain names → IP addresses** to locate the actual server.
+
+---
+
+## **5. DNS (Domain Name Server)**
+
+* **DNS = Domain Name System / Server**
+  Acts as the **“phonebook of the Internet.”**
+* **Step 1 in every web request:**
+
+  * Browser contacts a DNS to get the **IP address** for the domain name.
+  * DNS returns the IP.
+* Typically done automatically by your **Internet Service Provider (ISP)**.
+
+> **Key takeaway:**
+> DNS converts a **human-readable domain** into a **machine-readable IP address.**
+
+---
+
+## **6. Establishing the Connection**
+
+Once the IP is known:
+
+* A **TCP socket connection** is established between the **browser** and the **server**.
+
+### **TCP/IP Overview**
+
+| Protocol | Full Form                     | Role                                                                    |
+| -------- | ----------------------------- | ----------------------------------------------------------------------- |
+| **TCP**  | Transmission Control Protocol | Breaks data into packets and reassembles it correctly.                  |
+| **IP**   | Internet Protocol             | Sends and routes packets to the correct destination using IP addresses. |
+
+* The **connection remains open** while files or data are being transferred.
+* Together, **TCP/IP** defines **how data travels** across the Internet.
+
+---
+
+## **7. HTTP – Hypertext Transfer Protocol**
+
+Once connected, the browser sends an **HTTP request**.
+
+### **Definition:**
+
+* A **communication protocol** that defines how **clients and servers exchange data**.
+* Works on top of TCP/IP.
+* HTTP and HTTPS (secure version) are what browsers and APIs use to communicate.
+
+> **Protocol = a set of rules that govern how data is exchanged.**
+
+---
+
+## **8. Structure of an HTTP Request**
+
+An HTTP request consists of **three parts**:
+
+| Part                   | Description                                                         |
+| ---------------------- | ------------------------------------------------------------------- |
+| **1. Start Line**      | Contains: HTTP Method, Request Target (resource path), HTTP Version |
+| **2. Headers**         | Metadata about the request (browser type, language, time, etc.)     |
+| **3. Body (optional)** | Data sent to the server (for POST, PUT, etc.)                       |
+
+### **Common HTTP Methods**
+
+| Method     | Purpose                           |
+| ---------- | --------------------------------- |
+| **GET**    | Request data from the server      |
+| **POST**   | Send data to the server           |
+| **PUT**    | Replace/Update data on the server |
+| **PATCH**  | Modify data partially             |
+| **DELETE** | Remove data from the server       |
+
+### Example:
+
+```
+GET /rest/v2/name/portugal HTTP/1.1
+Host: restcountries.eu
+User-Agent: Chrome/...
+Accept-Language: en-US
+```
+
+> The **target** (e.g., `/rest/v2/name/portugal`) tells the server what resource is requested.
+
+---
+
+## **9. HTTPS – The Secure Version**
+
+* **HTTPS = HTTP + Encryption**
+* Uses **TLS (Transport Layer Security)** or **SSL (Secure Sockets Layer)**.
+* Ensures:
+
+  * Data is **encrypted** (secure from attackers).
+  * **Authenticity** (you’re talking to the correct server).
+
+---
+
+## **10. The HTTP Response**
+
+After processing the request, the server sends an **HTTP Response** back.
+
+### **Structure of a Response:**
+
+| Part              | Description                                                 |
+| ----------------- | ----------------------------------------------------------- |
+| **1. Start Line** | Includes HTTP Version, Status Code, and Status Message      |
+| **2. Headers**    | Metadata about the response (type, size, server info, etc.) |
+| **3. Body**       | Actual content (HTML, JSON data, images, etc.)              |
+
+### **Common HTTP Status Codes**
+
+| Code    | Meaning                  |
+| ------- | ------------------------ |
+| **200** | OK (successful request)  |
+| **201** | Created (resource added) |
+| **400** | Bad Request              |
+| **401** | Unauthorized             |
+| **403** | Forbidden                |
+| **404** | Not Found                |
+| **500** | Internal Server Error    |
+
+> Example: `404 Page Not Found` — means the requested resource doesn’t exist.
+
+---
+
+## **11. Multiple Requests for a Web Page**
+
+* When you visit a website:
+
+  1. Browser first requests the **HTML** page.
+  2. That HTML references **CSS, JS, and image files**.
+  3. For each file, the browser makes **new HTTP requests**.
+* This process repeats until **all assets are downloaded**.
+* The browser then **renders** the complete web page.
+* Multiple requests can happen **in parallel**, but only up to a **limited number** per domain.
+
+---
+
+## **12. How Data Travels: TCP/IP in Action**
+
+### **Step-by-Step:**
+
+1. **TCP** splits data (requests/responses) into **small packets**.
+2. **IP** routes these packets **across the internet** using IP addresses.
+3. **Packets may take different routes** to reach the destination faster.
+4. **TCP** reassembles them back into the original message upon arrival.
+
+> Analogy:
+> Sending many small cars (packets) separately through traffic instead of one large bus (entire data).
+
+---
+
+## **13. Full Flow Summary**
+
+| Step | Action                                      | Protocol      |
+| ---- | ------------------------------------------- | ------------- |
+| 1    | Browser finds server’s IP (via DNS)         | DNS           |
+| 2    | Connection established                      | TCP/IP        |
+| 3    | Browser sends HTTP request                  | HTTP or HTTPS |
+| 4    | Server processes request                    | —             |
+| 5    | Server sends HTTP response                  | HTTP or HTTPS |
+| 6    | Data broken into packets, sent, reassembled | TCP/IP        |
+| 7    | Browser renders web page or data            | —             |
+
+---
+
+## **14. Key Takeaways**
+
+* **Client–Server Architecture** drives the web.
+* **DNS** converts domain names → IP addresses.
+* **TCP/IP** handles reliable data transmission.
+* **HTTP/HTTPS** defines the structure of communication.
+* **Requests and responses** are text-based messages with headers and bodies.
+* Each asset (HTML, CSS, JS, images) requires **its own HTTP request**.
+* Understanding this flow clarifies how **AJAX**, **APIs**, and **networking** operate under the hood.
