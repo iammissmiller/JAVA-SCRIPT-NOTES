@@ -1,0 +1,154 @@
+## **Sequential AJAX Calls and Callback Hell**
+
+### **1. Recap: Parallel AJAX Calls**
+
+* Previously, we fetched data (e.g., country data) using AJAX.
+* When calling the function multiple times, **multiple AJAX calls ran simultaneously (in parallel)**.
+* We had **no control** over which response arrived first — they were **asynchronous and independent**.
+
+---
+
+### **2. Sequential AJAX Calls**
+
+**Goal:**
+Run the **second AJAX call only after the first one finishes** (i.e., execute requests in sequence).
+
+**Example:**
+We fetch data for a country (e.g., Portugal), which contains information about its **neighboring countries** (e.g., Spain).
+
+```js
+borders: ["ESP"]
+```
+
+We’ll:
+
+1. Fetch Portugal (first AJAX call)
+2. From its data, get the border country code (`ESP`)
+3. Fetch Spain using that code (second AJAX call)
+4. Render both Portugal and Spain side-by-side
+
+---
+
+### **3. Why the Second Call Depends on the First**
+
+* Neighbor country data (e.g., border code) comes **from the first call**.
+* Without the first call’s response, we **don’t know which neighbor to fetch**.
+* Hence, the **second AJAX call must wait** for the first to complete.
+
+---
+
+### **4. Implementation Outline**
+
+#### Step 1: AJAX Call for Country 1
+
+```js
+const request = new XMLHttpRequest();
+request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
+request.send();
+
+request.addEventListener('load', function() {
+  const data = JSON.parse(this.responseText);
+  renderCountry(data[0]);
+});
+```
+
+#### Step 2: Extract Neighbor Code
+
+```js
+const neighbor = data[0].borders?.[0];
+if (!neighbor) return; // no neighboring countries
+```
+
+#### Step 3: Second AJAX Call for Neighbor
+
+```js
+const request2 = new XMLHttpRequest();
+request2.open('GET', `https://restcountries.eu/rest/v2/alpha/${neighbor}`);
+request2.send();
+
+request2.addEventListener('load', function() {
+  const data2 = JSON.parse(this.responseText);
+  renderCountry(data2, 'neighbor');
+});
+```
+
+---
+
+### **5. Key Notes**
+
+* Searching by `alpha` instead of `name` since we’re using **country code (ESP)**.
+* The API returns a **single object** (not an array) when searched by code.
+* A helper function `renderCountry(data, className)` can handle both main and neighbor countries for cleaner code.
+
+---
+
+### **6. Example Output**
+
+* Fetching “Portugal” → Displays **Portugal** and its **neighbor Spain**
+* Fetching “USA” → Displays **USA** and **Canada** (neighbor)
+
+---
+
+### **7. Callback Nesting**
+
+In this setup:
+
+* The **second AJAX call** is **inside** the callback of the **first AJAX call**.
+* So, we have a **callback inside a callback** — known as **nested callbacks**.
+
+---
+
+## **8. Callback Hell**
+
+### **Definition:**
+
+> **Callback Hell** is when you have many nested callbacks used to execute asynchronous operations in sequence.
+
+### **Example:**
+
+```js
+setTimeout(() => {
+  console.log('1 second passed');
+  setTimeout(() => {
+    console.log('2 seconds passed');
+    setTimeout(() => {
+      console.log('3 seconds passed');
+    }, 1000);
+  }, 1000);
+}, 1000);
+```
+
+### **Symptoms:**
+
+* Code forms a **triangular / pyramid shape**
+* Becomes:
+
+  * Hard to **read**
+  * Hard to **maintain**
+  * Difficult to **debug**
+  * Prone to **bugs**
+
+---
+
+### **9. Why Callback Hell is Bad**
+
+* Complex and deeply nested structure.
+* Difficult to **add features** or **understand flow**.
+* Makes reasoning about asynchronous behavior confusing.
+* **Rule of Thumb:**
+
+  > Code that’s hard to understand = bad code → more bugs.
+
+---
+
+### **10. Solution: Promises**
+
+* Introduced in **ES6 (ECMAScript 2015)**.
+* Help us **escape callback hell**.
+* Provide a **cleaner**, more **manageable** way to handle asynchronous operations.
+
+---
+
+### **Next Step:**
+
+→ Learn **Promises** and how they replace nested callbacks for cleaner asynchronous code.
