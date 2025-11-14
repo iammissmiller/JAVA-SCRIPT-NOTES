@@ -1,0 +1,186 @@
+# **Handling Errors in Promises (JavaScript)**
+
+---
+
+## **1. Why Error Handling Matters**
+
+* Errors are **common** in web applications.
+* Up to now, AJAX requests assumed everything worked.
+* We must handle cases like:
+
+  * No internet
+  * Invalid API response
+  * Missing data
+  * Server errors (4xx, 5xx)
+
+---
+
+## **2. When Does `fetch()` Reject?**
+
+**Important:**
+`fetch()` **only rejects** in one case:
+
+* When the **network fails**
+  (e.g., user loses internet connection)
+
+It **does NOT** reject on 404 or 500 errors.
+
+---
+
+## **3. Simulating Network Failure**
+
+* Go to **DevTools → Network → Offline**
+* But reloading the page fully breaks everything.
+* Better approach:
+
+  * Load page normally
+  * Then click a button to trigger the request
+  * Switch to *Offline* before clicking
+
+---
+
+## **4. Two Ways to Handle Promise Rejections**
+
+### **A. Handling errors inside `.then()`**
+
+```js
+fetch(url).then(successCallback, errorCallback);
+```
+
+* `successCallback` → runs if promise is fulfilled
+* `errorCallback` → runs if promise is rejected
+* Works, but bad practice because:
+
+  * You must repeat error handlers for each `.then()`
+
+---
+
+### **B. Handling errors using `.catch()` (BEST)**
+
+```js
+fetch(url)
+  .then(...)
+  .then(...)
+  .catch(err => console.error(err));
+```
+
+* Placing `.catch()` at the **end of the chain**
+
+  * Catches ANY error in the whole chain
+  * Errors **propagate downward**
+* Prevents “uncaught promise rejection” warnings.
+
+---
+
+## **5. Example: Global Error Handler**
+
+```js
+fetch(url)
+  .then(res => res.json())
+  .then(data => renderCountry(data[0]))
+  .catch(err => {
+    console.error('💥 Error:', err);
+    renderError(`Something went wrong: ${err.message}`);
+  });
+```
+
+* `catch()` receives the actual `Error` object.
+* `err.message` gives clean user–friendly text.
+
+---
+
+## **6. Adding User-Friendly Error UI**
+
+Define a helper function:
+
+```js
+function renderError(msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  countriesContainer.style.opacity = 1;
+}
+```
+
+* Shows error both in UI and console.
+
+---
+
+## **7. The `.finally()` Method**
+
+* Runs **no matter what**:
+
+  * Whether promise is fulfilled or rejected.
+* Useful for actions that must always execute:
+
+  * Hiding loading spinners
+  * Resetting UI state
+  * Fading in containers
+
+Example:
+
+```js
+fetch(url)
+  .then(...)
+  .catch(...)
+  .finally(() => {
+    countriesContainer.style.opacity = 1;
+  });
+```
+
+---
+
+## **8. Why `.finally()` Works Here**
+
+* `.catch()` also returns a promise
+  → so `.finally()` can always run after everything.
+
+---
+
+## **9. A New Error Case: API Returns 404**
+
+Situation:
+
+* User enters a country that doesn’t exist.
+
+Result:
+
+* API returns **404**
+* But `fetch()` **does NOT reject**
+* It still produces a **fulfilled** promise
+  (because request technically succeeded)
+
+This leads to:
+
+```js
+Cannot read property 'flag' of undefined
+```
+
+Because:
+
+* `data[0]` is `undefined`
+* We attempted: `data[0].flag`
+
+Meaning:
+
+* We must handle API-level errors manually.
+
+The fix (checking `.ok`) will be taught in the next lecture.
+
+---
+
+## **10. Key Concepts Summary**
+
+### **Error Handling Methods**
+
+| Method                  | Runs When        | Notes                        |
+| ----------------------- | ---------------- | ---------------------------- |
+| `.then(success, error)` | success OR error | Avoid; becomes messy         |
+| `.catch(errorHandler)`  | error only       | Best for global chain errors |
+| `.finally(callback)`    | always           | Useful for cleanup           |
+
+---
+
+### **Fetch Limitations**
+
+* Rejects **only** on network errors.
+* For HTTP errors (404, 500), promise is **fulfilled**, not rejected.
+* You must manually check `response.ok`.
