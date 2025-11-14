@@ -1,0 +1,233 @@
+**JavaScript Runtime & Event Loop**
+
+This lecture explains **how asynchronous JavaScript works internally**, including:
+
+* **Call Stack**
+* **Web APIs**
+* **Callback Queue**
+* **Microtasks Queue**
+* **Event Loop**
+* **Promises vs Callbacks**
+* **Why JS is async despite being single-threaded**
+
+---
+
+# 1️⃣ **JavaScript Runtime Components**
+
+### ✔ **1. JavaScript Engine**
+
+* Executes code.
+* Contains:
+
+  * **Call Stack** → where code runs
+  * **Heap** → where objects are stored
+* JS is **single-threaded** → only **one statement** executes at a time.
+
+### ✔ **2. Web APIs (Browser APIs)**
+
+Not part of JS itself. Examples:
+
+* DOM
+* Timers (`setTimeout`)
+* Fetch API
+* Geolocation
+* etc.
+
+All **asynchronous tasks run here**, NOT in the JS engine.
+
+### ✔ **3. Callback Queue**
+
+For callbacks coming from:
+
+* setTimeout
+* DOM events
+* AJAX (older APIs)
+
+### ✔ **4. Microtasks Queue**
+
+For:
+
+* **Promise callbacks (`.then`, `.catch`)**
+* **MutationObserver**
+* and other microtasks.
+
+**Microtasks ALWAYS run before callback queue tasks.**
+
+### ✔ **5. Event Loop**
+
+* Constantly checks:
+
+  * **Is the call stack empty?**
+  * **If yes → push microtasks first**
+  * **Then push callbacks**
+
+This is the heart of async JS.
+
+---
+
+# 2️⃣ **Why Asynchronous Code Works**
+
+JS is single-threaded, BUT the browser is not.
+
+* Browser runs async tasks (image loading, fetch, timers)
+* JS engine continues running synchronously
+* When async finishes → browser sends callbacks back to JS (through queues)
+* Event loop chooses when to execute them.
+
+---
+
+# 3️⃣ **Detailed Flow Example**
+
+### Code used:
+
+```js
+const img = document.querySelector('.img');
+img.src = 'dog.jpg';
+
+img.addEventListener('load', function () {
+  console.log('Image loaded');
+});
+
+fetch('https://api.com/data')
+  .then(res => console.log('Data loaded'));
+```
+
+---
+
+## ✔ Step 1: DOM Image Starts Loading
+
+`img.src = 'dog.jpg'`
+
+* Loading image happens in **Web APIs**.
+* Does NOT block the call stack.
+
+---
+
+## ✔ Step 2: Event Listener Registered
+
+`img.addEventListener('load', callback)`
+
+* Stored in Web API environment.
+* Will be executed when load event fires.
+
+---
+
+## ✔ Step 3: Fetch Starts
+
+`fetch(url)`
+
+* Browser starts the network request.
+* Promise is returned immediately.
+* Fetch work runs in **Web APIs**, NOT JS engine.
+
+---
+
+## ✔ Step 4: Image finishes loading → “load” event occurs
+
+* Web API pushes the load callback into the **Callback Queue**.
+
+---
+
+## ✔ Step 5: Fetch finishes → Promise resolves
+
+* Promise’s `.then()` callback goes into **Microtasks Queue** (NOT callback queue).
+
+---
+
+## ✔ Step 6: Event Loop Behavior
+
+### Event Loop Rule:
+
+**Microtasks Queue ALWAYS empties BEFORE callback queue runs.**
+
+Therefore:
+
+1. Event loop sees stack empty
+2. It checks **Microtasks Queue first**
+3. Executes **fetch .then() callback**
+4. THEN checks Callback Queue
+5. Executes **image load callback**
+
+➡ **Promises have higher priority than DOM/timer callbacks.**
+
+---
+
+# 4️⃣ **Important Details**
+
+### 📌 **Timers are not guaranteed exact timing**
+
+`setTimeout(() => {}, 5000)`
+means:
+
+* Callback will run *after at least* 5 seconds
+* But might run LATER if:
+
+  * call stack is busy
+  * microtasks queue is busy
+  * callback queue is full
+
+---
+
+### 📌 **DOM events use callback queue**
+
+Even though DOM events aren't asynchronous by nature → their callbacks run through the queue.
+
+---
+
+### 📌 **Microtasks can starve the callback queue**
+
+If you keep adding more microtasks inside microtasks, callback queue will never run.
+
+Example:
+
+```js
+Promise.resolve().then(() => Promise.resolve().then(() => {...}))
+```
+
+This can endlessly delay callback queue tasks.
+
+---
+
+# 5️⃣ **Simplified Execution Model**
+
+### **When an async task finishes:**
+
+| Type of Callback           | Goes To                          | Priority |
+| -------------------------- | -------------------------------- | -------- |
+| Promise handlers (`.then`) | Microtasks Queue                 | ⭐ High   |
+| setTimeout / setInterval   | Callback Queue                   | Medium   |
+| DOM Event Handlers         | Callback Queue                   | Medium   |
+| UI Rendering               | After Microtasks Before Callback | Varies   |
+
+---
+
+# 6️⃣ **Key Concepts to Remember (Interview Essentials)**
+
+### ✔ JavaScript is **single-threaded**, **non-blocking**
+
+### ✔ Asynchronous tasks run in **Web APIs (Browser)**
+
+### ✔ When done → callbacks are queued
+
+### ✔ Event Loop:
+
+* First empties **Microtasks queue**
+* Then processes **Callback queue**
+
+### ✔ Promises (.then) ALWAYS run before `setTimeout`, before DOM events
+
+### ✔ JS itself has **no concept of time**
+
+Timers are managed by **Web APIs**, not JS.
+
+---
+
+# 7️⃣ **Why All This Matters**
+
+Understanding the event loop makes you better at:
+
+* Debugging async code
+* Avoiding race conditions
+* Knowing why Promises run before setTimeout
+* Building performant apps
+* Mastering async JavaScript (interview gold)
