@@ -1,0 +1,194 @@
+**Fixing 404 Errors & Creating a getJSON() Helper (Promises + Fetch)**
+
+---
+
+## **1. The Problem: Fetch Doesn't Reject on 404**
+
+* When an API returns **404 Not Found**, the **fetch() promise does NOT reject**.
+* It still resolves successfully (fulfilled promise).
+* This means:
+
+  * `.catch()` **does not run**
+  * You get weird JavaScript errors like:
+
+    ```
+    Cannot read property 'flag' of undefined
+    ```
+  * Because `data[0]` is `undefined`
+
+### **Fetch only rejects when:**
+
+* Network failure (offline).
+* Not for HTTP status codes.
+
+---
+
+## **2. Detecting 404 Manually Using `response.ok`**
+
+When `fetch()` resolves, the **response object** has:
+
+* `response.ok` → `true` if status 200–299
+* `response.status` → actual HTTP code (404, 400, 500…)
+
+Example:
+
+```js
+if (!response.ok) throw new Error(`Country not found (${response.status})`);
+```
+
+Throwing an error inside `.then()` automatically:
+
+* **rejects the promise**
+* jumps to the `.catch()` block
+
+---
+
+## **3. Throwing Errors Manually**
+
+This is how you make fetch properly reject:
+
+```js
+fetch(url)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Country not found (${response.status})`);
+    }
+    return response.json();
+  })
+  .then(data => renderCountry(data[0]))
+  .catch(err => renderError(err.message));
+```
+
+**Why this works:**
+
+* `throw` inside a `.then()` makes the promise REJECT
+* The rejection travels down to the nearest `.catch()`
+
+---
+
+## **4. Error Propagation**
+
+Any error in any `.then()`:
+
+* immediately rejects the promise returned by that `.then()`
+* flows down the chain until `.catch()` handles it
+
+This includes:
+
+* network error
+* JSON parse error
+* manual `throw new Error()`
+* accessing invalid property (`undefined.flag`)
+
+---
+
+## **5. Problem: Duplicate Error Handling Code**
+
+When fetching neighbor country, you would need to copy:
+
+```js
+if (!response.ok) throw new Error(...)
+```
+
+Repeated code = bad.
+
+---
+
+## **6. Solution: Create a Reusable Helper — `getJSON()`**
+
+### **Encapsulates:**
+
+* Fetching data
+* Checking `response.ok`
+* Throwing error
+* Converting to JSON
+
+### **Implementation**
+
+```js
+const getJSON = function (url, errorMsg = 'Something went wrong') {
+  return fetch(url)
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`${errorMsg} (${response.status})`);
+
+      return response.json();
+    });
+};
+```
+
+### **Usage:**
+
+#### Country 1:
+
+```js
+getJSON(`https://.../name/${country}`, 'Country not found')
+  .then(data => {
+    renderCountry(data[0]);
+    const neighbor = data[0].borders?.[0];
+
+    if (!neighbor) throw new Error('No neighbor found');
+
+    return getJSON(`https://.../alpha/${neighbor}`, 'Neighbor not found');
+  })
+```
+
+#### Country 2:
+
+```js
+  .then(data => renderCountry(data, 'neighbor'))
+  .catch(err => renderError(err.message))
+  .finally(() => {
+    countriesContainer.style.opacity = 1;
+  });
+```
+
+---
+
+## **7. Handling “No Neighbor Country”**
+
+Some countries (Australia, Iceland) have no borders.
+
+Instead of returning early (which breaks the chain):
+
+```js
+if (!neighbor) throw new Error('No neighbor found');
+```
+
+This:
+
+* Rejects the promise
+* Jumps to `.catch`
+* Displays a clean UI error
+
+---
+
+## **8. Benefits of This Pattern**
+
+### ⭐ Clean error messages
+
+### ⭐ No duplicated code
+
+### ⭐ All errors (fetch, JSON, manual) handled in **one place**
+
+### ⭐ Reusable for any API request
+
+### ⭐ Works for chained AJAX calls
+
+---
+
+## **9. Summary**
+
+### ✔ `fetch()` **does not reject on 404**
+
+### ✔ Use `response.ok` to catch API-level errors manually
+
+### ✔ `throw new Error()` makes the promise reject properly
+
+### ✔ Put all error handling in a single `.catch()` at the end
+
+### ✔ `.finally()` runs no matter what
+
+### ✔ Use a helper `getJSON()` to remove repetitive fetch patterns
+
+### ✔ Throw errors for special conditions (e.g., no neighbors)
