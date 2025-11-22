@@ -1,0 +1,108 @@
+# ES6 Modules 
+
+## What is a Module?
+
+* A **reusable piece of code** that encapsulates implementation details.
+* Typically stored in a **standalone file**.
+* Can contain:
+
+  * Code
+  * **Exports** → make values/functions public
+  * **Imports** → use values from other modules
+* The exported values form the module’s **public API**.
+
+### Dependencies
+
+* A module that imports another becomes **dependent** on it.
+* The importing module **cannot function** without the dependency.
+
+---
+
+## Why Use Modules?
+
+1. **Software Composition**
+
+   * Build applications using smaller building blocks.
+
+2. **Isolation**
+
+   * Each module can be developed independently.
+   * Developers do not need full knowledge of the entire project.
+
+3. **Abstraction**
+
+   * Hide low-level implementation details.
+   * Import only what is needed.
+
+4. **Code Organization**
+
+   * Naturally creates a cleaner and more manageable structure.
+
+5. **Code Reuse**
+
+   * Same module can be used across multiple projects.
+
+---
+
+## Modules in JavaScript (ES6)
+
+* One module per file.
+* A modern built-in module system (before ES6: custom solutions needed).
+
+### Differences: ES6 Modules vs Traditional Scripts
+
+| Feature                  | ES6 Modules                                       | Old Scripts                                                 |
+| ------------------------ | ------------------------------------------------- | ----------------------------------------------------------- |
+| Variable Scope           | Top-level variables are **private to the module** | Top-level variables are **global** (risk of name conflicts) |
+| Mode                     | Always **strict mode**                            | Sloppy mode by default                                      |
+| Top-level `this`         | `undefined`                                       | Points to `window`                                          |
+| Import/Export            | Supported                                         | Impossible                                                  |
+| Where imports can appear | **Top-level only**                                | N/A                                                         |
+| Loading                  | Asynchronous file loading                         | Blocking synchronous download (unless async/defer used)     |
+| Linking to HTML          | `<script type="module">`                          | `<script>`                                                  |
+
+---
+
+## How Module Importing Works Behind the Scenes
+
+1. **Parsing Phase**
+
+   * Code is read and **imports are hoisted**.
+   * Engine detects all dependencies **before execution**.
+   * Modules must be imported **at top level** (not inside functions/if blocks).
+
+2. **Module Fetching**
+
+   * Required modules are downloaded **asynchronously** from the server.
+
+3. **Linking**
+
+   * Exports are **linked** to imports.
+   * Import bindings are **live connections**:
+
+     * No copying
+     * Changes in exporting module reflect automatically in importing module
+
+4. **Execution**
+
+   * Imported modules execute first
+   * Then the main importing module executes
+
+---
+
+## Why Synchronous Import Operation?
+
+* Required for tooling such as:
+
+  * **Bundling**
+  * **Dead code elimination**
+* Bundlers must know the full module dependency graph **before execution**.
+
+---
+
+## Key Rules of ES6 Modules
+
+* Import/export must be **top-level**
+* Module code executes **after** all dependencies are processed
+* Imports are **references**, not copies
+* Each file usually represents one module
