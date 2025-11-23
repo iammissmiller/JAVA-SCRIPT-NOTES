@@ -1,0 +1,153 @@
+# ES6 Modules 
+
+## Creating and Importing a Module
+
+1. Create a separate file (module), e.g.:
+
+   * `shoppingcart.js` → exporting module
+   * `script.js` → importing module
+
+2. To connect a module in HTML:
+
+   ```html
+   <script type="module" src="script.js"></script>
+   ```
+
+3. Basic import with no exported values:
+
+   ```js
+   import './shoppingcart.js';
+   ```
+
+### Execution Order
+
+* Imported module’s code runs **before** the importing module’s code.
+* Import statements are **hoisted** to the top automatically.
+* Modules run in **strict mode** automatically (no need for `"use strict"`).
+
+---
+
+## Module Scope
+
+* Variables inside a module are **scoped to that module** (private).
+* Example:
+
+  ```js
+  const shippingCost = 10;
+  const cart = [];
+  ```
+* These cannot be accessed from other modules unless **exported**.
+
+---
+
+## Named Exports
+
+Used to export **multiple** values from a module.
+
+### Create a named export
+
+```js
+export const cart = [];
+export function addToCart(product, quantity) {
+  cart.push({ product, quantity });
+  console.log(`${quantity} ${product} added to cart`);
+}
+```
+
+### Import named exports
+
+```js
+import { addToCart, cart } from './shoppingcart.js';
+```
+
+### Renaming imports/exports
+
+* Import rename:
+
+  ```js
+  import { totalPrice as price } from './shoppingcart.js';
+  ```
+* Export rename:
+
+  ```js
+  export { totalQuantity as tq };
+  ```
+
+### Importing everything (namespace import)
+
+```js
+import * as ShoppingCart from './shoppingcart.js';
+ShoppingCart.addToCart('bread', 5);
+```
+
+* This creates a **namespace object** containing the module’s public API.
+
+---
+
+## Default Exports
+
+Used when exporting **only one main value** from a module.
+
+### Create default export
+
+```js
+export default function(product, quantity) {
+  cart.push({ product, quantity });
+}
+```
+
+### Import default export
+
+```js
+import add from './shoppingcart.js';
+add('pizza', 2);
+```
+
+✔ No curly braces
+✔ You can choose any import name
+✘ Avoid mixing named and default exports in the same module (increases complexity)
+
+---
+
+## Key Rule: Top-Level Only
+
+* `import` and `export` must be placed **at the top level** of the file
+* Not allowed inside functions or conditional blocks
+
+---
+
+## Live Connection (Not a Copy)
+
+* Imports reference the exact exported value in memory
+* Example: If a function mutates an exported array, the import sees the change
+* Useful, but requires attention to avoid bugs
+
+### Example Proof
+
+```js
+export const cart = [];
+
+addToCart('bread', 5);
+console.log(cart); // shows updated array, not an empty one
+```
+
+---
+
+# Summary Table
+
+| Feature                | Named Export                  | Default Export          |
+| ---------------------- | ----------------------------- | ----------------------- |
+| How many?              | Many per module               | One per module          |
+| Import syntax          | `import { x }`                | `import x`              |
+| Requires same name?    | Yes, unless renamed           | No                      |
+| Curly braces required? | Yes                           | No                      |
+| Best use case          | Multiple utilities per module | One main module feature |
+
+---
+
+### What to Practice
+
+* Export/import multiple values
+* Rename imports/exports
+* Import entire module as namespace
+* Use default exports for main functionality
