@@ -1,0 +1,120 @@
+# **Module Pattern in JavaScript (Pre-ES6 Modules)**
+
+## What is the Module Pattern?
+
+* A design pattern used **before ES6 modules existed**
+* Purpose is similar to ES6 modules:
+
+  * Encapsulate functionality
+  * Keep certain data **private**
+  * Expose a **public API**
+
+### Key Idea:
+
+Use a **function scope** to create private data
+Use **return value** to expose only what should be public
+
+---
+
+## Implementation Using an IIFE (Immediately Invoked Function Expression)
+
+### Structure:
+
+```js
+const ShoppingCart2 = (function () {
+  // Private variables & functions
+  const cart = [];
+  const shippingCost = 10;
+  const totalPrice = 237;
+  const totalQuantity = 23;
+
+  function addToCart(product, quantity) {
+    cart.push({ product, quantity });
+    console.log(`${quantity} ${product} added to cart`);
+  }
+
+  function orderStock(product, quantity) {
+    console.log(`${quantity} ${product} ordered from supplier`);
+  }
+
+  // Expose public API
+  return {
+    addToCart,
+    cart,
+    totalPrice,
+    totalQuantity,
+  };
+})();
+```
+
+### Usage:
+
+```js
+ShoppingCart2.addToCart('apples', 4);
+```
+
+---
+
+## Why Does It Work?
+
+Because of **closures**.
+
+* `addToCart()` is created inside the IIFE
+* It retains access to:
+
+  * `cart`, `shippingCost`, etc.
+* Even after the IIFE finishes executing,
+  these values remain accessible through closure
+
+**Important distinction:**
+
+* Private data stays inside function scope
+* Public API is returned as an object
+
+---
+
+## Public vs Private Items
+
+| Element         | Public? | How?                    |
+| --------------- | ------- | ----------------------- |
+| `addToCart()`   | Yes     | Returned via API object |
+| `cart`          | Yes     | Returned                |
+| `totalPrice`    | Yes     | Returned                |
+| `totalQuantity` | Yes     | Returned                |
+| `shippingCost`  | **No**  | Not returned → private  |
+| `orderStock()`  | **No**  | Not returned → private  |
+
+---
+
+## Advantages (at the time)
+
+✔ Encapsulation
+✔ Data privacy
+✔ Clear public API
+✔ Based on core JS features (no tooling needed)
+
+---
+
+## Limitations (Why ES6 Modules Replaced It)
+
+| Limitation                          | Explanation                                                |
+| ----------------------------------- | ---------------------------------------------------------- |
+| Hard to scale across many files     | Each file would need its own `<script>` tag                |
+| Script loading order issues         | Dependencies must load before dependents                   |
+| Everything still technically global | Variables leaked into global scope if not wrapped properly |
+| Not supported by modern tooling     | Bundlers can’t optimize code easily                        |
+
+➡ ES6 modules solve all of these issues
+➡ Native standard with import/export support
+
+---
+
+## Summary
+
+* Module Pattern = One of the earliest ways to implement modular architecture in JS
+* Uses:
+
+  * **IIFE** for scope
+  * **Closures** for persistent private state
+  * **Return object** as public API
+* Still seen in legacy codebases, but **ES6 modules are the modern standard**
