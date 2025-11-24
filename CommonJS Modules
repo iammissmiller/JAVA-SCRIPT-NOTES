@@ -1,0 +1,88 @@
+# **CommonJS Modules**
+
+## What is CommonJS?
+
+* A **module system** that was widely used **before ES6 modules**
+* **Native** to **Node.js**, not to browsers
+* Still very common because:
+
+  * npm packages were originally designed for Node.js
+  * Many libraries still use CommonJS format
+* Modern Node.js now supports ES Modules, but **CommonJS remains widely used** in existing code
+
+---
+
+## Syntax Overview
+
+### Exporting (CommonJS)
+
+```js
+module.exports = functionName;
+```
+
+or exporting multiple items:
+
+```js
+module.exports = {
+  func1,
+  variableA
+};
+```
+
+### Importing (CommonJS)
+
+```js
+const value = require('./moduleFile');
+```
+
+### Example
+
+```js
+// shoppingCart.js — CommonJS module
+function addToCart(product, quantity) {
+  console.log(`${product} ${quantity} added`);
+}
+
+module.exports = addToCart;
+
+// main.js
+const add = require('./shoppingCart.js');
+add('bread', 2);
+```
+
+---
+
+## Key Characteristics
+
+| Feature         | CommonJS                       | ES Modules          |
+| --------------- | ------------------------------ | ------------------- |
+| Environment     | Node.js                        | Browser + Node.js   |
+| Syntax          | `require()` / `module.exports` | `import` / `export` |
+| Loading         | Synchronous                    | Asynchronous        |
+| Browser Support | Needs bundlers                 | Native support      |
+
+---
+
+## Why You Should Know It
+
+* Still used in **many npm packages**
+* Seen in legacy Node.js codebases
+* Helps when integrating ES modules with older libraries
+
+---
+
+## The Future
+
+* ES Modules aim to replace all older systems
+* Transition is slow because:
+
+  * Large existing ecosystem using CommonJS
+  * Backward compatibility concerns
+
+---
+
+### Summary
+
+* CommonJS = Node’s traditional module system using `require` and `module.exports`
+* Still essential knowledge despite ES modules taking over
+* Understanding it helps when working with npm packages and older code
