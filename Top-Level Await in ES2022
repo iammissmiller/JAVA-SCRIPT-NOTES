@@ -1,0 +1,113 @@
+# Top-Level Await in ES2022 
+
+## What is Top-Level Await?
+
+* As of **ES2022**, we can use `await` **outside of async functions**
+* **Only** allowed **inside ES modules**
+
+  * Requires:
+
+    ```html
+    <script type="module" src="script.js"></script>
+    ```
+* Not supported in traditional script files without module type
+
+---
+
+## Example Usage
+
+Fetching fake data from JSONPlaceholder using top-level await:
+
+```js
+console.log('Start fetching');
+
+const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+const data = await res.json();
+
+console.log(data); // logs posts from API
+```
+
+### Important Behavior
+
+* Top-level `await` is **blocking**
+
+  * Execution of entire module **pauses** until the awaited Promise is resolved
+  * Code after it runs **only after** the await completes
+
+Example:
+
+```js
+console.log('Start fetching');
+await fetch(...);
+console.log('Something'); // waits until fetch completes
+```
+
+---
+
+## When Is It Useful?
+
+To avoid promise chains when working with async functions
+
+Example scenario:
+
+```js
+async function getLastPost() {
+  const res = await fetch(...);
+  const data = await res.json();
+  return {
+    title: data.at(-1).title,
+    text: data.at(-1).body,
+  };
+}
+
+const lastPost = await getLastPost(); // Retrieves resolved value
+console.log(lastPost);
+```
+
+✔ Cleaner than using `.then()` on returned Promise
+✔ Allows easy retrieval of async results at module scope
+
+---
+
+## Top-Level Await Blocks Importing Modules
+
+If module A imports module B, and module B contains a top-level `await`:
+
+➡ Module A must **wait until** B finishes its blocking operation
+
+Example:
+
+```js
+// shoppingCart.js
+console.log('Start fetching users');
+await fetch('...');
+console.log('Finished fetching users');
+
+// script.js importing shoppingCart.js
+import './shoppingCart.js';
+console.log('This waits for fetching to finish');
+```
+
+### Key takeaway
+
+> Top-level await blocks not only its own module,
+> but **also all modules that import it**.
+
+---
+
+## Benefits vs. Risks
+
+| Benefits                            | Risks                            |
+| ----------------------------------- | -------------------------------- |
+| Cleaner async code                  | Introduces blocking behavior     |
+| Avoids unnecessary `.then()` chains | Can delay entire app start       |
+| Useful for one-time initializations | Must use carefully in large apps |
+
+---
+
+## Summary
+
+* Top-level await works **only in modules**
+* It **blocks execution** of module and importers
+* Best used selectively and cautiously
+* Major improvement for async workflow in modern JS
